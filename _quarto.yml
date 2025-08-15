@@ -8,6 +8,7 @@ book:
   date: "30/07/2025"
   chapters:
     - index.qmd
+    - summary.qmd
     - solucoes_caso_real.qmd
     - references.qmd
 

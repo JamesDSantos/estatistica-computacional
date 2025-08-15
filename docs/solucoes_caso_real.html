@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1&nbsp; Solução de equações – Estatística Computacional I</title>
+<title>2&nbsp; Solução de equações – Estatística Computacional I</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./references.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./summary.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -110,7 +110,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./solucoes_caso_real.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Solução de equações</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./solucoes_caso_real.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Solução de equações</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -143,8 +143,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">summary.html</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./solucoes_caso_real.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Solução de equações</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Solução de equações</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -163,18 +169,18 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#método-da-bisseção" id="toc-método-da-bisseção" class="nav-link active" data-scroll-target="#método-da-bisseção"><span class="header-section-number">1.1</span> Método da bisseção</a></li>
-  <li><a href="#método-newton-raphson" id="toc-método-newton-raphson" class="nav-link" data-scroll-target="#método-newton-raphson"><span class="header-section-number">1.2</span> Método Newton-Raphson</a></li>
-  <li><a href="#método-da-secante" id="toc-método-da-secante" class="nav-link" data-scroll-target="#método-da-secante"><span class="header-section-number">1.3</span> Método da secante</a></li>
-  <li><a href="#método-da-interpolação-quadrática-inversa-método-de-muller" id="toc-método-da-interpolação-quadrática-inversa-método-de-muller" class="nav-link" data-scroll-target="#método-da-interpolação-quadrática-inversa-método-de-muller"><span class="header-section-number">1.4</span> Método da interpolação quadrática inversa (Método de Muller)</a></li>
-  <li><a href="#método-da-falsa-posição-regula-falsi" id="toc-método-da-falsa-posição-regula-falsi" class="nav-link" data-scroll-target="#método-da-falsa-posição-regula-falsi"><span class="header-section-number">1.5</span> Método da falsa posição (<em>regula falsi</em>)</a></li>
-  <li><a href="#métodos-híbridos" id="toc-métodos-híbridos" class="nav-link" data-scroll-target="#métodos-híbridos"><span class="header-section-number">1.6</span> Métodos híbridos</a></li>
-  <li><a href="#funções-para-encontrar-raízes-no-r" id="toc-funções-para-encontrar-raízes-no-r" class="nav-link" data-scroll-target="#funções-para-encontrar-raízes-no-r"><span class="header-section-number">1.7</span> Funções para encontrar raízes no <code>R</code></a>
+  <li><a href="#método-da-bisseção" id="toc-método-da-bisseção" class="nav-link active" data-scroll-target="#método-da-bisseção"><span class="header-section-number">2.1</span> Método da bisseção</a></li>
+  <li><a href="#método-newton-raphson" id="toc-método-newton-raphson" class="nav-link" data-scroll-target="#método-newton-raphson"><span class="header-section-number">2.2</span> Método Newton-Raphson</a></li>
+  <li><a href="#método-da-secante" id="toc-método-da-secante" class="nav-link" data-scroll-target="#método-da-secante"><span class="header-section-number">2.3</span> Método da secante</a></li>
+  <li><a href="#método-da-interpolação-quadrática-inversa-método-de-muller" id="toc-método-da-interpolação-quadrática-inversa-método-de-muller" class="nav-link" data-scroll-target="#método-da-interpolação-quadrática-inversa-método-de-muller"><span class="header-section-number">2.4</span> Método da interpolação quadrática inversa (Método de Muller)</a></li>
+  <li><a href="#método-da-falsa-posição-regula-falsi" id="toc-método-da-falsa-posição-regula-falsi" class="nav-link" data-scroll-target="#método-da-falsa-posição-regula-falsi"><span class="header-section-number">2.5</span> Método da falsa posição (<em>regula falsi</em>)</a></li>
+  <li><a href="#métodos-híbridos" id="toc-métodos-híbridos" class="nav-link" data-scroll-target="#métodos-híbridos"><span class="header-section-number">2.6</span> Métodos híbridos</a></li>
+  <li><a href="#funções-para-encontrar-raízes-no-r" id="toc-funções-para-encontrar-raízes-no-r" class="nav-link" data-scroll-target="#funções-para-encontrar-raízes-no-r"><span class="header-section-number">2.7</span> Funções para encontrar raízes no <code>R</code></a>
   <ul class="collapse">
-  <li><a href="#pacote-stats" id="toc-pacote-stats" class="nav-link" data-scroll-target="#pacote-stats"><span class="header-section-number">1.7.1</span> Pacote <code>stats</code></a></li>
-  <li><a href="#pacote-pracma" id="toc-pacote-pracma" class="nav-link" data-scroll-target="#pacote-pracma"><span class="header-section-number">1.7.2</span> Pacote <code>pracma</code></a></li>
+  <li><a href="#pacote-stats" id="toc-pacote-stats" class="nav-link" data-scroll-target="#pacote-stats"><span class="header-section-number">2.7.1</span> Pacote <code>stats</code></a></li>
+  <li><a href="#pacote-pracma" id="toc-pacote-pracma" class="nav-link" data-scroll-target="#pacote-pracma"><span class="header-section-number">2.7.2</span> Pacote <code>pracma</code></a></li>
   </ul></li>
-  <li><a href="#exercícios" id="toc-exercícios" class="nav-link" data-scroll-target="#exercícios"><span class="header-section-number">1.8</span> Exercícios</a></li>
+  <li><a href="#exercícios" id="toc-exercícios" class="nav-link" data-scroll-target="#exercícios"><span class="header-section-number">2.8</span> Exercícios</a></li>
   </ul>
 </nav>
     </div>
@@ -183,7 +189,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Solução de equações</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Solução de equações</span></h1>
 </div>
 
 
@@ -211,8 +217,8 @@ window.Quarto = {
 <p><span class="math display">\[x^3−x=1\]</span></p>
 <p>Quando nos deparamos com esse tipo de equação, recorremos aos métodos numéricos. Estes são algoritmos que geram uma sequência de aproximações que convergem para a solução real com uma precisão desejada.</p>
 <p>A escolha do método depende do tipo de equação e da natureza das variáveis envolvidas.</p>
-<section id="método-da-bisseção" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="método-da-bisseção"><span class="header-section-number">1.1</span> Método da bisseção</h2>
+<section id="método-da-bisseção" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="método-da-bisseção"><span class="header-section-number">2.1</span> Método da bisseção</h2>
 <p>O método da bisseção é uma ferramenta versátil para encontrar raízes. Antes de apresentá-lo, é importante conhecer o Teorema do Valor Intermediário (ou Teorema de Bolzano).</p>
 <div class="alert alert-success">
 <p><strong>Teorema do Valor Intermediário.</strong> Seja <span class="math inline">\(f\)</span> uma função real definida no intervalo <span class="math inline">\([a,b]\)</span>. Então, se <span class="math inline">\(f(a)\leq d \leq f(b)\)</span> ou <span class="math inline">\(f(b)\leq d \leq f(a)\)</span>, existe <span class="math inline">\(c\in[a,b]\)</span> tal que <span class="math inline">\(f(c)=d\)</span>.</p>
@@ -221,7 +227,7 @@ window.Quarto = {
 <div class="alert alert-success">
 <p><strong>Corolário.</strong> Seja <span class="math inline">\(f\)</span> uma função real definida no intervalo <span class="math inline">\([a,b]\)</span>. Então, se <span class="math inline">\(f(a)\)</span> e <span class="math inline">\(f(b)\)</span> possuem sinais opostos, então existe <span class="math inline">\(x^\star\in[a,b]\)</span> tal que <span class="math inline">\(x^\star\)</span> é raíz de <span class="math inline">\(f(x)\)</span>.</p>
 </div>
-<p>Portanto, se conhecemos um intervalo <span class="math inline">\([a,b]\)</span> tal que <span class="math inline">\(f(a)\)</span> e <span class="math inline">\(f(b)\)</span> tem sinais opostos, então temos a certeza de que há pelo menos uma raíz de <span class="math inline">\(f(x)\)</span> dentro do intervalo <span class="math inline">\([a,b]\)</span>. A <a href="#fig-bissecao" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> ilustra o Teorema do Valor Intermediário, considerando o intervalo <span class="math inline">\([a_0,b_0]\)</span> e a raiz <span class="math inline">\(x^\star\)</span>.</p>
+<p>Portanto, se conhecemos um intervalo <span class="math inline">\([a,b]\)</span> tal que <span class="math inline">\(f(a)\)</span> e <span class="math inline">\(f(b)\)</span> tem sinais opostos, então temos a certeza de que há pelo menos uma raíz de <span class="math inline">\(f(x)\)</span> dentro do intervalo <span class="math inline">\([a,b]\)</span>. A <a href="#fig-bissecao" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> ilustra o Teorema do Valor Intermediário, considerando o intervalo <span class="math inline">\([a_0,b_0]\)</span> e a raiz <span class="math inline">\(x^\star\)</span>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-bissecao" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -230,7 +236,7 @@ window.Quarto = {
 <img src="solucoes_caso_real_files/figure-html/fig-bissecao-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bissecao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: Ilustração do Teorema do Valor Médio
+Figure&nbsp;2.1: Ilustração do Teorema do Valor Médio
 </figcaption>
 </figure>
 </div>
@@ -244,7 +250,7 @@ Figure&nbsp;1.1: Ilustração do Teorema do Valor Médio
 <li><span class="math inline">\(f(x_1)\)</span> e <span class="math inline">\(f(a_0)\)</span> tem o mesmo sinal. Isso implica que <span class="math inline">\(f(x_1)\)</span> e <span class="math inline">\(f(b_0)\)</span> possuem sinais opostos e, portanto, a solução deve estar em <span class="math inline">\([x_1,b_0]\)</span>. Podemos então definir o novo intervalo de busca <span class="math inline">\([a_1,b_1]\)</span> onde <span class="math inline">\(a_1=x_1\)</span> e <span class="math inline">\(b_1=b_0\)</span>.</li>
 <li><span class="math inline">\(f(x_1)\)</span> e <span class="math inline">\(f(b_0)\)</span> tem o mesmo sinal. Isso implica que <span class="math inline">\(f(x_1)\)</span> e <span class="math inline">\(f(a_0)\)</span> possuem sinais opostos e, portanto, a solução deve estar em <span class="math inline">\([a_0,x_1]\)</span>. Podemos então definir o novo intervalo de busca <span class="math inline">\([a_1,b_1]\)</span> onde <span class="math inline">\(a_1=a_0\)</span> e <span class="math inline">\(b_1=x_1\)</span>.</li>
 </ol>
-<p>A figura abaixo mostra a <a href="#fig-bissecao" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> novamente, agora com o ponto <span class="math inline">\(x_1\)</span> em vermelho. Também em vermelho está representado o novo intervalo, com metade do comprimento do anterior, que contém a raiz e satisfaz as condições do Teorema do Valor Intermediário.</p>
+<p>A figura abaixo mostra a <a href="#fig-bissecao" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> novamente, agora com o ponto <span class="math inline">\(x_1\)</span> em vermelho. Também em vermelho está representado o novo intervalo, com metade do comprimento do anterior, que contém a raiz e satisfaz as condições do Teorema do Valor Intermediário.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-bissecao2" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -253,7 +259,7 @@ Figure&nbsp;1.1: Ilustração do Teorema do Valor Médio
 <img src="solucoes_caso_real_files/figure-html/fig-bissecao2-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bissecao2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.2: Obtenção de um novo intervalo para o Teorema do Valor Intermediário
+Figure&nbsp;2.2: Obtenção de um novo intervalo para o Teorema do Valor Intermediário
 </figcaption>
 </figure>
 </div>
@@ -412,10 +418,10 @@ Figure&nbsp;1.2: Obtenção de um novo intervalo para o Teorema do Valor Interme
 </div>
 </div>
 </section>
-<section id="método-newton-raphson" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="método-newton-raphson"><span class="header-section-number">1.2</span> Método Newton-Raphson</h2>
+<section id="método-newton-raphson" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="método-newton-raphson"><span class="header-section-number">2.2</span> Método Newton-Raphson</h2>
 <p>Considere o problma de encontrar uma raiz de <span class="math inline">\(f(x)\)</span>. Seja <span class="math inline">\(x_0\)</span> um ponto próximo da raiz <span class="math inline">\(x^\star\)</span>. A equação da reta tangente ao ponto <span class="math inline">\(x_0\)</span> é dada por</p>
-<p><span class="math display">\[f(x)=f(x_0)+(x-x_0)f'(x_0).\]</span> A <a href="#fig-newton-tangente" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> ilustra a reta tangente (em vermelho) ao ponto <span class="math inline">\(x_0\)</span> para uma certa função. Observe que a raiz da reta tangente, marcada como <span class="math inline">\(x_1\)</span> no gráfico, está mais próxima de <span class="math inline">\(x^\star\)</span> do que o ponto <span class="math inline">\(x_0\)</span>.</p>
+<p><span class="math display">\[f(x)=f(x_0)+(x-x_0)f'(x_0).\]</span> A <a href="#fig-newton-tangente" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> ilustra a reta tangente (em vermelho) ao ponto <span class="math inline">\(x_0\)</span> para uma certa função. Observe que a raiz da reta tangente, marcada como <span class="math inline">\(x_1\)</span> no gráfico, está mais próxima de <span class="math inline">\(x^\star\)</span> do que o ponto <span class="math inline">\(x_0\)</span>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-newton-tangente" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -424,7 +430,7 @@ Figure&nbsp;1.2: Obtenção de um novo intervalo para o Teorema do Valor Interme
 <img src="solucoes_caso_real_files/figure-html/fig-newton-tangente-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-newton-tangente-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.3: Obtenção de um novo intervalo para o Teorema do Valor Intermediário
+Figure&nbsp;2.3: Obtenção de um novo intervalo para o Teorema do Valor Intermediário
 </figcaption>
 </figure>
 </div>
@@ -463,10 +469,10 @@ Figure&nbsp;1.3: Obtenção de um novo intervalo para o Teorema do Valor Interme
 </div>
 <p>.</p>
 </section>
-<section id="método-da-secante" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="método-da-secante"><span class="header-section-number">1.3</span> Método da secante</h2>
+<section id="método-da-secante" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="método-da-secante"><span class="header-section-number">2.3</span> Método da secante</h2>
 <p>Seja <span class="math inline">\(x^\star\)</span> a raiz de <span class="math inline">\(f(x)\)</span> e sejam <span class="math inline">\(x_0\)</span> e <span class="math inline">\(x_1\)</span> dois valores próximos de <span class="math inline">\(x^\star\)</span>. A reta secante aos pontos <span class="math inline">\((x_0,f(x_0))\)</span> e <span class="math inline">\((x_1,f(x_1))\)</span> é dada por <span class="math display">\[f(x)=f(x_1)+ (x-x_1)\frac{f(x_1)-f(x_0)}{x_1-x_0}.\]</span></p>
-<p>Assim como no métod Newton-Raphson, a raiz da reta secante acima tende a estar mais próxima de <span class="math inline">\(x^\star\)</span> do que <span class="math inline">\(x_0\)</span> e <span class="math inline">\(x_1\)</span>. A <a href="#fig-secante" class="quarto-xref">Figure&nbsp;<span>1.4</span></a> ilustra essa afirmação, onde o ponto <span class="math inline">\(x_2\)</span> é a raiz da reta secante (em vermelho).</p>
+<p>Assim como no métod Newton-Raphson, a raiz da reta secante acima tende a estar mais próxima de <span class="math inline">\(x^\star\)</span> do que <span class="math inline">\(x_0\)</span> e <span class="math inline">\(x_1\)</span>. A <a href="#fig-secante" class="quarto-xref">Figure&nbsp;<span>2.4</span></a> ilustra essa afirmação, onde o ponto <span class="math inline">\(x_2\)</span> é a raiz da reta secante (em vermelho).</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-secante" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -475,7 +481,7 @@ Figure&nbsp;1.3: Obtenção de um novo intervalo para o Teorema do Valor Interme
 <img src="solucoes_caso_real_files/figure-html/fig-secante-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-secante-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.4: Obtenção de um novo pontos utilizando a reta secante formada a partir de dois pontos iniciais.
+Figure&nbsp;2.4: Obtenção de um novo pontos utilizando a reta secante formada a partir de dois pontos iniciais.
 </figcaption>
 </figure>
 </div>
@@ -554,8 +560,8 @@ Figure&nbsp;1.4: Obtenção de um novo pontos utilizando a reta secante formada 
 <p><strong>Atenção.</strong> O teorema acima mostra que não basta escolher dois valores dentro do intervalo <span class="math inline">\([a,b]\)</span> que contém <span class="math inline">\(x^\star\)</span>. Ou seja, diferente do método da bisseção, essa escolha não é garantia de convergência. Isso ocorre porque, dependendo da função, a escolha dos pontos iniciais pode levar a geração de candidatos para fora do intervalo <span class="math inline">\([a,b]\)</span> fazendo com que a convergência demore ou mesmo falhe.</p>
 </div>
 </section>
-<section id="método-da-interpolação-quadrática-inversa-método-de-muller" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="método-da-interpolação-quadrática-inversa-método-de-muller"><span class="header-section-number">1.4</span> Método da interpolação quadrática inversa (Método de Muller)</h2>
+<section id="método-da-interpolação-quadrática-inversa-método-de-muller" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="método-da-interpolação-quadrática-inversa-método-de-muller"><span class="header-section-number">2.4</span> Método da interpolação quadrática inversa (Método de Muller)</h2>
 <p>O método da interpolação quadrática inversa segue a mesma ideia do método da secante. Considere três pontos, <span class="math inline">\(x_1,x_2,x_3\)</span> próximos de <span class="math inline">\(x^\star\)</span>. Na <span class="math inline">\(i\)</span>-ésima iteração, o próximo candidato à solução é a raiz da parábola que passa pelos pontos <span class="math inline">\(x_{i-1},x_{i-2},x_{i-3}\)</span>, dada por</p>
 <p><span class="math display">\[x_{i} = x_{i-1} - \frac{2f(x_{i-1})}{\omega \pm \sqrt{\omega^2 - 4f(x_{i-1})\delta_{i-1}}}\]</span> onde <span class="math display">\[\begin{align}
 \delta_{i-1} &amp;= \frac{f(x_{i-1})-f(x_{i-2})}{x_{i-1}-x_{i-2}} + \frac{f(x_{i-1})-f(x_{i-3})}{x_{i-1}-x_{i-3}} - \frac{f(x_{i-2})-f(x_{i-3})}{x_{i-2}-x_{i-3}}\\
@@ -563,8 +569,8 @@ Figure&nbsp;1.4: Obtenção de um novo pontos utilizando a reta secante formada 
 \end{align}\]</span></p>
 <p>Embora esse método possa convergir rapidamente para a raiz, os pontos iniciais devem estar próximos da raiz. Além disso, o algoritmo pode falhar se em algum momento os valores de <span class="math inline">\(f(x_i),f(x_{i-1})\)</span> ou <span class="math inline">\(f(x_{i-2})\)</span> concidirem. Portanto, é recomendado que esse método seja utilizado em conjunto com outro, conforme discutido na seção Métodos Híbridos.</p>
 </section>
-<section id="método-da-falsa-posição-regula-falsi" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="método-da-falsa-posição-regula-falsi"><span class="header-section-number">1.5</span> Método da falsa posição (<em>regula falsi</em>)</h2>
+<section id="método-da-falsa-posição-regula-falsi" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="método-da-falsa-posição-regula-falsi"><span class="header-section-number">2.5</span> Método da falsa posição (<em>regula falsi</em>)</h2>
 <p>O método da falsa posição é uma combinação do método da secante com o método da bisseção. Assim como neste último, é necessário começar com um intervalo <span class="math inline">\([x_a,x_b]\)</span> no qual <span class="math inline">\(f(x_a)\)</span> e <span class="math inline">\(f(x_b)\)</span> têm sinais opostos.</p>
 <p>Primeiro, calcula-se a raiz da reta secante que passa pelos pontos <span class="math inline">\((x_a,f(x_a))\)</span> e <span class="math inline">\((x_b,f(x_b))\)</span>, dada por</p>
 <p><span class="math display">\[
@@ -719,8 +725,8 @@ x_c=x_b-f(x_b)\frac{x_b-x_a}{f(x_b)-f(x_a)}.
 </div>
 </div>
 </section>
-<section id="métodos-híbridos" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="métodos-híbridos"><span class="header-section-number">1.6</span> Métodos híbridos</h2>
+<section id="métodos-híbridos" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="métodos-híbridos"><span class="header-section-number">2.6</span> Métodos híbridos</h2>
 <p>Os métodos discutidos até o momento possuem vantagens e desvantagens, conforme sumarizado na tabela abaixo.</p>
 <table class="caption-top table">
 <colgroup>
@@ -788,11 +794,11 @@ x_c=x_b-f(x_b)\frac{x_b-x_a}{f(x_b)-f(x_a)}.
 <li><p><strong>Atualização do intervalo</strong>. O novo intervalo é atualizado com base no candidato aceito (<span class="math inline">\(x_s\)</span> ou <span class="math inline">\(x_m\)</span>), garantindo que a raiz continue delimitada e que o ponto com o menor valor de <span class="math inline">\(f(x)\)</span> seja sempre a melhor estimativa.</p></li>
 </ol>
 </section>
-<section id="funções-para-encontrar-raízes-no-r" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="funções-para-encontrar-raízes-no-r"><span class="header-section-number">1.7</span> Funções para encontrar raízes no <code>R</code></h2>
+<section id="funções-para-encontrar-raízes-no-r" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="funções-para-encontrar-raízes-no-r"><span class="header-section-number">2.7</span> Funções para encontrar raízes no <code>R</code></h2>
 <p>O <code>R</code> oferece várias funções para encontrar raízes de equações não-lineares, tanto no pacote base (<code>stats</code>) quanto em pacotes externos.</p>
-<section id="pacote-stats" class="level3" data-number="1.7.1">
-<h3 data-number="1.7.1" class="anchored" data-anchor-id="pacote-stats"><span class="header-section-number">1.7.1</span> Pacote <code>stats</code></h3>
+<section id="pacote-stats" class="level3" data-number="2.7.1">
+<h3 data-number="2.7.1" class="anchored" data-anchor-id="pacote-stats"><span class="header-section-number">2.7.1</span> Pacote <code>stats</code></h3>
 <p>A função <code>uniroot</code> é a implementação do método de Brent. Seus principais argumentos são:</p>
 <ul>
 <li><p><code>f</code>: a função da qual se deseja obter a raiz</p></li>
@@ -801,8 +807,8 @@ x_c=x_b-f(x_b)\frac{x_b-x_a}{f(x_b)-f(x_a)}.
 <li><p><code>maxiter</code>: número máximo de tentativas (o valor padrão é 1000)</p></li>
 </ul>
 </section>
-<section id="pacote-pracma" class="level3" data-number="1.7.2">
-<h3 data-number="1.7.2" class="anchored" data-anchor-id="pacote-pracma"><span class="header-section-number">1.7.2</span> Pacote <code>pracma</code></h3>
+<section id="pacote-pracma" class="level3" data-number="2.7.2">
+<h3 data-number="2.7.2" class="anchored" data-anchor-id="pacote-pracma"><span class="header-section-number">2.7.2</span> Pacote <code>pracma</code></h3>
 <p>O pacote <code>pracma</code> traz diversas rotinas de cálculo numérico, incluindo os métodos clássicos de busca de raízes.</p>
 <p>Os métodos da bisseção, secante e falsa posição estão implementados nas funções <code>bisect</code>, <code>secant</code> e <code>regulaFalsi</code>, respectivamente. Seus argumentos são</p>
 <ul>
@@ -836,8 +842,8 @@ x_c=x_b-f(x_b)\frac{x_b-x_a}{f(x_b)-f(x_a)}.
 </ul>
 </section>
 </section>
-<section id="exercícios" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="exercícios"><span class="header-section-number">1.8</span> Exercícios</h2>
+<section id="exercícios" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="exercícios"><span class="header-section-number">2.8</span> Exercícios</h2>
 <div class="alert alert-warning">
 <p><strong>Exercício</strong> Seja <span class="math inline">\(f:[a,b]\rightarrow\mathbb{R}\)</span> uma função contínua tal que <span class="math inline">\(f(a)f(b)&lt;0\)</span>. O método da bisseção gera uma sequência de intervalos encaixados <span class="math inline">\([a_k,b_k]\)</span> onde a raiz <span class="math inline">\(x^\star\in[a_k,b_k]\)</span> para todo <span class="math inline">\(k\in\mathbb{N}\)</span>.</p>
 <ol type="1">
@@ -1333,8 +1339,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Preface">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      <a href="./summary.html" class="pagination-link" aria-label="summary.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">summary.html</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
