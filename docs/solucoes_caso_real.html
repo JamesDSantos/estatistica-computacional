@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Solução de equações – Estatística Computacional I</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./solucoes_caso_real.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Solução de equações</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Estatística Computacional I</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./solucoes_caso_real.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Solução de equações</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#método-da-bisseção" id="toc-método-da-bisseção" class="nav-link active" data-scroll-target="#método-da-bisseção"><span class="header-section-number">1.1</span> Método da bisseção</a></li>
+  <li><a href="#método-newton-raphson" id="toc-método-newton-raphson" class="nav-link" data-scroll-target="#método-newton-raphson"><span class="header-section-number">1.2</span> Método Newton-Raphson</a></li>
+  <li><a href="#método-da-secante" id="toc-método-da-secante" class="nav-link" data-scroll-target="#método-da-secante"><span class="header-section-number">1.3</span> Método da secante</a></li>
+  <li><a href="#método-da-interpolação-quadrática-inversa-método-de-muller" id="toc-método-da-interpolação-quadrática-inversa-método-de-muller" class="nav-link" data-scroll-target="#método-da-interpolação-quadrática-inversa-método-de-muller"><span class="header-section-number">1.4</span> Método da interpolação quadrática inversa (Método de Muller)</a></li>
+  <li><a href="#método-da-falsa-posição-regula-falsi" id="toc-método-da-falsa-posição-regula-falsi" class="nav-link" data-scroll-target="#método-da-falsa-posição-regula-falsi"><span class="header-section-number">1.5</span> Método da falsa posição (<em>regula falsi</em>)</a></li>
+  <li><a href="#métodos-híbridos" id="toc-métodos-híbridos" class="nav-link" data-scroll-target="#métodos-híbridos"><span class="header-section-number">1.6</span> Métodos híbridos</a></li>
+  <li><a href="#funções-para-encontrar-raízes-no-r" id="toc-funções-para-encontrar-raízes-no-r" class="nav-link" data-scroll-target="#funções-para-encontrar-raízes-no-r"><span class="header-section-number">1.7</span> Funções para encontrar raízes no <code>R</code></a>
+  <ul class="collapse">
+  <li><a href="#pacote-stats" id="toc-pacote-stats" class="nav-link" data-scroll-target="#pacote-stats"><span class="header-section-number">1.7.1</span> Pacote <code>stats</code></a></li>
+  <li><a href="#pacote-pracma" id="toc-pacote-pracma" class="nav-link" data-scroll-target="#pacote-pracma"><span class="header-section-number">1.7.2</span> Pacote <code>pracma</code></a></li>
+  </ul></li>
+  <li><a href="#exercícios" id="toc-exercícios" class="nav-link" data-scroll-target="#exercícios"><span class="header-section-number">1.8</span> Exercícios</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Solução de equações</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Seja <span class="math inline">\(f(x)\)</span> uma função real e contínua. O valor <span class="math inline">\(x^\star\)</span> que satisfaz</p>
+<p><span class="math display">\[f(x^\star)=0\]</span> é denominado raíz, ou zero da função.</p>
+<p>Considere agora o problema de encontrar o valor <span class="math inline">\(x\)</span> tal que</p>
+<p><span class="math display">\[f(x)=a.\]</span> Isto é equivalente a encontrar a raiz da função <span class="math inline">\(g(x)\)</span>, dada por</p>
+<p><span class="math display">\[g(x)=f(x)-a\]</span> Portanto, todo problema de solução de equações pode ser reescrito como um outro de encontrar raízes.</p>
+<p>Dizemos que uma equação possui solução analítica quando conseguimos encontrar a raíz explicitamente. Por exemplo, a equação <span class="math inline">\(f(x)=2x+4\)</span> e considere o problema de encontrar a solução para <span class="math inline">\(f(x)=5\)</span>. Observe que</p>
+<p><span class="math display">\[f(x)=5\Rightarrow 2x+1=5\Rightarrow 2x-4=0,\]</span> o que implica que devemos encontrar a raiz de <span class="math inline">\(g(x)=2x-4\)</span>. Note que <span class="math inline">\(x^\star=2\)</span> é a raiz e, portanto, a solução desejada.</p>
+<p>Existem diversas equações que não podem ser resolvidas com simples manipulações algébricas, como por exemplo</p>
+<p><span class="math display">\[x^3−x=1\]</span></p>
+<p>Quando nos deparamos com esse tipo de equação, recorremos aos métodos numéricos. Estes são algoritmos que geram uma sequência de aproximações que convergem para a solução real com uma precisão desejada.</p>
+<p>A escolha do método depende do tipo de equação e da natureza das variáveis envolvidas.</p>
+<section id="método-da-bisseção" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="método-da-bisseção"><span class="header-section-number">1.1</span> Método da bisseção</h2>
+<p>O método da bisseção é uma ferramenta versátil para encontrar raízes. Antes de apresentá-lo, é importante conhecer o Teorema do Valor Intermediário (ou Teorema de Bolzano).</p>
+<div class="alert alert-success">
+<p><strong>Teorema do Valor Intermediário.</strong> Seja <span class="math inline">\(f\)</span> uma função real definida no intervalo <span class="math inline">\([a,b]\)</span>. Então, se <span class="math inline">\(f(a)\leq d \leq f(b)\)</span> ou <span class="math inline">\(f(b)\leq d \leq f(a)\)</span>, existe <span class="math inline">\(c\in[a,b]\)</span> tal que <span class="math inline">\(f(c)=d\)</span>.</p>
+</div>
+<p>Observe que a condição do Teorema do Valor Intermediário pode ser reescrita para como <span class="math display">\[g(a)=f(a)-d \leq 0 \leq g(b)=f(b)-d,\]</span> (ou <span class="math inline">\(g(b)\leq 0\leq g(a)\)</span>), o que implica que <span class="math inline">\(c\)</span> é raíz de <span class="math inline">\(g(x)\)</span>. Temos o seguinte corolário.</p>
+<div class="alert alert-success">
+<p><strong>Corolário.</strong> Seja <span class="math inline">\(f\)</span> uma função real definida no intervalo <span class="math inline">\([a,b]\)</span>. Então, se <span class="math inline">\(f(a)\)</span> e <span class="math inline">\(f(b)\)</span> possuem sinais opostos, então existe <span class="math inline">\(x^\star\in[a,b]\)</span> tal que <span class="math inline">\(x^\star\)</span> é raíz de <span class="math inline">\(f(x)\)</span>.</p>
+</div>
+<p>Portanto, se conhecemos um intervalo <span class="math inline">\([a,b]\)</span> tal que <span class="math inline">\(f(a)\)</span> e <span class="math inline">\(f(b)\)</span> tem sinais opostos, então temos a certeza de que há pelo menos uma raíz de <span class="math inline">\(f(x)\)</span> dentro do intervalo <span class="math inline">\([a,b]\)</span>. A <a href="#fig-bissecao" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> ilustra o Teorema do Valor Intermediário, considerando o intervalo <span class="math inline">\([a_0,b_0]\)</span> e a raiz <span class="math inline">\(x^\star\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-bissecao" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bissecao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="solucoes_caso_real_files/figure-html/fig-bissecao-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bissecao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Ilustração do Teorema do Valor Médio
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>O método da bisseção é baseado em aplicações sucessivas do Teorema do Valor Intermediário. Suponha que conhecemos um intervalo <span class="math inline">\([a_0,b_0]\)</span> tal que <span class="math inline">\(f(a_0)\)</span> e <span class="math inline">\(f(b_0)\)</span> possuem sinais opostos e que contém a única raiz <span class="math inline">\(x^\star\)</span>. Considere como candidato à solução o valor</p>
+<p><span class="math display">\[x_1=\frac{a_0+b_0}{2},\]</span></p>
+<p>ou seja, o ponto médio do intervalo. Portanto, podemos escrever <span class="math inline">\([a_0,b_0]=[a_0,x_1]\cup[x_1,b_0]\)</span>. Ao calcular <span class="math inline">\(f(x_1)\)</span>, três coisas podem acontecer:</p>
+<ol type="1">
+<li><span class="math inline">\(f(x_1)=0\)</span>. Nesse caso, <span class="math inline">\(x_1\)</span> é a solução do problema.</li>
+<li><span class="math inline">\(f(x_1)\)</span> e <span class="math inline">\(f(a_0)\)</span> tem o mesmo sinal. Isso implica que <span class="math inline">\(f(x_1)\)</span> e <span class="math inline">\(f(b_0)\)</span> possuem sinais opostos e, portanto, a solução deve estar em <span class="math inline">\([x_1,b_0]\)</span>. Podemos então definir o novo intervalo de busca <span class="math inline">\([a_1,b_1]\)</span> onde <span class="math inline">\(a_1=x_1\)</span> e <span class="math inline">\(b_1=b_0\)</span>.</li>
+<li><span class="math inline">\(f(x_1)\)</span> e <span class="math inline">\(f(b_0)\)</span> tem o mesmo sinal. Isso implica que <span class="math inline">\(f(x_1)\)</span> e <span class="math inline">\(f(a_0)\)</span> possuem sinais opostos e, portanto, a solução deve estar em <span class="math inline">\([a_0,x_1]\)</span>. Podemos então definir o novo intervalo de busca <span class="math inline">\([a_1,b_1]\)</span> onde <span class="math inline">\(a_1=a_0\)</span> e <span class="math inline">\(b_1=x_1\)</span>.</li>
+</ol>
+<p>A figura abaixo mostra a <a href="#fig-bissecao" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> novamente, agora com o ponto <span class="math inline">\(x_1\)</span> em vermelho. Também em vermelho está representado o novo intervalo, com metade do comprimento do anterior, que contém a raiz e satisfaz as condições do Teorema do Valor Intermediário.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-bissecao2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bissecao2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="solucoes_caso_real_files/figure-html/fig-bissecao2-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bissecao2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: Obtenção de um novo intervalo para o Teorema do Valor Intermediário
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Como ilustrado acima, se o procedimento não encontra a solução, ele ao menos elimina metade do espaço de busca. Podemos então definir o novo candidato a solução <span class="math display">\[x_2=\frac{a_1+b_1}{2},\]</span> isto é, ponto médio do novo intevalo e verificar se a raiz está no intervalo <span class="math inline">\([a_1,x_2]\)</span> ou <span class="math inline">\([x_2,b_1]\)</span>. Ao realizar esse procedimento <span class="math inline">\(n\)</span> vezes, teremos a sequência</p>
+<p><span class="math display">\[[a_0,b_0]\supset [a_1,b_1]\supset\cdots\supset [a_{n},b_{n}],\]</span> onde o intervalo <span class="math inline">\([a_n,b_n]\)</span> contém a raiz <span class="math inline">\(x^\star\)</span>. O comprimento deste intervalo é <span class="math display">\[\frac{b_0-a_0}{2^n}\]</span> o que implica que <span class="math display">\[|x_{n}-x^\star|&lt;\frac{b_0-a_0}{2^n}=\varepsilon_n,\]</span> onde <span class="math inline">\(\varepsilon_n\)</span> é o erro máximo da aproximação. É imediato que <span class="math inline">\(\lim_{n\rightarrow \infty}\varepsilon_n=0\)</span>, o que implica que o método converge para a solução. Abaixo, apresentamos o algoritmo do método da bisseção.</p>
+<div class="alert alert-success">
+<p><strong>Algoritmo 1 (Método da Bisseção).</strong></p>
+<p>Para encontrar uma raiz de <span class="math inline">\(f(x)\)</span> no intervalo <span class="math inline">\([a,b]\)</span> com uma tolerância de <span class="math inline">\(\varepsilon\)</span>:</p>
+<p>Pré-condição: <span class="math inline">\(f(a)f(b)&lt;0.\)</span></p>
+<ol type="1">
+<li><p>Defina a tolerância <span class="math inline">\(\varepsilon&gt;0.\)</span> e faça <span class="math inline">\(i=1\)</span></p></li>
+<li><p>Enquanto <span class="math inline">\(∣b−a|\geq\varepsilon\)</span> repita os seguintes passos:</p>
+<ol type="a">
+<li><p>Calcule <span class="math inline">\(x_i=(a+b)/2\)</span></p></li>
+<li><p>Se <span class="math inline">\(f(x_i)=0\)</span>, pare e retorne <span class="math inline">\(x^\star=x_i\)</span>.</p></li>
+<li><p>Atualização do intervalo</p></li>
+</ol>
+<ul>
+<li>Se <span class="math inline">\(f(x_i)f(a)&lt;0\)</span>, a raiz está o intervalo <span class="math inline">\([a,x_i]\)</span>. Faça <span class="math inline">\(b=x_i\)</span></li>
+<li>Senão, a raiz está no intervalo <span class="math inline">\([x_i,b]\)</span>. Faça <span class="math inline">\(a=x_i\)</span></li>
+<li>Faça <span class="math inline">\(i=i+1\)</span></li>
+</ul></li>
+</ol>
+</div>
+<p>O método da bisseção consiste em realizar as sucessivas divisões de intervalos até a iteração <span class="math inline">\(n\)</span> que satifaz o erro máximo.</p>
+<div class="alert alert-info">
+<p><strong>Exemplo</strong> Seja <span class="math display">\[f(x)=x^2−x-1\]</span> Vamos encontrar a raiz de <span class="math inline">\(f\)</span> utilizando o método da bisseção. Observe que <span class="math inline">\(f(1)=-1\)</span> e <span class="math inline">\(f(2)=5\)</span> e, pelo Teorema do Valor Intermediário, há pelo menos uma raiz no intervalo [1,2]. O erro máximo na <span class="math inline">\(n\)</span>-ésima iteração é</p>
+<p><span class="math display">\[\varepsilon_n=\frac{1}{2^n}.\]</span> Escolhendo <span class="math inline">\(n=15\)</span> temos <span class="math inline">\(\varepsilon_{15}=0.00003\)</span> (ou seja, uma precisão de quatro casas decimais). A tabela abaixo apresenta os intervalos e os pontos médios (soluções) para cada iteração.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1.000000 1.500000 1.500000 1.500000 1.562500 1.593750 1.609375 1.617188
+ [9] 1.617188 1.617188 1.617188 1.617676 1.617920 1.617920 1.617981 1.618011</code></pre>
+</div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Iteração</th>
+<th style="text-align: right;">Solução</th>
+<th style="text-align: right;">Erro</th>
+<th style="text-align: right;">[a</th>
+<th style="text-align: right;">b]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.500000</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: right;">1.500000</td>
+<td style="text-align: right;">2.000000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1.750000</td>
+<td style="text-align: right;">0.250000</td>
+<td style="text-align: right;">1.500000</td>
+<td style="text-align: right;">1.750000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.625000</td>
+<td style="text-align: right;">0.125000</td>
+<td style="text-align: right;">1.500000</td>
+<td style="text-align: right;">1.625000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.562500</td>
+<td style="text-align: right;">0.062500</td>
+<td style="text-align: right;">1.562500</td>
+<td style="text-align: right;">1.625000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1.593750</td>
+<td style="text-align: right;">0.031250</td>
+<td style="text-align: right;">1.593750</td>
+<td style="text-align: right;">1.625000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1.609375</td>
+<td style="text-align: right;">0.015625</td>
+<td style="text-align: right;">1.609375</td>
+<td style="text-align: right;">1.625000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1.617188</td>
+<td style="text-align: right;">0.007812</td>
+<td style="text-align: right;">1.617188</td>
+<td style="text-align: right;">1.625000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1.621094</td>
+<td style="text-align: right;">0.003906</td>
+<td style="text-align: right;">1.617188</td>
+<td style="text-align: right;">1.621094</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1.619141</td>
+<td style="text-align: right;">0.001953</td>
+<td style="text-align: right;">1.617188</td>
+<td style="text-align: right;">1.619141</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1.618164</td>
+<td style="text-align: right;">0.000977</td>
+<td style="text-align: right;">1.617188</td>
+<td style="text-align: right;">1.618164</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.617676</td>
+<td style="text-align: right;">0.000488</td>
+<td style="text-align: right;">1.617676</td>
+<td style="text-align: right;">1.618164</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1.617920</td>
+<td style="text-align: right;">0.000244</td>
+<td style="text-align: right;">1.617920</td>
+<td style="text-align: right;">1.618164</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">1.618042</td>
+<td style="text-align: right;">0.000122</td>
+<td style="text-align: right;">1.617920</td>
+<td style="text-align: right;">1.618042</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1.617981</td>
+<td style="text-align: right;">0.000061</td>
+<td style="text-align: right;">1.617981</td>
+<td style="text-align: right;">1.618042</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">1.618011</td>
+<td style="text-align: right;">0.000031</td>
+<td style="text-align: right;">1.618011</td>
+<td style="text-align: right;">1.618042</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="método-newton-raphson" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="método-newton-raphson"><span class="header-section-number">1.2</span> Método Newton-Raphson</h2>
+<p>Considere o problma de encontrar uma raiz de <span class="math inline">\(f(x)\)</span>. Seja <span class="math inline">\(x_0\)</span> um ponto próximo da raiz <span class="math inline">\(x^\star\)</span>. A equação da reta tangente ao ponto <span class="math inline">\(x_0\)</span> é dada por</p>
+<p><span class="math display">\[f(x)=f(x_0)+(x-x_0)f'(x_0).\]</span> A <a href="#fig-newton-tangente" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> ilustra a reta tangente (em vermelho) ao ponto <span class="math inline">\(x_0\)</span> para uma certa função. Observe que a raiz da reta tangente, marcada como <span class="math inline">\(x_1\)</span> no gráfico, está mais próxima de <span class="math inline">\(x^\star\)</span> do que o ponto <span class="math inline">\(x_0\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-newton-tangente" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-newton-tangente-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="solucoes_caso_real_files/figure-html/fig-newton-tangente-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-newton-tangente-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.3: Obtenção de um novo intervalo para o Teorema do Valor Intermediário
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>A raiz <span class="math inline">\(x_1\)</span> é calculada do seguinte modo: <span class="math display">\[0=f(x_0)+(x_1-x_0)f'(x_0)\Rightarrow x_1=x_0-\frac{f(x_0)}{f'(x_0)}.\]</span></p>
+<p>Podemos então encontrar a reta tangente ao ponto <span class="math inline">\(x_1\)</span>. Por sua vez, a raiz desta reta, denominada por <span class="math inline">\(x_2\)</span>, estará mais próxima de <span class="math inline">\(x^\star\)</span> do que <span class="math inline">\(x_1\)</span>. Após realizar o mesmo procedimento <span class="math inline">\(n\)</span> vezes teremos</p>
+<p><span class="math display">\[x_n=x_{n-1}-\frac{f(x_{n-1})}{f'(x_{n-1})}\]</span></p>
+<p>Intuitivamente, temos que <span class="math inline">\(x_n\)</span> deve estar mais próximo de <span class="math inline">\(x^\star\)</span> na medida que <span class="math inline">\(n\rightarrow\infty\)</span>. Abaixo, segue o algoritmo do método de Newton-Raphson.</p>
+<div class="alert alert-success">
+<p><strong>Algoritmo 2. (Método de Newton-Raphson)</strong></p>
+<p>Para encontrar a raiz <span class="math inline">\(x^\star\)</span> de <span class="math inline">\(f(x)\)</span> com um erro <span class="math inline">\(\varepsilon\)</span>.</p>
+<p>Pré-condição: <span class="math inline">\(f(x)\)</span> é diferenciável com <span class="math inline">\(f'(x)\neq 0\)</span> para qualquer <span class="math inline">\(x\)</span> na vizinhança de <span class="math inline">\(x^\star\)</span>. É necessário um valor <span class="math inline">\(x_0\)</span> próximo de <span class="math inline">\(x^\star\)</span></p>
+<p>Defina <span class="math inline">\(x_{atual}=x_0\)</span> e erro=<span class="math inline">\(+\infty\)</span></p>
+<ol type="1">
+<li><p>Enquanto o erro for maior que <span class="math inline">\(\varepsilon\)</span> repita os seguintes passos:</p>
+<ol type="a">
+<li><p>Calcule <span class="math inline">\(x_m=x_{atual}-\frac{f(x_{atual})}{f'(x_{atual})}\)</span></p></li>
+<li><p>Calcule erro<span class="math inline">\(=|x_m-x_{atual}|\)</span> e faça <span class="math inline">\(x_{atual}=x_m\)</span>.</p></li>
+</ol></li>
+<li><p>Retorne <span class="math inline">\(x^\star=x_m\)</span>.</p></li>
+</ol>
+</div>
+<p>O método</p>
+<div class="alert alert-success">
+<p><strong>Teorema de Kantorovich (simplificado)</strong> Seja <span class="math inline">\(x_0\)</span> um ponto inicial para o método Newton-Raphson. A convergência para a raiz de <span class="math inline">\(f(x)\)</span> é garantida se:</p>
+<ol type="1">
+<li><p><span class="math inline">\(f'(x_0)\neq 0\)</span></p></li>
+<li><p>Existe uma constante <span class="math inline">\(L\)</span> que limita a segunda derivada, ou seja <span class="math inline">\(|f''(x_0)|\leq L\)</span> em algum intervalo contento <span class="math inline">\(x_0\)</span>.</p></li>
+<li><p>A seguinte condição é satisfeita: <span class="math display">\[h_0=\frac{|f(x_0)|}{f'(x_0)^2}L\leq \frac{1}{2}.\]</span></p></li>
+</ol>
+</div>
+<div class="alert alert-success">
+<p><strong>Métodos de quase-Newton.</strong></p>
+<p>Uma das desvantagens do método de Newton-Raphson é a necessidade de obter uma expressão analítica para a derivada de <span class="math inline">\(f(x)\)</span>. Qualquer método que utilize a mesma estrutura do Newton-Raphson mas troca a forma analítica de <span class="math inline">\(f'(x)\)</span> por uma aproximação pertence à classe de <em>métodos de quase-Newton</em>.</p>
+</div>
+<p>.</p>
+</section>
+<section id="método-da-secante" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="método-da-secante"><span class="header-section-number">1.3</span> Método da secante</h2>
+<p>Seja <span class="math inline">\(x^\star\)</span> a raiz de <span class="math inline">\(f(x)\)</span> e sejam <span class="math inline">\(x_0\)</span> e <span class="math inline">\(x_1\)</span> dois valores próximos de <span class="math inline">\(x^\star\)</span>. A reta secante aos pontos <span class="math inline">\((x_0,f(x_0))\)</span> e <span class="math inline">\((x_1,f(x_1))\)</span> é dada por <span class="math display">\[f(x)=f(x_1)+ (x-x_1)\frac{f(x_1)-f(x_0)}{x_1-x_0}.\]</span></p>
+<p>Assim como no métod Newton-Raphson, a raiz da reta secante acima tende a estar mais próxima de <span class="math inline">\(x^\star\)</span> do que <span class="math inline">\(x_0\)</span> e <span class="math inline">\(x_1\)</span>. A <a href="#fig-secante" class="quarto-xref">Figure&nbsp;<span>1.4</span></a> ilustra essa afirmação, onde o ponto <span class="math inline">\(x_2\)</span> é a raiz da reta secante (em vermelho).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-secante" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-secante-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="solucoes_caso_real_files/figure-html/fig-secante-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-secante-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.4: Obtenção de um novo pontos utilizando a reta secante formada a partir de dois pontos iniciais.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>O ponto <span class="math inline">\(x_2\)</span> é obtido do seguinte modo:</p>
+<p><span class="math display">\[0=f(x_1)+(x_2-x_1)\frac{f(x_1)-f(x_)}{x_1-x_0}\Rightarrow x_2=x_1-f(x_1)\frac{x_1-x_0}{f(x_1)-f(x_0)}.\]</span> De modo análogo, podemos construir a reta secante aos pontos <span class="math inline">\((x_1,f(x_1))\)</span> e <span class="math inline">\((x_2,f(x_2))\)</span> e encontrar sua raiz <span class="math inline">\(x_3\)</span>. Ao realizar esse procedimento diversas vezes, teremos que o ponto <span class="math inline">\(x_n\)</span> será dado por</p>
+<p><span class="math display">\[ x_n=x_{n-1}-f(x_{n-1})\frac{x_{n-1}-x_{n-2}}{f(x_{n-1})-f(x_{n-2})}.\]</span> Podemos continuar a iteração até obter <span class="math inline">\(|x_n-x_{n-1}|&lt;\varepsilon\)</span>.</p>
+<div class="alert alert-success">
+<p><strong>Algoritmo 3. (Método da secante)</strong></p>
+<p>Para encontrar a raiz <span class="math inline">\(x^\star\)</span> de <span class="math inline">\(f(x)\)</span> com um erro <span class="math inline">\(\varepsilon\)</span>.</p>
+<p>Pré-condição: São necessários valores <span class="math inline">\(x_0\)</span> e <span class="math inline">\(x_1\)</span> próximos de <span class="math inline">\(x^\star\)</span></p>
+<p>Defina erro=<span class="math inline">\(+\infty\)</span> e <span class="math inline">\(n=1\)</span></p>
+<ol type="1">
+<li><p>Enquanto o erro for maior que <span class="math inline">\(\varepsilon\)</span> repita os seguintes passos:</p>
+<ol type="a">
+<li><p><span class="math inline">\(n=n+1\)</span></p></li>
+<li><p>Calcule <span class="math inline">\(x_n=x_{n-1}-f(x_{n-1})\frac{x_{n-1}-x_{n-2}}{f(x_{n-1})-f(x_{n-2})}\)</span></p></li>
+<li><p>Calcule erro<span class="math inline">\(=|x_n-x_{n-1}|\)</span>.</p></li>
+</ol></li>
+<li><p>Retorne <span class="math inline">\(x^\star=x_n\)</span>.</p></li>
+</ol>
+</div>
+<div class="alert alert-info">
+<p><strong>Exemplo - (W de Lambert)</strong> Considere o problema de encontrar a raiz de <span class="math inline">\(f(x)= e^{-x}-x\)</span>. O resultado, conhecido como constante de <span class="math inline">\(W\)</span> de Lambert, é um número irracional e é aproximadamente 0,567143.</p>
+<p>Vamos escolher os pontos iniciais <span class="math inline">\(x_0=0\)</span> e <span class="math inline">\(x_1=1\)</span>, onde <span class="math display">\[\begin{align}f(0)&amp;=e^{-0}-0=1\\f(1)&amp;=e^{-1}-1\approx-0,6321.\end{align}\]</span> A fórmula de iteração é dada por</p>
+<p><span class="math display">\[x_n=x_{n-1}-(e^{-x_{n-1}}-1)\frac{x_{n-1}-x_{n-2}}{e^{-x_{n-1}}-x_{n-1}-e^{-x_{n-2}}+x_{n-2}}.\]</span></p>
+<p>Vamos fixar o erro em <span class="math inline">\(10^{-7}\)</span> para obter uma precisão de 6 casas decimais.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Iterações</th>
+<th style="text-align: right;">x</th>
+<th style="text-align: right;">Erro</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.612700</td>
+<td style="text-align: right;">0.387300</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.563838</td>
+<td style="text-align: right;">0.048861</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.567170</td>
+<td style="text-align: right;">0.003332</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.567143</td>
+<td style="text-align: right;">0.000027</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.567143</td>
+<td style="text-align: right;">0.000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Fica como exercício provar que o método da secante pertence à classe dos métodos de quase-Newton. Assim como o método de Newton-Raphson, esse método tem boas propriedades para funções duas vezes continuamente diferenciáveis, como mostra o teorema abaixo.</p>
+<div class="alert alert-success">
+<p><strong>Teorema da convergência do método da secante.</strong> Seja <span class="math inline">\(f\)</span> uma função real, contínua e duas vezes diferenciável no intervalo <span class="math inline">\([a,b]\)</span>, onde <span class="math inline">\(x^\star\in(a,b)\)</span> é a única raiz nesse intervalo e <span class="math inline">\(f'(x^\star)\neq 0\)</span></p>
+<p>Se as soluções iniciais <span class="math inline">\(x_0\)</span> e <span class="math inline">\(x_1\)</span> forem escolhidas suficientemente próximas de <span class="math inline">\(x^\star\)</span> então a sequência <span class="math inline">\(x_2,\ldots,x_n\)</span> produzida pelo método da secante irá convergir para <span class="math inline">\(x^\star\)</span>.</p>
+</div>
+<div class="alert alert-success">
+<p><strong>Atenção.</strong> O teorema acima mostra que não basta escolher dois valores dentro do intervalo <span class="math inline">\([a,b]\)</span> que contém <span class="math inline">\(x^\star\)</span>. Ou seja, diferente do método da bisseção, essa escolha não é garantia de convergência. Isso ocorre porque, dependendo da função, a escolha dos pontos iniciais pode levar a geração de candidatos para fora do intervalo <span class="math inline">\([a,b]\)</span> fazendo com que a convergência demore ou mesmo falhe.</p>
+</div>
+</section>
+<section id="método-da-interpolação-quadrática-inversa-método-de-muller" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="método-da-interpolação-quadrática-inversa-método-de-muller"><span class="header-section-number">1.4</span> Método da interpolação quadrática inversa (Método de Muller)</h2>
+<p>O método da interpolação quadrática inversa segue a mesma ideia do método da secante. Considere três pontos, <span class="math inline">\(x_1,x_2,x_3\)</span> próximos de <span class="math inline">\(x^\star\)</span>. Na <span class="math inline">\(i\)</span>-ésima iteração, o próximo candidato à solução é a raiz da parábola que passa pelos pontos <span class="math inline">\(x_{i-1},x_{i-2},x_{i-3}\)</span>, dada por</p>
+<p><span class="math display">\[x_{i} = x_{i-1} - \frac{2f(x_{i-1})}{\omega \pm \sqrt{\omega^2 - 4f(x_{i-1})\delta_{i-1}}}\]</span> onde <span class="math display">\[\begin{align}
+\delta_{i-1} &amp;= \frac{f(x_{i-1})-f(x_{i-2})}{x_{i-1}-x_{i-2}} + \frac{f(x_{i-1})-f(x_{i-3})}{x_{i-1}-x_{i-3}} - \frac{f(x_{i-2})-f(x_{i-3})}{x_{i-2}-x_{i-3}}\\
+\omega &amp;= \frac{f(x_{i-1})-f(x_{i-2})}{x_{i-1}-x_{i-2}} + \delta_{i-1}(x_{i-1}-x_{i-2})
+\end{align}\]</span></p>
+<p>Embora esse método possa convergir rapidamente para a raiz, os pontos iniciais devem estar próximos da raiz. Além disso, o algoritmo pode falhar se em algum momento os valores de <span class="math inline">\(f(x_i),f(x_{i-1})\)</span> ou <span class="math inline">\(f(x_{i-2})\)</span> concidirem. Portanto, é recomendado que esse método seja utilizado em conjunto com outro, conforme discutido na seção Métodos Híbridos.</p>
+</section>
+<section id="método-da-falsa-posição-regula-falsi" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="método-da-falsa-posição-regula-falsi"><span class="header-section-number">1.5</span> Método da falsa posição (<em>regula falsi</em>)</h2>
+<p>O método da falsa posição é uma combinação do método da secante com o método da bisseção. Assim como neste último, é necessário começar com um intervalo <span class="math inline">\([x_a,x_b]\)</span> no qual <span class="math inline">\(f(x_a)\)</span> e <span class="math inline">\(f(x_b)\)</span> têm sinais opostos.</p>
+<p>Primeiro, calcula-se a raiz da reta secante que passa pelos pontos <span class="math inline">\((x_a,f(x_a))\)</span> e <span class="math inline">\((x_b,f(x_b))\)</span>, dada por</p>
+<p><span class="math display">\[
+x_c=x_b-f(x_b)\frac{x_b-x_a}{f(x_b)-f(x_a)}.
+\]</span> Em seguida, verifica-se qual dos intervalos <span class="math inline">\([x_a,x_c]\)</span> ou <span class="math inline">\([x_c,x_b]\)</span> contém a raiz. Então, repete-se a busca.</p>
+<p>Assim como ocorre no método da bisseção, o método da falsa posição cria uma sequência de intervalos encaixados que contém a raiz, convergindo portanto para a verdadeira solução. Espera-se que a escolha de <span class="math inline">\(x_c\)</span> esteja mais próxima da raiz do que o ponto médio do intervalo.</p>
+<div class="alert alert-success">
+<p><strong>Algoritmo 4 (Método da Falsa Posição).</strong></p>
+<p>Para encontrar uma raiz de <span class="math inline">\(f(x)\)</span> no intervalo <span class="math inline">\([a,b]\)</span> com uma tolerância de <span class="math inline">\(\varepsilon\)</span>:</p>
+<p>Pré-condição: <span class="math inline">\(f(a)f(b)&lt;0.\)</span></p>
+<ol type="1">
+<li><p>Defina a tolerância <span class="math inline">\(\varepsilon&gt;0.\)</span> e faça <span class="math inline">\(i=1\)</span></p></li>
+<li><p>Enquanto <span class="math inline">\(∣b−a|\geq\varepsilon\)</span> repita os seguintes passos:</p>
+<ol type="a">
+<li><p>Calcule <span class="math inline">\(x_i=b - f(b)\frac{b-a}{f(b)-f(a)}\)</span></p></li>
+<li><p>Se <span class="math inline">\(f(x_i)=0\)</span>, pare e retorne <span class="math inline">\(x^\star=x_i\)</span>.</p></li>
+<li><p>Atualização do intervalo</p></li>
+</ol>
+<ul>
+<li>Se <span class="math inline">\(f(x_i)f(a)&lt;0\)</span>, a raiz está o intervalo <span class="math inline">\([a,x_i]\)</span>. Faça <span class="math inline">\(b=x_i\)</span></li>
+<li>Senão, a raiz está no intervalo <span class="math inline">\([x_i,b]\)</span>. Faça <span class="math inline">\(a=x_i\)</span></li>
+<li>Faça <span class="math inline">\(i=i+1\)</span></li>
+</ul></li>
+</ol>
+</div>
+<div class="alert alert-info">
+<p><strong>Exemplo</strong> Seja <span class="math display">\[f(x)=x^2−x-1\]</span> Anteriormente, encontramos a raiz de <span class="math inline">\(f\)</span>, iniciando com o intervalo [1,2] e fixando erro de <span class="math inline">\(0,00003\)</span>, que foi obtido em 15 iterações. A tabela abaixo apresenta os intervalos e os pontos médios (soluções) para o método da falsa posição até a obtenção do mesmo erro fixado no método da bisseção.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</code></pre>
+</div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Iteração</th>
+<th style="text-align: right;">Solução</th>
+<th style="text-align: right;">Erro</th>
+<th style="text-align: right;">[a</th>
+<th style="text-align: right;">b]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.800000</td>
+<td style="text-align: right;">1.000000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.800000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1.712871</td>
+<td style="text-align: right;">0.087129</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.712871</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.669659</td>
+<td style="text-align: right;">0.043212</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.669659</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.646784</td>
+<td style="text-align: right;">0.022875</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.646784</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1.634245</td>
+<td style="text-align: right;">0.012539</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.634245</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1.627238</td>
+<td style="text-align: right;">0.007007</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.627238</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1.623280</td>
+<td style="text-align: right;">0.003958</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.623280</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1.621031</td>
+<td style="text-align: right;">0.002249</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.621031</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1.619748</td>
+<td style="text-align: right;">0.001283</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.619748</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1.619015</td>
+<td style="text-align: right;">0.000733</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.619015</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.618596</td>
+<td style="text-align: right;">0.000419</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.618596</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1.618356</td>
+<td style="text-align: right;">0.000240</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.618356</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">1.618218</td>
+<td style="text-align: right;">0.000137</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.618218</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1.618140</td>
+<td style="text-align: right;">0.000079</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.618140</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">1.618094</td>
+<td style="text-align: right;">0.000045</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.618094</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="métodos-híbridos" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="métodos-híbridos"><span class="header-section-number">1.6</span> Métodos híbridos</h2>
+<p>Os métodos discutidos até o momento possuem vantagens e desvantagens, conforme sumarizado na tabela abaixo.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 29%">
+<col style="width: 23%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Método</th>
+<th style="text-align: center;">Ordem de Convergência</th>
+<th style="text-align: left;">Vantagem</th>
+<th style="text-align: left;">Desvantagem</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Bisseção</strong></td>
+<td style="text-align: center;">Linear</td>
+<td style="text-align: left;">Garante a convergência. Não exige o cálculo da derivada.</td>
+<td style="text-align: left;">A convergência é lenta.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Falsa Posição</strong></td>
+<td style="text-align: center;">Linear</td>
+<td style="text-align: left;">Geralmente converge mais rápido que a bisseção. Não exige o cálculo da derivada.</td>
+<td style="text-align: left;">Pode ter convergência lenta se a função for muito côncava ou convexa.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Secante</strong></td>
+<td style="text-align: center;">Superlinear</td>
+<td style="text-align: left;">Convergência rápida, sem precisar calcular a derivada.</td>
+<td style="text-align: left;">Pode divergir se a aproximação inicial for ruim.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Interpolação Quadrática Inversa</strong></td>
+<td style="text-align: center;">Superlinear</td>
+<td style="text-align: left;">Geralmente mais rápido que o método da secante. Pode encontrar raízes complexas.</td>
+<td style="text-align: left;">Exige três pontos iniciais. Pode ser instável e falhar se os pontos forem colineares.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Newton-Raphson</strong></td>
+<td style="text-align: center;">Quadrática</td>
+<td style="text-align: left;">Convergência extremamente rápida (se as condições forem atendidas).</td>
+<td style="text-align: left;">Exige o cálculo da derivada. Pode divergir se a aproximação inicial for ruim.</td>
+</tr>
+</tbody>
+</table>
+<p>Os métodos híbridos são algoritmos que decidem em cada iteração qual método utilizar. Os objetivos dessas decisões são acelerar e garantir a convergência. Vamos apresentar a ideia por trás de dois métodos: Dekker e Brent.</p>
+<p>O método de Dekker (1969) combina o método da bisseção com o da secante. sua ideia básica é utilizar o método da secante sempre que possível, criando verificações lógicas que evitem que o candidato à solução se afaste da raiz. Ele começa com um intervalo <span class="math inline">\([a,b]\)</span> que contém a raiz <span class="math inline">\(x^\star\)</span> (ou seja, <span class="math inline">\(f(a)\)</span> e <span class="math inline">\(f(b)\)</span> tem sinais opostos). Na sua <span class="math inline">\(i\)</span>-ésima iteração:</p>
+<ol type="1">
+<li><strong>Geração dos candidatos</strong>. Dois candidatos são construídos, utilizando o método da bisseção e o da secante:</li>
+</ol>
+<p><span class="math display">\[\begin{align}x_m&amp;=\frac{a_{i-1}+b_{i-1}}{2}\\x_s&amp;=b_{i-1}-f(b_{i-1})\frac{b_{i-1}-a_{i-1}}{f(b_{i-1})-f(a_{i-1})} \end{align}\]</span> 2. <strong>Freio da secante</strong>. Se <span class="math inline">\(x_s\in[x_m,b_{i-1}]\)</span>, então o ponto da secante não se afastou da solução e fazemos <span class="math inline">\(b_{i}=x_s\)</span>. Senão, escolhemos <span class="math inline">\(b_i=x_m\)</span> por segurança. O objetivo desse passo é evitar utilizar um ponto <span class="math inline">\(x_s\)</span> afastado da solução.</p>
+<ol start="3" type="1">
+<li><p><strong>Definindo o novo intervalo</strong>. Se <span class="math inline">\(f(a_{i-1})\)</span> e <span class="math inline">\(f(b_i)\)</span> tem sinais oposto, então <span class="math inline">\(a_i=a_{i-1}\)</span>. Em caso contrário, <span class="math inline">\(a_i=b_{i-1}\)</span></p></li>
+<li><p><strong>Permuta</strong> Se <span class="math inline">\(|f(a_i)|&lt;|f(b_i)|\)</span>, então é provável que <span class="math inline">\(a_i\)</span> seja um palpite melhor que <span class="math inline">\(b_i\)</span>. Então os valores <span class="math inline">\(a_i\)</span> e <span class="math inline">\(b_i\)</span> são permutados. Isso garante que a solução será dada pel convergência da sequência <span class="math inline">\(b_1,b_2,\ldots\)</span></p></li>
+</ol>
+<p>O método de Brent (1973) é uma modificação do método de Dekker, començando também com um intervalo <span class="math inline">\([a,b]\)</span> que contém a raiz. A principal diferença é que Brent adiciona mais verificações para garantir que a interpolação não apenas se aproxime da raiz, mas o faça de forma eficiente. Ele utiliza a interpolação quadrática inversa (que é mais rápida que a secante) e recorre à bisseção quando a interpolação não faz um progresso significativo.</p>
+<p>Em geral, o método itera nos seguintes passos:</p>
+<ol type="1">
+<li><p><strong>Geração do candidato</strong>: O algoritmo tenta encontrar um novo ponto, <span class="math inline">\(x_s\)</span>, usando a interpolação quadrática inversa. Se essa interpolação não for possível, ele recorre ao método da secante.</p></li>
+<li><p><strong>Testes de segurança</strong>: Antes de aceitar <span class="math inline">\(x_s\)</span>, ele é submetido a uma série de testes que o comparam com a garantia de progresso da bisseção. Se <span class="math inline">\(x_s\)</span> não for significativamente melhor do que um passo de bisseção, o algoritmo descarta <span class="math inline">\(x_s\)</span> e, em vez disso, usa o ponto médio <span class="math inline">\(x_m\)</span> como candidato.</p></li>
+<li><p><strong>Atualização do intervalo</strong>. O novo intervalo é atualizado com base no candidato aceito (<span class="math inline">\(x_s\)</span> ou <span class="math inline">\(x_m\)</span>), garantindo que a raiz continue delimitada e que o ponto com o menor valor de <span class="math inline">\(f(x)\)</span> seja sempre a melhor estimativa.</p></li>
+</ol>
+</section>
+<section id="funções-para-encontrar-raízes-no-r" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="funções-para-encontrar-raízes-no-r"><span class="header-section-number">1.7</span> Funções para encontrar raízes no <code>R</code></h2>
+<p>O <code>R</code> oferece várias funções para encontrar raízes de equações não-lineares, tanto no pacote base (<code>stats</code>) quanto em pacotes externos.</p>
+<section id="pacote-stats" class="level3" data-number="1.7.1">
+<h3 data-number="1.7.1" class="anchored" data-anchor-id="pacote-stats"><span class="header-section-number">1.7.1</span> Pacote <code>stats</code></h3>
+<p>A função <code>uniroot</code> é a implementação do método de Brent. Seus principais argumentos são:</p>
+<ul>
+<li><p><code>f</code>: a função da qual se deseja obter a raiz</p></li>
+<li><p><code>interval</code>: vetor contendo os pontos extremos do intervalo de busca</p></li>
+<li><p><code>tol</code>: tolerância desejada (o valor padrão é 10^{-10})</p></li>
+<li><p><code>maxiter</code>: número máximo de tentativas (o valor padrão é 1000)</p></li>
+</ul>
+</section>
+<section id="pacote-pracma" class="level3" data-number="1.7.2">
+<h3 data-number="1.7.2" class="anchored" data-anchor-id="pacote-pracma"><span class="header-section-number">1.7.2</span> Pacote <code>pracma</code></h3>
+<p>O pacote <code>pracma</code> traz diversas rotinas de cálculo numérico, incluindo os métodos clássicos de busca de raízes.</p>
+<p>Os métodos da bisseção, secante e falsa posição estão implementados nas funções <code>bisect</code>, <code>secant</code> e <code>regulaFalsi</code>, respectivamente. Seus argumentos são</p>
+<ul>
+<li><p><code>f</code>: a função da qual se deseja obter a raiz</p></li>
+<li><p><code>a</code>: limite inferior do intervalo para a bisseção e falsa posição; um ponto perto da raiz para a secante</p></li>
+<li><p><code>b</code>: limite superior do intervalo para a bisseção e falsa posição; um ponto perto da raiz para a secante</p></li>
+<li><p><code>tol</code>: tolerância desejada (o valor padrão é <span class="math inline">\(10^{-10}\)</span>)</p></li>
+<li><p><code>maxiter</code>: número máximo de tentativas (o valor padrão é 100)</p></li>
+</ul>
+<p>O método da interpolação quadrática inversa (Muller) está implementado na função <code>muller</code>, cujos argumentos são</p>
+<ul>
+<li><p><code>f</code>: a função da qual se deseja obter a raiz</p></li>
+<li><p><code>p0,p1,p2</code>: três pontos iniciais, próximos da raiz</p></li>
+<li><p><code>tol</code>: tolerância desejada (o valor padrão é .0001)</p></li>
+<li><p><code>maxiter</code>: número máximo de tentativas (o valor padrão é <span class="math inline">\(10^{-10}\)</span>)</p></li>
+</ul>
+<p>O método de Brent está implementado na função <code>brent</code> e possui os argumentos</p>
+<ul>
+<li><p><code>f</code>: a função da qual se deseja obter a raiz</p></li>
+<li><p><code>a,b</code>: intervalo que contém a raiz (as imagens nas extremidades do intervalo devem ter sinais opostos)</p></li>
+<li><p><code>tol</code>: tolerância desejada (o valor padrão é <span class="math inline">\(10^{-12}\)</span>)</p></li>
+<li><p><code>maxiter</code>: número máximo de tentativas (o valor padrão é 500)</p></li>
+</ul>
+<p>A função <code>newtonRaphson</code> (ou de modo equivalente, <code>newton</code>) encontra a raiz da função utilizando o método Newton-Raphson. Os argumentos são</p>
+<ul>
+<li><p><code>fun</code>: a função da qual se deseja obter a raiz</p></li>
+<li><p><code>x0</code>: valor inicial, próximo da raiz</p></li>
+<li><p><code>dfun</code>: a função da derivada de <span class="math inline">\(f\)</span>. Se <code>dfun=NULL</code>, o método da secante será utilizado</p></li>
+<li><p><code>tol</code>: tolerância desejada (o valor padrão é <span class="math inline">\(10^{-8}\)</span>)</p></li>
+<li><p><code>maxiter</code>: número máximo de tentativas (o valor padrão é 500)</p></li>
+</ul>
+</section>
+</section>
+<section id="exercícios" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="exercícios"><span class="header-section-number">1.8</span> Exercícios</h2>
+<div class="alert alert-warning">
+<p><strong>Exercício</strong> Seja <span class="math inline">\(f:[a,b]\rightarrow\mathbb{R}\)</span> uma função contínua tal que <span class="math inline">\(f(a)f(b)&lt;0\)</span>. O método da bisseção gera uma sequência de intervalos encaixados <span class="math inline">\([a_k,b_k]\)</span> onde a raiz <span class="math inline">\(x^\star\in[a_k,b_k]\)</span> para todo <span class="math inline">\(k\in\mathbb{N}\)</span>.</p>
+<ol type="1">
+<li><p>Discuta a unicidade da raiz encontrada por esse método. Sob quais condições o Método da Bisseção garante que a raiz encontrada é única no intervalo inicial <span class="math inline">\([a,b]?\)</span></p></li>
+<li><p>Se a função tiver múltiplas raízes no intervalo, o que podemos afirmar sobre a raiz que o método converge?</p></li>
+</ol>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício</strong> Implemente o método da bisseção para encontrar a raiz da função <span class="math display">\[f(x)=\log(x)+x^2-4.\]</span></p>
+<p>Utilize o intervalo inicial <span class="math inline">\([1,2]\)</span>. (Verifique previamente se <span class="math inline">\(f(1)\)</span> e <span class="math inline">\(f(2)\)</span> possuem sinais opostos). O critério de parada deve ser a obtenção de um erro absoluto máximo inferior a <span class="math inline">\(10^{−6}\)</span>. Ao final, imprima:</p>
+<ol type="1">
+<li>A raiz aproximada encontrada.</li>
+<li>O número total de iterações realizadas.</li>
+<li>Uma tabela com os valores <span class="math inline">\(x_n\)</span>, <span class="math inline">\(f(x_n)\)</span> e <span class="math inline">\(\varepsilon_n\)</span>.</li>
+</ol>
+</div>
+<div class="alert alert-warning">
+<p><strong>Exemplo.</strong> Seja <span class="math inline">\(X\)</span> uma variável aleatória contínua, cuja função distribuição é dada por <span class="math inline">\(F(x)\)</span>. O quantil <span class="math inline">\(100p\%\)</span> é o valor <span class="math inline">\(x_p\)</span> que satisfaz <span class="math display">\[F(x_p)=p.\]</span> Explique porque existe um único <span class="math inline">\(x_p\)</span> que satifaz a equação acima e utilize esse fato para descrever como obter <span class="math inline">\(x_p\)</span> a partir do método da bisseção.</p>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> Seja <span class="math inline">\(X\)</span> uma variável aleatória com a seguinte função distribuição <span class="math display">\[F(x)=1-\frac{1}{5}(x^2+4x+5) e^{-x},\]</span> com <span class="math inline">\(x&gt;0\)</span>. Encontre a mediana de <span class="math inline">\(X\)</span> utilizando o método da bisseção.</p>
+</div>
+<div class="alert alert-warning">
+<p><strong>Exercício</strong> Considere o problema de resolver <span class="math inline">\(\sqrt{x}=3\)</span>. Prove que o método de Newton-Raphson vai convergir para a verdadeira solução se o valor inicial <span class="math inline">\(x_0\)</span> satisfaz</p>
+<p><span class="math display">\[\frac{|x_0^2-7|}{2x_0^2}\leq \frac{1}{2}.\]</span></p>
+</div>
+<div class="alert alert-warning">
+<p>Exercício. Neste exercício você vai demonstrar o Teorema da Convergência do método da secante. Considere que as condições do teorema estão satisfeitas. É fato que, para qualquer ponto <span class="math inline">\(x\)</span> próximo de <span class="math inline">\(x^\star\)</span>, a função <span class="math inline">\(f(x)\)</span> pode ser aproximada por</p>
+<p><span class="math display">\[f(x)\approx f(x^\star) +(x-x^\star)f'(x^\star)+\frac{1}{2}(x-x^\star)f''(x^\star)\]</span> onde a aproximação é obtida por expansão em séries de Taylor. Considere então que <span class="math inline">\(x_n\)</span> e <span class="math inline">\(x_{n-1}\)</span> estão próximas de <span class="math inline">\(x^\star\)</span>. Seja <span class="math inline">\(\xi_n=x_n-x^\star\)</span>.</p>
+<ol type="1">
+<li>Prove que <span class="math display">\[\begin{align}f(x_n)\approx \xi_nf'(x^\star)+\frac{1}{2}\xi_n^2 f''(x^\star)\end{align}\]</span></li>
+<li>Mostre que</li>
+</ol>
+<p><span class="math display">\[\begin{align}f(x_n)-f(x_{n-1})\approx (\xi_n-\xi_{n-1})\left[f'(x^\star)+\frac{1}{2}f''(x^\star)(\xi_n+\xi_{n-1})\right]\end{align}\]</span></p>
+<ol start="3" type="1">
+<li>Mostre que a fórmula de iteração do método da secante pode ser reescrita como</li>
+</ol>
+<p><span class="math display">\[\xi_{n+1}=\xi_n-f(x_n)\frac{\xi_n-\xi_{n-1}}{f(x_n)-f(n-1)}\]</span></p>
+<ol start="4" type="1">
+<li>A partir dos passos 2 e 3, prove que</li>
+</ol>
+<p><span class="math display">\[\xi_{n+1}=\xi_n-\frac{f(x_n)}{f'(x^\star)+\frac{1}{2}f''(x^\star)(\xi_n+\xi_{n-1})}\]</span></p>
+<ol start="5" type="1">
+<li>Utilize a aproximação para <span class="math inline">\(f(x_n)\)</span> para mostrar que</li>
+</ol>
+<p><span class="math display">\[\xi_{n+1}\approx\xi_n-\frac{\xi_nf'(x^\star)+\frac{1}{2}\xi_n^2 f''(x^\star)}{f'(x^\star)+\frac{1}{2}f''(x^\star)(\xi_n+\xi_{n-1})}=\xi_n-\frac{\xi_n+\frac{1}{2}\xi_n^2 \frac{f''(x^\star)}{f'(x^\star)} }{1+\frac{1}{2}\frac{f''(x^\star)}{f'(x^\star)}(\xi_n+\xi_{n-1})}\]</span></p>
+<ol start="6" type="1">
+<li><p>Se <span class="math inline">\(u\)</span> é próximo de zero, é verdade que <span class="math display">\[\frac{1}{1+u}\approx 1-u\]</span> Como <span class="math inline">\((\xi_n+\xi_{n-1})\)</span> é próximo de zero faça <span class="math display">\[u=\frac{1}{2}\frac{f''(x^\star)}{f'(x^\star)}(\xi_n+\xi_{n-1})\]</span> e mostre que <span class="math display">\[\xi_{n+1}\approx\xi_n-\frac{\xi_nf'(x^\star)+\frac{1}{2}\xi_n^2 f''(x^\star)}{f'(x^\star)+\frac{1}{2}f''(x^\star)(\xi_n+\xi_{n-1})}=\xi_n-\left(\xi_n+\frac{1}{2}\xi_n^2 \frac{f''(x^\star)}{f'(x^\star)}\right)\left(1-\frac{1}{2}\frac{f''(x^\star)}{f'(x^\star)}(\xi_n+\xi_{n-1})\right)\]</span></p></li>
+<li><p>Como <span class="math inline">\(\varepsilon_n\)</span> é pequeno, o valor de <span class="math inline">\(\varepsilon_n^2\approx 0\)</span>. Utilize essa informação para mostrar que</p></li>
+</ol>
+<p><span class="math display">\[\xi_{n+1}\approx \frac{1}{2}\frac{f''(x^\star)}{f'(x^\star)}\xi_n\xi_{n-1}\]</span> Isto implica que <span class="math inline">\(|\xi_{n+1}|&lt;|\xi_n|\)</span></p>
+<ol start="8" type="1">
+<li>Conclua que, se <span class="math inline">\(x_0,x_1\)</span> estão próximos o suficiente da raiz, então o método da secante é convergente.</li>
+</ol>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> Dizemos que <span class="math inline">\(X\)</span> tem distribuição Lindley(<span class="math inline">\(\theta\)</span>) se sua função densidade é dada por <span class="math display">\[f(x|\theta)=\frac{\theta^2}{1+\theta}(1+x)e^{-\theta x},\]</span> onde <span class="math inline">\(x,\theta&gt;0\)</span>. Pode-se provar que</p>
+<p><span class="math display">\[F(x|\theta)=1-\frac{1+\theta(1+x)}{1+\theta}e^{-\theta x}\]</span> Para <span class="math inline">\(\theta=1\)</span> e considerando um erro de <span class="math inline">\(10^{-4}\)</span>, encontre a mediana desse modelo considerando os métodos</p>
+<ul>
+<li>Bisseção</li>
+<li>Secante</li>
+<li>Falsa Posição</li>
+<li>Muller</li>
+<li>Brent</li>
+<li>Newton-Raphson</li>
+</ul>
+<p>Você pode utilizar as funções ja implementadas no <code>R</code>. Para cada método, guarde o número de iterações até a convergência. Qual método convergiu mais rápido?</p>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,18 @@
+project:
+  type: book
+  output-dir: docs
+  
+book:
+  title: "Estatística Computacional I"
+  author: "James D Santos"
+  date: "30/07/2025"
+  chapters:
+    - index.qmd
+    - solucoes_caso_real.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
