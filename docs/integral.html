@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>integral</title>
+<title>3&nbsp; Métodos de quadratura – Estatística Computacional I</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -57,16 +57,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="integral_files/libs/clipboard/clipboard.min.js"></script>
-<script src="integral_files/libs/quarto-html/quarto.js"></script>
-<script src="integral_files/libs/quarto-html/popper.min.js"></script>
-<script src="integral_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="integral_files/libs/quarto-html/anchor.min.js"></script>
-<link href="integral_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="integral_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="integral_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="integral_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="integral_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./otimizacao.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -100,17 +134,108 @@ window.Quarto = {
 
 </head>
 
-<body class="fullcontent">
+<body class="nav-sidebar floating">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./integral.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Métodos de quadratura</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Estatística Computacional I</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./solucoes_caso_real.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Solução de equações</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./otimizacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de otimização</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./integral.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Métodos de quadratura</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#quadratura-gaussiana" id="toc-quadratura-gaussiana" class="nav-link active" data-scroll-target="#quadratura-gaussiana"><span class="header-section-number">3.1</span> Quadratura Gaussiana</a></li>
+  <li><a href="#quadratura-adaptativa-e-a-função-integrate" id="toc-quadratura-adaptativa-e-a-função-integrate" class="nav-link" data-scroll-target="#quadratura-adaptativa-e-a-função-integrate"><span class="header-section-number">3.2</span> Quadratura adaptativa e a função <code>integrate</code></a></li>
+  <li><a href="#exercícios" id="toc-exercícios" class="nav-link" data-scroll-target="#exercícios"><span class="header-section-number">3.3</span> Exercícios</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Métodos de quadratura</span></h1>
+</div>
 
 
 
-<section id="métodos-de-quadratura" class="level1">
-<h1>Métodos de quadratura</h1>
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <p>Em estatística, é usual estar interessado em encontrar expressões do tipo</p>
 <p><span class="math display">\[E(g(\boldsymbol{X}))=\int_{\mathbb{R}^n}g(\boldsymbol{x})f(\boldsymbol{x})d\boldsymbol{x}.
 \]</span></p>
@@ -150,7 +275,7 @@ window.Quarto = {
 <p><span class="math display">\[\int_a^b f(x)dx \approx \sum_{i=1}^{n}(x_i - x_{i-1})f(\tilde{x}_i),
 \]</span></p>
 <div id="def-" class="alert alert-success theorem definition">
-<p><span class="theorem-title"><strong>Definition 1</strong></span> Considere a integral <span class="math display">\[I=\int_a^b f(x)dx.\]</span></p>
+<p><span class="theorem-title"><strong>Definition 3.1</strong></span> Considere a integral <span class="math display">\[I=\int_a^b f(x)dx.\]</span></p>
 <p>Um método de quadratura numérica utiliza um conjunto de nós (ou pontos de quadratura) <span class="math inline">\(\tilde{x}_1,\ldots,\tilde{x}_n\)</span> e um conjunto correspondente de pesos <span class="math inline">\(w_1,\ldots,w_n\)</span> para aproximar a integral através de <span class="math display">\[\hat{I}_n=\sum_{i=1}^n w_if(\tilde{x}_i).\]</span></p>
 </div>
 <p>Observe que para qualquer intervalo <span class="math inline">\(D\)</span> sempre é possível utilizar o método da substituição para fazer</p>
@@ -185,7 +310,7 @@ $$
 <p>A fórmula da integral da regra do ponto médio se torna</p>
 <p><span class="math display">\[\hat{I}_n=\sum_{i=1}^{n}w_if(\tilde{x}_i)=\frac{1}{n}\sum_{i=1}^{n} f\left(\frac{2i-1}{2n}\right)\]</span> onde <span class="math inline">\(w_i=1/n\)</span> para <span class="math inline">\(i=1,\ldots,n\)</span>.</p>
 <div id="exm-" class="alert alert-info theorem example">
-<p><span class="theorem-title"><strong>Example 1</strong></span> Para exemplificar, considere a integral <span class="math display">\[\begin{equation}\label{eq::integral_beta}
+<p><span class="theorem-title"><strong>Example 3.1</strong></span> Para exemplificar, considere a integral <span class="math display">\[\begin{equation}\label{eq::integral_beta}
 \int_0^1 x(1-x)dx,
 \end{equation}\]</span> cujo resultado, igual a <span class="math inline">\(1/6\approx 0,166\)</span>, pode ser obtido analiticamente.</p>
 <p>Ao escolher o conjunto com <span class="math inline">\(n=4\)</span>, temos <span class="math display">\[\begin{align}\hat{I}_4&amp;=\frac{1}{4}\sum_{i=1}^4 f\left(\frac{2i-1}{8}\right)=\frac{1}{4}\sum_{i=1}^4 \left(\frac{2i-1}{8}\right)\left(1-\frac{2i-1}{8}\right)\\&amp;=
@@ -215,7 +340,7 @@ $$
 <img src="integral_files/figure-html/fig-regra_retangular-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-regra_retangular-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: A função dada no exemplo Exemplo 1 e os retângulos utilizados para computar a integral via método de Newton-Cotes com a regra retangular.
+Figure&nbsp;3.1: A função dada no exemplo Exemplo 1 e os retângulos utilizados para computar a integral via método de Newton-Cotes com a regra retangular.
 </figcaption>
 </figure>
 </div>
@@ -239,7 +364,7 @@ Figure&nbsp;1: A função dada no exemplo Exemplo 1 e os retângulos utilizados 
 <li><p>Aproxime o valor da integral utilizando a regra do ponto médio. Certifique-se de obter uma tolerância de 0,0001 (quatro casas decimais)</p></li>
 </ol>
 </div>
-<p>A <strong>regra do trapézio</strong> aproxima a integral no intervalo pela área de um trapézio. A <a href="#fig-regra_trapezio" class="quarto-xref">Figure&nbsp;2</a> ilustra a regra do trapézio em conjunto com a regra do ponto médio para o primeiro exemplo desta seção.</p>
+<p>A <strong>regra do trapézio</strong> aproxima a integral no intervalo pela área de um trapézio. A <a href="#fig-regra_trapezio" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> ilustra a regra do trapézio em conjunto com a regra do ponto médio para o primeiro exemplo desta seção.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fx <span class="ot">=</span> <span class="cf">function</span>(x) x<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>x)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>oo <span class="ot">=</span> <span class="fu">par</span>( <span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
@@ -287,7 +412,7 @@ Figure&nbsp;1: A função dada no exemplo Exemplo 1 e os retângulos utilizados 
 <img src="integral_files/figure-html/fig-regra_trapezio-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-regra_trapezio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Ambos os gráficos apresentam a função dada no Exemplo 1. (a) Método Newton-Cotes com regra retangular. (b) Método Newton-Cotes com regra trapezoidal.
+Figure&nbsp;3.2: Ambos os gráficos apresentam a função dada no Exemplo 1. (a) Método Newton-Cotes com regra retangular. (b) Método Newton-Cotes com regra trapezoidal.
 </figcaption>
 </figure>
 </div>
@@ -303,17 +428,17 @@ Figure&nbsp;2: Ambos os gráficos apresentam a função dada no Exemplo 1. (a) M
 <div class="alert alert-danger">
 <p><strong>Exemplo.</strong> Utilize a regra de Simpson para aproximar integral <span class="math display">\[\int_0^1 x^{5/2}e^{-x}dx\]</span> com uma tolerância igual a 0,0001.</p>
 </div>
-<section id="quadratura-gaussiana" class="level2">
-<h2 class="anchored" data-anchor-id="quadratura-gaussiana">Quadratura Gaussiana</h2>
+<section id="quadratura-gaussiana" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="quadratura-gaussiana"><span class="header-section-number">3.1</span> Quadratura Gaussiana</h2>
 <p>Seja <span class="math inline">\(P_n(x)\)</span> um polinômio de grau <span class="math inline">\(n\)</span>. Dizemos que os polinômios <span class="math inline">\(P_0(x),P_1(x),\ldots,\)</span> são ortonormais para o intervalo <span class="math inline">\([a,b]\)</span> e para a função de peso <span class="math inline">\(w(x)\geq 0\)</span> se <span class="math display">\[\begin{align}\int_a^b w(x)P_i(x)P_j(x)dx&amp;=0\\\int_a^b w(x)P_i(x)^2dx&amp;=1\end{align}\]</span> para todo <span class="math inline">\(i\neq j\)</span>. Esse polinômios podem ser escritos como <span class="math display">\[P_n(x)=k_n\prod_{i=1}^n(x-t_i),\]</span> onde <span class="math inline">\(k_n&gt;0\)</span> e <span class="math inline">\(a&lt;t_1&lt;\cdots&lt;t_n&lt;b\)</span> são suas raízes reais.</p>
 <p>O seguinte teorema relaciona a integral de uma função <span class="math inline">\(f\)</span> contínua em <span class="math inline">\([a,b]\)</span> e os polinômios ortonormais.</p>
 <div id="thm-" class="alert alert-success theorem">
-<p><span class="theorem-title"><strong>Theorem 1</strong></span> <strong>Teorema</strong> Seja <span class="math inline">\(f(x)\)</span> uma função contínua em <span class="math inline">\([a,b]\)</span>. Para qualquer polinômio ortonormal <span class="math inline">\(P_n(x)\)</span> sejam <span class="math inline">\(t_1,\ldots,t_n\)</span> suas raízes. Então,</p>
+<p><span class="theorem-title"><strong>Theorem 3.1</strong></span> <strong>Teorema</strong> Seja <span class="math inline">\(f(x)\)</span> uma função contínua em <span class="math inline">\([a,b]\)</span>. Para qualquer polinômio ortonormal <span class="math inline">\(P_n(x)\)</span> sejam <span class="math inline">\(t_1,\ldots,t_n\)</span> suas raízes. Então,</p>
 <p><span class="math display">\[\int_a^b f(x)w(x)dx=\sum_{j=1}^n w_j f(t_j)+\frac{f^{(2n)}(\xi)}{k_n^2 (2n)!},\]</span> onde <span class="math inline">\(\xi\in[a,b]\)</span>, <span class="math inline">\(f^{(2n)}\)</span> é a derivada de ordem <span class="math inline">\(2n\)</span> da função e <span class="math display">\[w_j=-\frac{k_{n+1}}{k_n}\frac{1}{P_{n+1}(t_j)P_n'(t_j)}.\]</span></p>
 </div>
 <p>O teorema acima mostra que a integral <span class="math inline">\(\int_a^b f(x)w(x)dx\)</span> é bem aproximada por <span class="math display">\[\sum_{j=1}^n w_j f(t_j),\]</span> uma vez que o termo restante decresce para zero rapidamente. Além disso, <span class="math inline">\(f^{(2n)}(x)=0\)</span> se <span class="math inline">\(f(x)\)</span> for um polinômio de grau <span class="math inline">\(2n+1\)</span>, o que implica que o resultado é exato. Podemos então definir a quadratura gaussiana.</p>
 <div id="def-" class="alert alert-success theorem definition">
-<p><span class="theorem-title"><strong>Definition 2</strong></span> <strong>(Quadratura gaussiana)</strong> Seja <span class="math inline">\(f(x)\)</span> uma função contínua em <span class="math inline">\([a,b]\)</span> e sejam <span class="math inline">\(P_0(x),P_1(x),\ldots,\)</span> polinômios ortogonais no mesmo intervalo considerando a função peso <span class="math inline">\(w(x)\leq\)</span>. Então, a integral <span class="math display">\[\int_a^b f(x)w(x)dx\]</span> então a quadratura gaussiana com <span class="math inline">\(n\)</span> nós é dada por <span class="math display">\[\hat{I}_n=\sum_{j=1}^n w_j f(t_j).\]</span></p>
+<p><span class="theorem-title"><strong>Definition 3.2</strong></span> <strong>(Quadratura gaussiana)</strong> Seja <span class="math inline">\(f(x)\)</span> uma função contínua em <span class="math inline">\([a,b]\)</span> e sejam <span class="math inline">\(P_0(x),P_1(x),\ldots,\)</span> polinômios ortogonais no mesmo intervalo considerando a função peso <span class="math inline">\(w(x)\leq\)</span>. Então, a integral <span class="math display">\[\int_a^b f(x)w(x)dx\]</span> então a quadratura gaussiana com <span class="math inline">\(n\)</span> nós é dada por <span class="math display">\[\hat{I}_n=\sum_{j=1}^n w_j f(t_j).\]</span></p>
 </div>
 <p>Em geral, tal quadratura costuma vir acompanhada com o nome do polinômio ortogonal utilizado. A tabela abaixo apresenta as quadraturas usuais.</p>
 <p><span class="math display">\[\begin{array}{lll}\hline
@@ -351,8 +476,8 @@ Figure&nbsp;2: Ambos os gráficos apresentam a função dada no Exemplo 1. (a) M
 </ul>
 </div>
 </section>
-<section id="quadratura-adaptativa-e-a-função-integrate" class="level2">
-<h2 class="anchored" data-anchor-id="quadratura-adaptativa-e-a-função-integrate">Quadratura adaptativa e a função <code>integrate</code></h2>
+<section id="quadratura-adaptativa-e-a-função-integrate" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="quadratura-adaptativa-e-a-função-integrate"><span class="header-section-number">3.2</span> Quadratura adaptativa e a função <code>integrate</code></h2>
 <p>A quadratura adaptativa é um método de integração numérica que ajusta dinamicamente os nós para maximizar a precisão onde a função é mais difícil de ser integrada.</p>
 <p>A ideia central é um processo de subdivisão recursiva. Utilizando a regra de Gauss-Kronrod como exemplo, temos os seguintes passos:</p>
 <ol type="1">
@@ -389,8 +514,8 @@ Figure&nbsp;2: Ambos os gráficos apresentam a função dada no Exemplo 1. (a) M
 <p><span class="math display">\[f(x)=\frac{2}{5\sqrt{\pi}}(2/5)e^{-x^2}+ \frac{2}{15}x^3 e^{-x},\]</span> para <span class="math inline">\(x&gt;0\)</span>. Combine as funções <code>integrate</code> e <code>uniroot</code> para encontrar a mediana deste modelo.</p>
 </div>
 </section>
-<section id="exercícios" class="level2">
-<h2 class="anchored" data-anchor-id="exercícios">Exercícios</h2>
+<section id="exercícios" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="exercícios"><span class="header-section-number">3.3</span> Exercícios</h2>
 <div class="alert alert-warning">
 <p><strong>Exercício</strong> Considerando a regra do trapézio prove que <span class="math display">\[\hat{I}_n=\sum_{i=0}^n w_i f(x_i),\]</span> onde <span class="math inline">\(0=x_0,\ldots,x_n=1\)</span> é o conjunto de nós e <span class="math display">\[w_i=\left\{\begin{array}{ll}\frac{1}{2n},&amp;\hbox{ se }i=0\\
 \frac{1}{n},&amp;i=1,\ldots,n-1\\\frac{1}{2n},&amp;\hbox{ se }i=n\end{array}\right.\]</span></p>
@@ -409,11 +534,11 @@ Figure&nbsp;2: Ambos os gráficos apresentam a função dada no Exemplo 1. (a) M
 <p><span class="math display">\[\hat{I}_n=\frac{1}{3n}\sum_{i=1}^n[f(x_{i-1})+4f(\tilde{x}_i)+f(x_i)]\]</span> Mostre que essa mesma aproximação pode ser escrita como <span class="math display">\[\hat{I}_n=\sum_{j=0}^{2n}w_jf(y_j)\]</span> onde <span class="math inline">\(y_j=j/2n\)</span> para <span class="math inline">\(j=0,\ldots 2n\)</span> e</p>
 <p><span class="math display">\[w_j=\left\{\begin{array}{ll} \frac{1}{3n},&amp;j=0\\\frac{4}{3n},&amp;j \hbox{ é ímpar}\\\frac{2}{3n},&amp;j\hbox{ é par diferente de } 2n\\ \frac{1}{3n},&amp;j=2n\end{array}\right.\]</span></p>
 </div>
-</section>
+
+
 </section>
 
-</main>
-<!-- /main column -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -834,6 +959,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./otimizacao.html" class="pagination-link" aria-label="Métodos de otimização">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de otimização</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
