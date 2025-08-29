@@ -11,6 +11,7 @@ book:
     - solucoes_caso_real.qmd
     - references.qmd
     - otimizacao.qmd
+    - integral.qmd
 
 bibliography: references.bib
 
