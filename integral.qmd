@@ -404,7 +404,7 @@ Em seguida, calcule as mesmas integrais utilizando a função `integrate`.
 
 Considere a função densidade
 
-$$f(x)=\frac{2}{5\sqrt{\pi}}(2/5)e^{-x^2}+ \frac{2}{15}x^3 e^{-x},$$
+$$f(x)=\frac{2}{5\sqrt{\pi}}e^{-x^2}+ \frac{2}{15}x^3 e^{-x},$$
 para $x>0$. Combine as funções `integrate` e `uniroot` para encontrar a mediana deste modelo. 
 </div>
 
