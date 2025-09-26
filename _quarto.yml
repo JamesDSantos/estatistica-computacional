@@ -13,6 +13,7 @@ book:
     - otimizacao.qmd
     - integral.qmd
     - gerador_congruencial.qmd
+    - provas.qmd
 
 bibliography: references.bib
 

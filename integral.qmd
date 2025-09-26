@@ -93,8 +93,8 @@ aceitamos que o método convergiu e consideramos os $n_1$ pontos. Caso contrári
 $$|\hat{I}_{n_i}-\hat{I}_{n_{i-1}}|<\varepsilon.$$
 </div>
 
-Para decidir o número de pontos 
-## Regra de Newton-Cotes
+
+## Regras de Newton-Cotes
 
 Considere a integral
 $$I=\int_0^1 f(x)dx$$

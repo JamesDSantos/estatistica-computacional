@@ -216,7 +216,7 @@ Como a direção e o tamanho do salto são computados diretamente da função ob
     a. Calcule
   $$\boldsymbol{x}_i=\boldsymbol{x}_{i-1}-[\mathcal{H}f(\boldsymbol{x}_{i-1})]^{-1}\nabla f(\boldsymbol{x}_{i-1})$$ e faça $i=i+1$.
   
-    b.Calcule ERRO$=|\boldsymbol{x}_i-\bolsymbol{x}_{i-1}|=\sqrt{\sum_{j=1}^n (x_{i,j}-x_{i-1,j})^2}$ 
+    b.Calcule ERRO$=|\boldsymbol{x}_i-\boldsymbol{x}_{i-1}|=\sqrt{\sum_{j=1}^n (x_{i,j}-x_{i-1,j})^2}$ 
 
 3. **Finalizando.** Retorne $x_i$
 </div>

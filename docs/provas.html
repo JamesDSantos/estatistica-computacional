@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>References – Estatística Computacional I</title>
+<title>5&nbsp; Provas – Estatística Computacional I</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -49,8 +30,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./otimizacao.html" rel="next">
-<link href="./solucoes_caso_real.html" rel="prev">
+<link href="./gerador_congruencial.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -89,6 +69,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -101,7 +110,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./provas.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Provas</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -140,7 +149,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -164,7 +173,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./provas.html" class="sidebar-item-text sidebar-link">
+  <a href="./provas.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
   </div>
 </li>
@@ -173,15 +182,21 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#revisão-para-a-prova-1" id="toc-revisão-para-a-prova-1" class="nav-link active" data-scroll-target="#revisão-para-a-prova-1"><span class="header-section-number">6</span> Revisão para a Prova 1</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Provas</span></h1>
 </div>
 
 
@@ -198,11 +213,34 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" role="list" style="display: none">
-
+<p>Todas as provas possuem as seguintes regras:</p>
+<ol type="1">
+<li>Não é permitido o uso de dispositivos eletrônicos</li>
+<li>Não é permitido deixar a sala de aula sem entregar a prova</li>
+</ol>
+<section id="revisão-para-a-prova-1" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Revisão para a Prova 1</h1>
+<div class="alert alert-info">
+<p><strong>Questão 1.</strong> Considere o problema de encontrar a raiz de <span class="math inline">\(f(x)\)</span> no intervalo <span class="math inline">\([a,b]\)</span>. Explique porque ter <span class="math inline">\(f(a)f(b)&lt;0\)</span> não é suficiente para garantir que há uma única raiz no intervalo <span class="math inline">\([a,b]\)</span>. <strong>Sugestão.</strong> Esboce um gráfico de uma função periódica, como <span class="math inline">\(\sin(x)\)</span>.</p>
+</div>
+<div class="alert alert-info">
+<p><strong>Questão 2.</strong> Seja <span class="math inline">\(f(x)=x^2-4\)</span>. Considerando o problema de encontra a raiz de <span class="math inline">\(f(x)\)</span> e o ponto inicial <span class="math inline">\(x_0=1\)</span>, faça uma iteração do método de Newton-Raphson.</p>
+</div>
+<div class="alert alert-info">
+<p><strong>Questão 3.</strong> Prove que nem todo minimizador local é um minimizador global.<strong>Sugestão.</strong> Você pode esboçar um gráfico para criar seu argumento.</p>
+</div>
+<div class="alert alert-info">
+<p><strong>Questão 4.</strong> Seja <span class="math inline">\(f(x)=x^4-1\)</span>. Considerando o problema de minimização de <span class="math inline">\(f(x)\)</span>, o ponto inicial <span class="math inline">\(x_0=1\)</span> e a taxa de aprendizagem <span class="math inline">\(\alpha=0,1\)</span>, faça uma iteração do método do gradiente e retorne o valor de <span class="math inline">\(x_1\)</span>.</p>
+</div>
+<div class="alert alert-info">
+<p><strong>Questão 5.</strong> Considere a função <span class="math inline">\(f(x,y)=x^2+y^2\)</span>. Começando com com o simplex <span class="math inline">\((1,1),(2,1),(2,3)\)</span>, faça uma iteração do método de Nelder Mead e apresente o novo simplex.</p>
+</div>
+<div class="alert alert-info">
+<p><strong>Questão 6.</strong> Aproxime a integral <span class="math display">\[\int_0^1 x^2dx\]</span> utilizando a regra de Newton-Cotes, considerando dois subintervalos e a regra do ponto médio.</p>
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -606,14 +644,11 @@ div.csl-indent {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./solucoes_caso_real.html" class="pagination-link" aria-label="Solução de equações">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Solução de equações</span></span>
+      <a href="./gerador_congruencial.html" class="pagination-link" aria-label="Introdução aos geradores de números pseudo-aleatórios">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introdução aos geradores de números pseudo-aleatórios</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./otimizacao.html" class="pagination-link" aria-label="Métodos de otimização">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de otimização</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

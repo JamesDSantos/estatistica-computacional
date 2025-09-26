@@ -1,0 +1,36 @@
+# Provas
+
+Todas as provas possuem as seguintes regras:
+
+1. Não é permitido o uso de dispositivos eletrônicos
+2. Não é permitido deixar a sala de aula sem entregar a prova
+
+# Revisão para a Prova 1
+
+
+<div class='alert alert-info'>
+**Questão 1.** Considere o problema de encontrar a raiz de $f(x)$ no intervalo $[a,b]$. Explique porque ter $f(a)f(b)<0$ não é suficiente para garantir que há uma única raiz no intervalo $[a,b]$. **Sugestão.** Esboce um gráfico de uma função periódica, como $\sin(x)$.
+</div>
+
+<div class='alert alert-info'>
+**Questão 2.** Seja $f(x)=x^2-4$. Considerando o problema de encontra a raiz de $f(x)$ e o ponto inicial $x_0=1$, faça uma iteração do método de Newton-Raphson.
+</div>
+
+<div class='alert alert-info'>
+**Questão 3.** Prove que nem todo minimizador local é um minimizador global.**Sugestão.** Você pode esboçar um gráfico para criar seu argumento.
+</div>
+
+<div class='alert alert-info'>
+**Questão 4.** Seja $f(x)=x^4-1$. Considerando o problema de minimização de $f(x)$, o ponto inicial $x_0=1$ e a taxa de aprendizagem $\alpha=0,1$, faça uma iteração do método do gradiente e retorne o valor de $x_1$.
+</div>
+
+<div class='alert alert-info'>
+**Questão 5.** Considere a função $f(x,y)=x^2+y^2$. Começando com com o simplex $(1,1),(2,1),(2,3)$, faça uma iteração do método de Nelder Mead e apresente o novo simplex.
+</div>
+
+
+<div class='alert alert-info'>
+**Questão 6.** Aproxime a integral
+$$\int_0^1 x^2dx$$
+utilizando a regra de Newton-Cotes, considerando dois subintervalos e a regra do ponto médio.
+</div>
