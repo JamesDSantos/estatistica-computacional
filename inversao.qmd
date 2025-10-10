@@ -1,0 +1,560 @@
+# Método da inversão
+
+## Leitura
+
+<div class = "alert alert=warning">
+<strong>Leitura</strong>
+
+* Random number generation and Monte Carlo Methods: seção 4.1
+* Introducing Monte Carlo Methods with R: capítulo 2
+</div>
+
+## 1. Funções de uniformes
+
+Anteriormente, vimos que é possível gerar números que se assemelham a uma amostra
+de variáveis aleatórias independentes com distribuição Uniforme(0,1). 
+Em particular, utilizamos a função `runif()` do `R` para este fim. 
+
+Note que isto implica que podemos simular qualquer distribuição que seja função 
+de variáveis aleatórias uniformes. O exemplo abaixo mostra como gerar amostras 
+da distribuição Triangular(0,1,2)
+
+<div class='alert alert-info'>
+**Exemplo.** Seja $X\sim\hbox{Triangular}(0,1,2)$, cuja função densidade é dada por
+$$f(x)=1-|x-1|,$$
+com $x\in(0,2)$. Sejam $U_1$ e $U_2$ variáveis aleatórias independentes com distribuição Uniforme(0,1). Pode-se mostrar que $X=U_1+U_2\hbox{Triangular}(0,1,2)$. Portanto, podemos simular da distribuição de $X$ com o seguinte algoritmo: 
+
+
+1. Gere $u_1,u_2\sim\hbox{Uniforme}(0,1)$ independentes.
+2. Faça $x=u_1+u_2$
+
+Abaixo, simulamos uma amostra tamanho 5000 de $X\sim\hbox{Triangular}(0,1,2)$:
+
+```{r}
+n = 50000
+u1 = runif(n)
+u2 = runif(n)
+x = u1 + u2
+
+hist(x,freq = FALSE, main = '')
+```
+</div>
+
+
+<div class='alert alert-danger'>
+**Exercício.** A função densidade da distribuição de Bates é dada por
+$$f(x)=\frac{n}{2(n-1)!}\sum_{k=0}^{n}(-1)^k{n\choose k }(nx-k)^{n-1}\hbox{sgn}(nx-k),$$
+onde $n\geq 1$ é inteiro e $\hbox{sgn}(a)$ é o sinal de $a$ (+1 se $a$ é positivo e $-1$ se $a$ é negativo). A distribuição de Bates tem aplicação em formação de feixe e síntese de diagrama de irradiação no campo da engenharia elétrica. 
+
+Contudo, pode-se mostrar que
+
+$$X=\frac{1}{n}\sum_{i=1}^n U_i,$$
+onde $U_1,\ldots,U_n$ são variáveis independentes com distribuição Uniforme(0,1). Deste modo, para $n$ suficientemente grande, o Teorema Central do Limite garante que
+
+$$X\approx N\left(\frac{1}{2}, \frac{1}{12n} \right).$$
+Deste modo, a distribuição Bates também pode ser utilizada como aproximação para a distribuição normal. Vamos explorar esse útlimo aspecto com mais detalhes.
+
+Como gerar uniformes e fazer operções básicas como somas e divisões tem custo computacional baixo, é usual simular da distribuição Bates, com o objetivo de obter amostras de uma normal, em problemas que não exigem muita precisão como simulação de normais em de jogos eletrônicos. Fazendo
+
+$$Y=\sqrt{12n}\left(X-\frac{1}{2}\right),$$
+teremos que $Y\approx N(0,1)$. Para manter o custo computacional ainda baixo, é usual escolher $n=12$, o que evita realizar o cálculo da raiz quadrada. O seguinte algoritmo simula uma variável com distribuição (aproximada) normal padrão:
+
+1. Simule uma amostra aleatória $u_1,\ldots,u_{12}$ com distribuição Uniforme(0,1)
+
+2. Calcule $x=\sum_{i=1}^{12} x_i/12$
+
+3. Retorne o valor de $y= 12(x-1/2)$
+
+
+Considerando o algoritmo acima:
+
+a. gere uma amostra de tamanho 5000 da distribuição (aproximada) normal padrão.
+b. compare o gráfico função de distribuição empírica (`ecdf`) da amostra 
+simulada com a função de distribuição da normal padrão (`pnorm`).
+</div>
+
+Um exemplo mais elaborado, para gerar amostras da distribuição normal padrão a partir de uniformes, é dado abaixo.
+
+<div class="alert alert-success">
+<strong>Algoritmo Box-Muller - Geração de normais padrão </strong>
+
+1. Gere $u_1,u_2\sim\hbox{Uniforme(0,1)}$ independentes
+
+2. Faça $x_1= \sqrt{-2 \log(u_1)}\cos(2\pi u_2)$ e $x_2 =\sqrt{-2\log(u_1)}\sin(2\pi u_2)$
+
+</div>
+
+<div class='alert alert-danger'>
+**Exercício** Simule uma amostra de tamanho 5000 da distribuição Normal(0,1) utilizado o algoritmo de Box-Muller.
+</div>
+
+O algoritmo de Box-Muller foi um dos primeiros geradores de normais e sua aplicação 
+mostra a fragilidade dos primeiros geradores congruenciais, como ilustra o exemplo abaixo.
+
+::: {#exm- .alert .alert-info}
+
+O gráfico de dispersão de duas amostras indepedentes de normais padrão deve ter um comportamento de pontos ao acaso dentro de uma circunferência, como mostrado abaixo:
+
+```{r}
+plot(rnorm(5000),rnorm(5000), asp  =1)
+```
+
+Considere então Gerador Congruencial Linear conhecido como RANDOM:
+
+```{r}
+lcg_random <- function(n, seed = 123, a = 106, c = 1283, m = 6075) {
+  # n: número de pontos a serem gerados
+  # seed: semente inicial
+  # a, c, m: parâmetros do LCG: X_n+1 = (a * X_n + c) mod m
+  
+  resultados <- numeric(n)
+  X <- seed
+  
+  for (i in 1:n) {
+    X <- (a * X + c) %% m
+    resultados[i] <- X / m # Normaliza para o intervalo [0, 1]
+  }
+  
+  return(resultados)
+}
+```
+
+Ao gerar duas amostras independentes de normais padrão pelo algoritmo de Box-Muller, utilizando para as uniformes do gerador RANDOM, obtemos  o seguinte gráfico de dispersão, que não possui o comportamento esperado: 
+
+```{r echo = FALSE}
+box_muller <- function(u1, u2) {
+  z1 <- sqrt(-2 * log(u1)) * cos(2 * pi * u2)
+  z2 <- sqrt(-2 * log(u1)) * sin(2 * pi * u2)
+  
+  # Retorna um data.frame para facilitar a plotagem com ggplot2
+  return(data.frame(Z1 = z1, Z2 = z2))
+}
+
+n_pontos <- 5000
+
+# Gerar 2 * n_pontos números do nosso LCG, pois Box-Muller precisa de pares
+uniformes_lcg <- lcg_random(n = 2 * n_pontos)
+
+# Separar os números em dois vetores. Usamos números consecutivos
+# (índices ímpares para u1, pares para u2) para expor a correlação serial.
+u1_ruim <- uniformes_lcg[seq(1, 2 * n_pontos, by = 2)]
+u2_ruim <- uniformes_lcg[seq(2, 2 * n_pontos, by = 2)]
+
+# Aplicar a transformação de Box-Muller
+normais_falhos <- box_muller(u1_ruim, u2_ruim)
+
+plot(normais_falhos, asp = 1)
+```
+
+:::
+
+
+
+## 2. Teorema da Probabilidade Integral
+
+O teorema abaixo é a chave para simular outras distribuições.
+
+<div class="alert alert-success">
+<strong>Teorema da Probabilidade Integral. </strong>  
+
+Se $U=F_X(X)$, então $U\sim$Uniforme(0,1).
+</div>
+
+<div class="alert alert-success">
+**Prova** Defina
+$$F_X^{-1}(u)=\min\{x:u\leq F_X(x)\}.$$
+Então,
+$$F_U(u)=P(U\leq u)=P(F_X(X)\leq u)=P(X\leq F^{-1}_X(u))=F_X(F^{-1}_X(u))=u.$$
+</div>
+
+A partir do Teorema da Probabilidade Integral, podemos estabelecer a relação $X=F_X^{-1}(U)$. Desde modo, podemos gerar amostras da distribuição de $X$ do seguinte modo:
+
+<div class="alert alert-success">  
+<strong> Algoritmo do Método da Inversão</strong>
+
+1. Gere $u\sim \hbox{Unirforme}(0,1)$
+
+2. Faça $x=F_X^{-1}(u)$
+
+</div>
+
+<div class="alert alert-info">
+<strong>Exemplo 2.1. Geração de exponenciais </strong> Se $X\sim\hbox{Exponencial}(\lambda)$, então
+$$F_X(x)=1-e^{-\lambda x}$$
+e $$F^{-1}_X(u)=-\frac{1}{\lambda}\log(1-u).$$
+
+Assim, podemos gerar uma amostra de $n$ variáveis aleatórias independentes com distibuição Exponencial com o seguinte algoritmo:
+
+1. Gere $u_1,\ldots,u_n$ independentes com distribuição Uniforme(0,1)
+
+2. Retorne $x_i=-\frac{1}{\lambda}\log(1-u_i)$
+
+É importante notar que $1-u_i$ pode ser trocado por $u_i$ sem prejuízos, uma vez que $1-U_i\sim\hbox{Uniforme}(0,1)$.
+</div>
+
+
+<div class='alert alert-danger'>
+**Exercício.** 
+
+a. Gere uma amostra de tamanho 5000 do modelo Exponencial(3) utilizando o
+método da inversão.
+
+b. Faça o gráfico da função de distribuição empírica (`ecdf`) e compare com a gráfico da função de distribuição da Exponencial(3).
+</div>
+
+
+<div class='alert alert-danger'>
+**Exercício.** A distribuição Weibull é muito útil para análise de sobrevida e 
+para valores extremos. Sua função distribuição é dada por
+
+$$F(x)=1-e^{-(x/\lambda)^\kappa},$$
+onde $x,\lambda,\kappa>0$. Construa um gerador de números aleatórios para essa distribuição utilizando o Método da Inversão.
+</div>
+
+
+<div class="alert alert-info">
+<strong>Exemplo 2.2. Geração de Bernoullis. </strong> Se $X\sim\hbox{Bernoulli}(\theta)$ então,
+
+$$F_X(x)=\left\{\begin{array}{ll}0&,x<0\\ 1-\theta&,0\leq x < 1\\
+1&,x\geq 1\end{array}\right.$$
+então,
+
+$$F_X^{-1}(u)=\left\{\begin{array}{ll}0&,0<u\leq 1-\theta\\ 1&,1-\theta<u<1\end{array}\right.$$
+Portanto, podemos gerar uma amostra de $n$ variáveis independentes com distribuição Bernoulli($\theta$) utilizando o seguinte algoritmo:
+
+1. Gere $u_1,\ldots,u_n$ independentes com distribuição Uniforme$(0,1)$
+2. Se $u_i<1-\theta$, faça $x_i=0$. Se não, faça $x_i=1$.
+
+</div>
+
+Acima, mostramos como gerar uma amostra de tamanho $n$ da distribuição Bernoulli($\theta$). A soma destes valores é uma amostra de tamanho 1 de uma distribuição Binomial($n,\theta$) e é imediata a implementação para uma amostra de tamanho qualquer. Na verdade, simular binomiais através da soma de Bernoullis não é uma estratégia ótima (veja Kachitvichyanukul & Schmeiser (1988)), mas é um exemplo de como podemos utilizar a distribuição uniforme para gerar uma infinidade de outras distribuições. 
+
+## 3. Pesquisas em tabelas
+
+Seja $X$ uma variável aleatória discreta. Seja $p_j=P(X=j)$. O Método da Inversão 
+consiste:
+
+1. Simular $U\sim\hbox{Uniforme}$ 
+
+2. Encontrar $j$ que satisfaz o critério de seleção
+
+$$\sum_{i=1}^{j-1}p_j< U \leq \sum_{i=1}^jp_j.$$
+
+Se o suporte de $X$ é finito, então o método da inversão é denominado *Table Lookup* (pesquisa em tabela). Nesse caso, uma tabela é construída com duas colunas, sendo que uma possui os possíveis valores de $X$ e a outra o critério que permite dizer que o ponto $j$ foi simulado a partir de $U$. 
+
+Os principais algoritmos de pesquisa em tabela são 
+
+* **Busca Sequencial (Build-up search).**: a tabela é construída de modo iterativo em tempo real até obter o critério de seleção.
+
+* **Busca Binária (Chop-down search).**: utiliza uma tabela já pronta e uma busca semelhante ao método da bisseção até obter o critério de seleção.
+
+
+Sem perda de generalidade, considere que $j\in\{1,\ldots,k\}$. O método de Busca Sequencial começa verificando se $U\leq p_1$. Em caso afirmativo, o valor 1 é gerado. Senão, é fato que $U>p_1$ e verifica-se se $U\leq p_1+p_2$. Caso $U\leq p_1+p_2$, então é fato que $p_1<U\leq p_1+p_2$ e o valor 2 é gerado. Caso contrário, continuamos acumulando as probabilidades até encontrar o valor $j$ que satisfaz o critério de seleção. 
+
+<div class="alert alert-success">
+<strong>Algoritmo Busca Sequencial. </strong>
+
+Gere $u\sim\hbox{Uniforme}(0,1)$. Faça $j=1$ e $s=p_1$
+
+1. Se $u\leq s$, retorne $x=j$. Senão, faça $j=j+1$, $s=s+p_{j}$ e repita o passo 1. 
+
+</div>
+
+
+:::{#exm- .alert .alert-info}
+Considere a função de distribuição 
+
+$$P(X=x)=\frac{x}{10},$$
+onde $x\in\{1,2,3,4\}$. A tabela de busca é  
+
+$$\begin{array}{c|c|c}\hline x & F(x) & \hbox{Intervalo de busca}\\ \hline 1  & \frac{1}{10} & (0,\frac{1}{10}] \\  2& \frac{3}{10} & (\frac{1}{10}, \frac{3}{10}]\\ 3 & \frac{6}{10} & (\frac{3}{10},\frac{6}{10}] \\ 4 & 1 & (\frac{6}{10},1]  \\ \hline  \end{array}$$
+
+Observe que o método de Busca Sequencial não precisa construir a tabela inteira para verificar se $u$ está no intervalo de busca. Por exemplo, se $u= 2/10$, o método começa com $j=1$, $s=p_1=1/10$ e faz as seguintes iterações:
+
+* Iteração 1. Como $u\nleq s=1/10$, não geramos um número. Temos que $j=j+1=2$ e $s=s+p_2=3/10$ 
+
+* Iteração 2. Como $u=2/10<3/10$, o valor $j=2$ é gerado.
+
+:::
+
+
+<div class='alert alert-danger'>
+**Exercício.** Considere um jogo eletrônico, no qual o jogador recebe um prêmio após
+derrotar um monstro. Existem 5 prêmios possíveis e a probabilidade do jogador
+receber cada um dos itens é dada abaixo.
+
+$$\begin{array}{c|l|c}\hline
+\hbox{Índice}& \hbox{Item} & \hbox{Probabilidade}\\ \hline
+1&\hbox{500 Moedas de Ouro}	&0,50\\
+2&\hbox{Gema Rara}	&0,25\\
+3&\hbox{Poção de Cura}	&0,15\\ 
+4&\hbox{Espada Mágica}	&0,08 \\
+5&\hbox{Pergaminho Lendário}	&0,02\\ \hline
+\end{array}$$
+
+Construa um algoritmo para simular os itens acima, considerando a busca sequencial.
+</div>
+
+Como a busca sequencial não precisa construir a tabela toda, ela pode ser 
+utilizada para variáveis discretas com suporte infinito.
+
+
+<div class="alert alert-danger">
+<strong>Exercício</strong> Dizemos que $X\sim\hbox{Borel}(\alpha)$ se
+sua função de probabilidade é dada por
+$$P(X=x)=\frac{e^{-\alpha x}(\alpha x)^{x-1}}{x!},$$
+com $\alpha\in(0,1)$ e $x=1,2,\ldots,$. Contrua um gerador para simular uma amostra
+ de variáveis aleatórias independentes de tamanho $n$ para um $\alpha$ fixado utilizando a busca sequencial.
+</div>
+
+
+Considere uma distribuição discreta com suporte $\{1,2,\ldots,k\}$. Considere que uma tabela com a função de distribuição está construída. O método da busca binária começa selecionando o ponto $j$ no meio da tabela. Ao comparar $u$ com $F(j)$, temos duas situações:
+
+* Se $u\leq F(j)$, então todos os valores maiores que $j$ não podem ser gerados. O ponto que vai ser selecionado deve estar no conjunto $\{1,\ldots,j\}$
+
+* Se $u> F(j)$, então os valores $x\leq j$. Então, o ponto que
+vai ser selecionado deve estar no conjunto $\{j+1,\ldots,k\}$
+
+Deste modo, uma nova busca é criada, considerando apenas os valores que podem ser
+simulados.
+
+
+<div class="alert alert-success">
+<strong>Algoritmo Busca Binária</strong>
+
+Variáveis do Algoritmo:
+
+* low: O índice mais baixo do nosso intervalo de busca atual.
+
+* high: O índice mais alto do nosso intervalo de busca atual.
+
+* mid: O índice do meio do intervalo de busca.
+
+Passos do Algoritmo (usando índices de 1 a k):
+
+Inicialização:
+
+1. Gere $U\sim$Uniforme(0,1). Defina os limites da busca: low = 1, high = k.
+
+2. Loop de Busca: Continue o processo enquanto o intervalo de busca tiver mais de um elemento (low < high):
+
+  a. Calcular o meio: Encontre o índice do meio do intervalo atual (usando o piso para garantir um inteiro):
+
+$$\hbox{mid}=\left\lfloor \frac{\hbox{low}+\hbox{high}}{2}\right\rfloor$$
+
+  b. A Comparação Precisa: Compare $U$ com o valor de $F(\hbox{mid})$
+
+  - Se $U>F(\hbox{mid})$: Isso significa que $U$ está na metade superior do espaço de probabilidade. Portanto, descartamos a metade inferior da busca, incluindo o meio.
+
+$$\hbox{low}=\hbox{mid}+1$$
+  - Se $U\leq F(\hbox{mod})$: Isso significa que $U$ está na metade inferior do espaço de probabilidade. Portanto, descartamos a metade superior da busca, mas mantemos mid como um candidato potencial.
+
+$$\hbox{high}=\hbox{mid}$$
+
+Terminação: O loop termina quando low e high se encontram (low = high). Retorne $j=$low.
+</div>
+
+É importante notar que uma das vantagens do `R` é a vetorização. Nesse sentido,
+a busca binária pode ser rapidamente implementada uma vez que $U$ pode ser comparada
+simultaneamente com todos os valores de $F(x)$. Essa verificação está implementada na função `findInterval`.
+
+
+## 3. Inversão numérica de $F_x(.)$ e o Método da Interpolação em Tabelas
+
+Seja $X$ uma variável aleatória contínua. Existem casos nos quais temos a expressão analítica para $F_X(.)$ mas não para $F_X^{-1}(.)$. Ainda podemos utilizar o Método da Inversão da seguinte forma:
+
+1. Gere $u\sim\hbox{Uniforme}(0,1)$
+
+2. Encontre numericamente o valor de $x$ que resolve $u=F_X(x)$
+
+Conforme discutido no Capítulo 1, a solução está sujeita a uma tolerância $\varepsilon>0$ pré-especificada. Isso implica que qualquer valor $x$ que satisfaça
+
+$$|u-F_X(x)|<\varepsilon$$
+
+é uma solução. 
+
+
+<div class="alert alert-danger">
+<strong>Exercício</strong>
+
+Considere a densidade 
+$$f_X(x)=\frac{x\sin(x)}{\sin(1)-\cos(1)},$$
+com $x\in(0,1)$. Note que 
+$$F_X(x)=\frac{\sin(x)-x\cos(x)}{\sin(1)-\cos(1)}$$
+mas não há expressão para $F_X^{-1}(.)$. Crie um gerador para essa distribuição utilizando o método da inversão e utilize-o para obter uma amostra de tamanho 50000. Monitore o tempo de execução utilizando a função `Sys.time`.
+
+</div>
+
+
+O exercício acima mostra que o método a inversão utilizando algoritmos para obtenção de raízes pode ser demorado. Uma solução mais eficiente pode ser obtida combinando a busca binária das pesquisas em tabela e interpolações, conhecido como Método da Interpolação em Tabelas.
+
+Seja $X$ uma variável aleatória contínua com valores em $D$. Assuma que existe, para 
+$\{y_1,\ldots,y_m\}\inD$, existe a tabela 
+
+$$\begin{array}{c|c|c}\hline \hbox{Índice} & \hbox{x} & F(x)\\ \hline 
+1 & y_1 & F(y_1) \\
+2 & y_2 & F(y_2) \\
+\vdots & \vdots & \vdots \\
+m & y_m & F(y_m)\\\hline \end{array}$$
+
+O Método da Interpolação de Tabelas consiste em utilizar um método de pesquisa em tabela para obter simular um índice $j\in\{1,\ldots,m\}$. Ao simular o índice $j$ através de $U\sim\hbox{Uniforme}(0,1)$ sabemos que
+$$F(y_{j-1})<u\leq F(y_j),$$
+o que implica que o valor de $X$ a ser simulado está entre $y_{j-1}$ e $y_j$. Desde que $m$ seja grande o suficiente, teremos que $F(y_{j-1})\approx F(y_j)$, e podemos utilizar uma intervalação para obter $x$ a partir de $u$. As funções interpolantes mais simples são as lineares, embora polinômios de graus 2 ou 3 possam dar melhores ajustes. Para a interpolação linear, teremos que o valor simulado será
+
+$$x=\frac{u-F(y_{j-1})}{F(y_j)-F(y_{j-1})}.$$
+Abaixo, ilustramos como $x$ pode ser simulado por interpolação linear.  Alinha sólida em preto mostra $F(x)$ enquanto que a pontilhada em preto apresenta a interpolação linear. O valor real a ser simulado é $x^o$ enquanto $x$ é o valor simulado pela interpolação. 
+
+
+```{r echo = FALSE}
+x = (.7-.5)/(pnorm(1)-pnorm(0))
+plot.new()
+plot.window( xlim = c(0,1), ylim=c(0.45,1))
+curve(pnorm(x),add=T, lwd = 2)
+axis(1, at = c(0,qnorm(.7),x,1), labels = c(expression(x[i-1]), expression(x^o),'x',expression(x[i])))
+axis(2, at = c(0,.5,.7, pnorm(1)), labels = c('',expression(F(x[i-1])),'u',expression(F(x[i]))) )
+abline(pnorm(0), pnorm(1)-.5, lty = 2)
+segments(0,.7,qnorm(.7),.7, col =2)
+segments(qnorm(.7),0,qnorm(.7),.7, col =2)
+segments(0,.7,x,.7, col ='blue', lty=2)
+segments(x,.7,x,0, col ='blue', lty=2)
+
+
+```
+
+
+
+A função `rnorm` utiliza uma tabela com precisão de 16 dígitos para simular amostras da distribuição normal (ver Wichura (1988)).
+
+O algoritmo base para o Método da Interpolação em Tabela é dado abaixo.
+
+
+<div class="alert alert-success">
+<strong>Método da Interpolação em Tabela (interpolação linear)</strong>
+
+Sejam $y_1,\ldots,y_M$ os valores tabelados e sejam $v_i=F_X(y_i)$, para $i=1,\ldots,M$
+
+1. Gere $u\sim\hbox{Uniforme}(0,1)$
+
+2. Encontre $k$ tal que $v_{k-1}<u\leq v_k$
+
+3. A partir da reta que passa em $(y_{k-1},v_{k-1}),(y_k,v_k)$, faça
+
+$$x=\frac{1}{v_k-v_{k-1}}\left[y_k(u-v_{k-1})+y_{k-1}(v_k-u)\right]$$
+
+</div>
+
+
+<div class='alert alert-info'>
+**Exemplo.** Considere a função densidade 
+
+$$f(x)= 60x^3(1-x)^2$$
+cuja função distribuição é dada por
+$$F(x)=15x^4-24x^5 + 10x^6.$$
+Abaixo, vamos construir uma tabela para a progressão 0,01 até 0,99 com razão 0,01.
+
+```{r}
+Fx <- function(x) 16*x^4 -24*x^5 + 10*x^6
+
+y <- seq(.01, .99, .01)
+Índice = 1:length(y)
+`F(y)` <- Fx(y)
+data.frame(Índice, y, `F(y)`)
+```
+
+Abaixo, simulamos $5000$ valores dessa distribuição utilizando o método da interpolação de tabelas:
+
+```{r}
+n = 5000
+u <- runif(5000)
+
+# pesquisando o indice na tabela
+j <- findInterval(u, c(0,`F(y)`))
+
+# interpolação
+x <- ( y[j]*(u- Fx(y[j-1])) + y[j-1]*(Fx(y[j]) - u)  )/( Fx(y[j]) - Fx(y[j-1]))
+
+# gráfico
+fx <- function(x) 60*x^3*(1-x)^2
+plot(density(x))
+curve( fx(x), add=T, col =2)
+```
+
+</div>
+
+
+## 6. Gerando vetores aleatórios
+
+Não é possível aplicar o Método da Inversão diretamente em vetores aleatórios. Contudo, o método é válido para distribuições condicionais univariadas, pois
+
+$$F_{X|y}(x)=u\Leftrightarrow x=F_{X|y}^{-1}(u).$$
+
+Considere que $\bf{X}=(X_1,\ldots,X_d)$ é um vetor de variáveis aleatórias independentes. Então,
+
+$$F_{{\bf X}} ({\bf x} )=F_{X_1}(x_1)F_{X_2|x_1}(x_2)\cdots F_{X_d|x_1,\ldots,x_{d-1}}(x_d)$$
+
+Deste modo, geramos uma amostra do vetor ${\bf X}$ do seguinte modo:
+
+1. Gere $u_1,\ldots,u_d\sim \hbox{Uniformes}(0,1)$ independentes
+
+2. Faça $x_1=F^{-1}_{X_1}(u_1)$
+
+3. Faça $x_2=F^{-1}_{X_2|x_1}(u_2)$
+
+d+1. Faça $x_d=F^{-1}_{X_d|x_1,\ldots,x_{d-1}}(u_d)$
+
+<div class="alert alert-info">
+<strong>Exemplo 2.6 </strong>
+Seja $(X,Y)$ um vetor aleatório uniformemente distribuído no triângulo $\Delta$, definido pelos  vértices $\{(0,0),(1,0),(1,1)\}$, cuja densidade é
+
+$$f_{X,Y}(x,y)=2I((x,y)\in\Delta).$$
+Teremos que $f_Y(y)=2y$, com $F_Y(y)=y^2$ e $y\in(0,1)$. Além disso $X|y\sim\hbox{Uniforme}(0,y)$. Então, podemos gerar $(x,y)$ com o seguinte algoritmo:
+
+1. Gere $u\sim\hbox{Uniforme}(0,1)$
+
+2. Faça $y = \sqrt{u}$
+
+3. Gere $x\sim\hbox{Uniforme}(0,y)$
+
+</div>
+
+Dizemos que $X$ é um modelo de mistura se, para algum vetor ${\bf Y}$, 
+
+$$F_X(x)=\int F_{X|{\bf y}}(x)dF_{ {\bf Y}}({\bf y}).$$
+
+Note que pode ser conveniente gerar $X$ simulando o o vetor $(X,{\bf Y})$.
+
+<div class="alert alert-info">
+<strong>Exemplo 2.7</strong>
+
+Dizemos que $X$ tem distribuição binomial negativa se sua função de probabilidade é dada por
+
+$$P(X=x)=\frac{\Gamma(x+a)}{\Gamma(a)x!}p^a(1-p)^x,$$
+com $x=0,1,2,\ldots$, $a<0$ e $p\in(0,1)$. Este é um modelo de mistura com
+
+$$\begin{align}
+X|Y=y&\sim\hbox{Poisson}(y),\\
+Y&\sim\hbox{Gama}\left(a,\frac{p}{1-p}\right)\end{align}$$
+
+Deste modo, uma observação do modelo binomial pode ser gerada com o seguinte algoritmo:
+
+1. Gere $y\sim\hbox{Gama}(a,p/(1-p))$
+
+2. Gete $x\sim\hbox{Poisson}(y)$
+
+A função `rnbinom` do `R` utiliza esse algoritmo para simular variáveis com distribuição binomial negativa.
+
+</div>
+## Referências
+
+<div class="alert alert-warning">
+
+**Geração eficiente de binomiais**
+
+* Kachitvichyanukul, V. and Schmeiser, B. W. (1988) Binomial random variate generation. Communications of the ACM, 31, 216–222.
+
+**Gerador de números gaussianos usando o método da inversão por interpolação**
+
+* Wichura, M. J. (1988) Algorithm AS 241: The percentage points of the normal distribution. Applied Statistics, 37, 477–484.
+
+</div>
+

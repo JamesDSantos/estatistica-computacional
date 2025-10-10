@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Método da inversão – Estatística Computacional I</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./provas.html" rel="next">
+<link href="./gerador_congruencial.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./inversao.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Método da inversão</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Estatística Computacional I</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./solucoes_caso_real.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Solução de equações</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./otimizacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de otimização</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./integral.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Métodos de quadratura</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gerador_congruencial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introdução aos geradores de números pseudo-aleatórios</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./inversao.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Método da inversão</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./provas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#leitura" id="toc-leitura" class="nav-link active" data-scroll-target="#leitura"><span class="header-section-number">5.1</span> Leitura</a></li>
+  <li><a href="#funções-de-uniformes" id="toc-funções-de-uniformes" class="nav-link" data-scroll-target="#funções-de-uniformes"><span class="header-section-number">5.2</span> 1. Funções de uniformes</a></li>
+  <li><a href="#teorema-da-probabilidade-integral" id="toc-teorema-da-probabilidade-integral" class="nav-link" data-scroll-target="#teorema-da-probabilidade-integral"><span class="header-section-number">5.3</span> 2. Teorema da Probabilidade Integral</a></li>
+  <li><a href="#pesquisas-em-tabelas" id="toc-pesquisas-em-tabelas" class="nav-link" data-scroll-target="#pesquisas-em-tabelas"><span class="header-section-number">5.4</span> 3. Pesquisas em tabelas</a></li>
+  <li><a href="#inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas" id="toc-inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas" class="nav-link" data-scroll-target="#inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas"><span class="header-section-number">5.5</span> 3. Inversão numérica de <span class="math inline">\(F_x(.)\)</span> e o Método da Interpolação em Tabelas</a></li>
+  <li><a href="#gerando-vetores-aleatórios" id="toc-gerando-vetores-aleatórios" class="nav-link" data-scroll-target="#gerando-vetores-aleatórios"><span class="header-section-number">5.6</span> 6. Gerando vetores aleatórios</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências"><span class="header-section-number">5.7</span> Referências</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Método da inversão</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="leitura" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="leitura"><span class="header-section-number">5.1</span> Leitura</h2>
+<div class="alert alert=warning">
+<p><strong>Leitura</strong></p>
+<ul>
+<li>Random number generation and Monte Carlo Methods: seção 4.1</li>
+<li>Introducing Monte Carlo Methods with R: capítulo 2</li>
+</ul>
+</div>
+</section>
+<section id="funções-de-uniformes" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="funções-de-uniformes"><span class="header-section-number">5.2</span> 1. Funções de uniformes</h2>
+<p>Anteriormente, vimos que é possível gerar números que se assemelham a uma amostra de variáveis aleatórias independentes com distribuição Uniforme(0,1). Em particular, utilizamos a função <code>runif()</code> do <code>R</code> para este fim.</p>
+<p>Note que isto implica que podemos simular qualquer distribuição que seja função de variáveis aleatórias uniformes. O exemplo abaixo mostra como gerar amostras da distribuição Triangular(0,1,2)</p>
+<div class="alert alert-info">
+<p><strong>Exemplo.</strong> Seja <span class="math inline">\(X\sim\hbox{Triangular}(0,1,2)\)</span>, cuja função densidade é dada por <span class="math display">\[f(x)=1-|x-1|,\]</span> com <span class="math inline">\(x\in(0,2)\)</span>. Sejam <span class="math inline">\(U_1\)</span> e <span class="math inline">\(U_2\)</span> variáveis aleatórias independentes com distribuição Uniforme(0,1). Pode-se mostrar que <span class="math inline">\(X=U_1+U_2\hbox{Triangular}(0,1,2)\)</span>. Portanto, podemos simular da distribuição de <span class="math inline">\(X\)</span> com o seguinte algoritmo:</p>
+<ol type="1">
+<li>Gere <span class="math inline">\(u_1,u_2\sim\hbox{Uniforme}(0,1)\)</span> independentes.</li>
+<li>Faça <span class="math inline">\(x=u_1+u_2\)</span></li>
+</ol>
+<p>Abaixo, simulamos uma amostra tamanho 5000 de <span class="math inline">\(X\sim\hbox{Triangular}(0,1,2)\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">50000</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>u1 <span class="ot">=</span> <span class="fu">runif</span>(n)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>u2 <span class="ot">=</span> <span class="fu">runif</span>(n)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> u1 <span class="sc">+</span> u2</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x,<span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">main =</span> <span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="inversao_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> A função densidade da distribuição de Bates é dada por <span class="math display">\[f(x)=\frac{n}{2(n-1)!}\sum_{k=0}^{n}(-1)^k{n\choose k }(nx-k)^{n-1}\hbox{sgn}(nx-k),\]</span> onde <span class="math inline">\(n\geq 1\)</span> é inteiro e <span class="math inline">\(\hbox{sgn}(a)\)</span> é o sinal de <span class="math inline">\(a\)</span> (+1 se <span class="math inline">\(a\)</span> é positivo e <span class="math inline">\(-1\)</span> se <span class="math inline">\(a\)</span> é negativo). A distribuição de Bates tem aplicação em formação de feixe e síntese de diagrama de irradiação no campo da engenharia elétrica.</p>
+<p>Contudo, pode-se mostrar que</p>
+<p><span class="math display">\[X=\frac{1}{n}\sum_{i=1}^n U_i,\]</span> onde <span class="math inline">\(U_1,\ldots,U_n\)</span> são variáveis independentes com distribuição Uniforme(0,1). Deste modo, para <span class="math inline">\(n\)</span> suficientemente grande, o Teorema Central do Limite garante que</p>
+<p><span class="math display">\[X\approx N\left(\frac{1}{2}, \frac{1}{12n} \right).\]</span> Deste modo, a distribuição Bates também pode ser utilizada como aproximação para a distribuição normal. Vamos explorar esse útlimo aspecto com mais detalhes.</p>
+<p>Como gerar uniformes e fazer operções básicas como somas e divisões tem custo computacional baixo, é usual simular da distribuição Bates, com o objetivo de obter amostras de uma normal, em problemas que não exigem muita precisão como simulação de normais em de jogos eletrônicos. Fazendo</p>
+<p><span class="math display">\[Y=\sqrt{12n}\left(X-\frac{1}{2}\right),\]</span> teremos que <span class="math inline">\(Y\approx N(0,1)\)</span>. Para manter o custo computacional ainda baixo, é usual escolher <span class="math inline">\(n=12\)</span>, o que evita realizar o cálculo da raiz quadrada. O seguinte algoritmo simula uma variável com distribuição (aproximada) normal padrão:</p>
+<ol type="1">
+<li><p>Simule uma amostra aleatória <span class="math inline">\(u_1,\ldots,u_{12}\)</span> com distribuição Uniforme(0,1)</p></li>
+<li><p>Calcule <span class="math inline">\(x=\sum_{i=1}^{12} x_i/12\)</span></p></li>
+<li><p>Retorne o valor de <span class="math inline">\(y= 12(x-1/2)\)</span></p></li>
+</ol>
+<p>Considerando o algoritmo acima:</p>
+<ol type="a">
+<li>gere uma amostra de tamanho 5000 da distribuição (aproximada) normal padrão.</li>
+<li>compare o gráfico função de distribuição empírica (<code>ecdf</code>) da amostra simulada com a função de distribuição da normal padrão (<code>pnorm</code>).</li>
+</ol>
+</div>
+<p>Um exemplo mais elaborado, para gerar amostras da distribuição normal padrão a partir de uniformes, é dado abaixo.</p>
+<div class="alert alert-success">
+<p><strong>Algoritmo Box-Muller - Geração de normais padrão </strong></p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(u_1,u_2\sim\hbox{Uniforme(0,1)}\)</span> independentes</p></li>
+<li><p>Faça <span class="math inline">\(x_1= \sqrt{-2 \log(u_1)}\cos(2\pi u_2)\)</span> e <span class="math inline">\(x_2 =\sqrt{-2\log(u_1)}\sin(2\pi u_2)\)</span></p></li>
+</ol>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício</strong> Simule uma amostra de tamanho 5000 da distribuição Normal(0,1) utilizado o algoritmo de Box-Muller.</p>
+</div>
+<p>O algoritmo de Box-Muller foi um dos primeiros geradores de normais e sua aplicação mostra a fragilidade dos primeiros geradores congruenciais, como ilustra o exemplo abaixo.</p>
+<div id="exm-" class="alert alert-info theorem example">
+<p><span class="theorem-title"><strong>Example 5.1</strong></span> O gráfico de dispersão de duas amostras indepedentes de normais padrão deve ter um comportamento de pontos ao acaso dentro de uma circunferência, como mostrado abaixo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">rnorm</span>(<span class="dv">5000</span>),<span class="fu">rnorm</span>(<span class="dv">5000</span>), <span class="at">asp  =</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="inversao_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Considere então Gerador Congruencial Linear conhecido como RANDOM:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lcg_random <span class="ot">&lt;-</span> <span class="cf">function</span>(n, <span class="at">seed =</span> <span class="dv">123</span>, <span class="at">a =</span> <span class="dv">106</span>, <span class="at">c =</span> <span class="dv">1283</span>, <span class="at">m =</span> <span class="dv">6075</span>) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># n: número de pontos a serem gerados</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># seed: semente inicial</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># a, c, m: parâmetros do LCG: X_n+1 = (a * X_n + c) mod m</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  resultados <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> seed</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> (a <span class="sc">*</span> X <span class="sc">+</span> c) <span class="sc">%%</span> m</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    resultados[i] <span class="ot">&lt;-</span> X <span class="sc">/</span> m <span class="co"># Normaliza para o intervalo [0, 1]</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(resultados)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ao gerar duas amostras independentes de normais padrão pelo algoritmo de Box-Muller, utilizando para as uniformes do gerador RANDOM, obtemos o seguinte gráfico de dispersão, que não possui o comportamento esperado:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="inversao_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="teorema-da-probabilidade-integral" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="teorema-da-probabilidade-integral"><span class="header-section-number">5.3</span> 2. Teorema da Probabilidade Integral</h2>
+<p>O teorema abaixo é a chave para simular outras distribuições.</p>
+<div class="alert alert-success">
+<p><strong>Teorema da Probabilidade Integral. </strong></p>
+<p>Se <span class="math inline">\(U=F_X(X)\)</span>, então <span class="math inline">\(U\sim\)</span>Uniforme(0,1).</p>
+</div>
+<div class="alert alert-success">
+<p><strong>Prova</strong> Defina <span class="math display">\[F_X^{-1}(u)=\min\{x:u\leq F_X(x)\}.\]</span> Então, <span class="math display">\[F_U(u)=P(U\leq u)=P(F_X(X)\leq u)=P(X\leq F^{-1}_X(u))=F_X(F^{-1}_X(u))=u.\]</span></p>
+</div>
+<p>A partir do Teorema da Probabilidade Integral, podemos estabelecer a relação <span class="math inline">\(X=F_X^{-1}(U)\)</span>. Desde modo, podemos gerar amostras da distribuição de <span class="math inline">\(X\)</span> do seguinte modo:</p>
+<div class="alert alert-success">
+<p><strong> Algoritmo do Método da Inversão</strong></p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(u\sim \hbox{Unirforme}(0,1)\)</span></p></li>
+<li><p>Faça <span class="math inline">\(x=F_X^{-1}(u)\)</span></p></li>
+</ol>
+</div>
+<div class="alert alert-info">
+<p><strong>Exemplo 2.1. Geração de exponenciais </strong> Se <span class="math inline">\(X\sim\hbox{Exponencial}(\lambda)\)</span>, então <span class="math display">\[F_X(x)=1-e^{-\lambda x}\]</span> e <span class="math display">\[F^{-1}_X(u)=-\frac{1}{\lambda}\log(1-u).\]</span></p>
+<p>Assim, podemos gerar uma amostra de <span class="math inline">\(n\)</span> variáveis aleatórias independentes com distibuição Exponencial com o seguinte algoritmo:</p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(u_1,\ldots,u_n\)</span> independentes com distribuição Uniforme(0,1)</p></li>
+<li><p>Retorne <span class="math inline">\(x_i=-\frac{1}{\lambda}\log(1-u_i)\)</span></p></li>
+</ol>
+<p>É importante notar que <span class="math inline">\(1-u_i\)</span> pode ser trocado por <span class="math inline">\(u_i\)</span> sem prejuízos, uma vez que <span class="math inline">\(1-U_i\sim\hbox{Uniforme}(0,1)\)</span>.</p>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong></p>
+<ol type="a">
+<li><p>Gere uma amostra de tamanho 5000 do modelo Exponencial(3) utilizando o método da inversão.</p></li>
+<li><p>Faça o gráfico da função de distribuição empírica (<code>ecdf</code>) e compare com a gráfico da função de distribuição da Exponencial(3).</p></li>
+</ol>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> A distribuição Weibull é muito útil para análise de sobrevida e para valores extremos. Sua função distribuição é dada por</p>
+<p><span class="math display">\[F(x)=1-e^{-(x/\lambda)^\kappa},\]</span> onde <span class="math inline">\(x,\lambda,\kappa&gt;0\)</span>. Construa um gerador de números aleatórios para essa distribuição utilizando o Método da Inversão.</p>
+</div>
+<div class="alert alert-info">
+<p><strong>Exemplo 2.2. Geração de Bernoullis. </strong> Se <span class="math inline">\(X\sim\hbox{Bernoulli}(\theta)\)</span> então,</p>
+<p><span class="math display">\[F_X(x)=\left\{\begin{array}{ll}0&amp;,x&lt;0\\ 1-\theta&amp;,0\leq x &lt; 1\\
+1&amp;,x\geq 1\end{array}\right.\]</span> então,</p>
+<p><span class="math display">\[F_X^{-1}(u)=\left\{\begin{array}{ll}0&amp;,0&lt;u\leq 1-\theta\\ 1&amp;,1-\theta&lt;u&lt;1\end{array}\right.\]</span> Portanto, podemos gerar uma amostra de <span class="math inline">\(n\)</span> variáveis independentes com distribuição Bernoulli(<span class="math inline">\(\theta\)</span>) utilizando o seguinte algoritmo:</p>
+<ol type="1">
+<li>Gere <span class="math inline">\(u_1,\ldots,u_n\)</span> independentes com distribuição Uniforme<span class="math inline">\((0,1)\)</span></li>
+<li>Se <span class="math inline">\(u_i&lt;1-\theta\)</span>, faça <span class="math inline">\(x_i=0\)</span>. Se não, faça <span class="math inline">\(x_i=1\)</span>.</li>
+</ol>
+</div>
+<p>Acima, mostramos como gerar uma amostra de tamanho <span class="math inline">\(n\)</span> da distribuição Bernoulli(<span class="math inline">\(\theta\)</span>). A soma destes valores é uma amostra de tamanho 1 de uma distribuição Binomial(<span class="math inline">\(n,\theta\)</span>) e é imediata a implementação para uma amostra de tamanho qualquer. Na verdade, simular binomiais através da soma de Bernoullis não é uma estratégia ótima (veja Kachitvichyanukul &amp; Schmeiser (1988)), mas é um exemplo de como podemos utilizar a distribuição uniforme para gerar uma infinidade de outras distribuições.</p>
+</section>
+<section id="pesquisas-em-tabelas" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="pesquisas-em-tabelas"><span class="header-section-number">5.4</span> 3. Pesquisas em tabelas</h2>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória discreta. Seja <span class="math inline">\(p_j=P(X=j)\)</span>. O Método da Inversão consiste:</p>
+<ol type="1">
+<li><p>Simular <span class="math inline">\(U\sim\hbox{Uniforme}\)</span></p></li>
+<li><p>Encontrar <span class="math inline">\(j\)</span> que satisfaz o critério de seleção</p></li>
+</ol>
+<p><span class="math display">\[\sum_{i=1}^{j-1}p_j&lt; U \leq \sum_{i=1}^jp_j.\]</span></p>
+<p>Se o suporte de <span class="math inline">\(X\)</span> é finito, então o método da inversão é denominado <em>Table Lookup</em> (pesquisa em tabela). Nesse caso, uma tabela é construída com duas colunas, sendo que uma possui os possíveis valores de <span class="math inline">\(X\)</span> e a outra o critério que permite dizer que o ponto <span class="math inline">\(j\)</span> foi simulado a partir de <span class="math inline">\(U\)</span>.</p>
+<p>Os principais algoritmos de pesquisa em tabela são</p>
+<ul>
+<li><p><strong>Busca Sequencial (Build-up search).</strong>: a tabela é construída de modo iterativo em tempo real até obter o critério de seleção.</p></li>
+<li><p><strong>Busca Binária (Chop-down search).</strong>: utiliza uma tabela já pronta e uma busca semelhante ao método da bisseção até obter o critério de seleção.</p></li>
+</ul>
+<p>Sem perda de generalidade, considere que <span class="math inline">\(j\in\{1,\ldots,k\}\)</span>. O método de Busca Sequencial começa verificando se <span class="math inline">\(U\leq p_1\)</span>. Em caso afirmativo, o valor 1 é gerado. Senão, é fato que <span class="math inline">\(U&gt;p_1\)</span> e verifica-se se <span class="math inline">\(U\leq p_1+p_2\)</span>. Caso <span class="math inline">\(U\leq p_1+p_2\)</span>, então é fato que <span class="math inline">\(p_1&lt;U\leq p_1+p_2\)</span> e o valor 2 é gerado. Caso contrário, continuamos acumulando as probabilidades até encontrar o valor <span class="math inline">\(j\)</span> que satisfaz o critério de seleção.</p>
+<div class="alert alert-success">
+<p><strong>Algoritmo Busca Sequencial. </strong></p>
+<p>Gere <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span>. Faça <span class="math inline">\(j=1\)</span> e <span class="math inline">\(s=p_1\)</span></p>
+<ol type="1">
+<li>Se <span class="math inline">\(u\leq s\)</span>, retorne <span class="math inline">\(x=j\)</span>. Senão, faça <span class="math inline">\(j=j+1\)</span>, <span class="math inline">\(s=s+p_{j}\)</span> e repita o passo 1.</li>
+</ol>
+</div>
+<div id="exm-" class="alert alert-info theorem example">
+<p><span class="theorem-title"><strong>Example 5.2</strong></span> Considere a função de distribuição</p>
+<p><span class="math display">\[P(X=x)=\frac{x}{10},\]</span> onde <span class="math inline">\(x\in\{1,2,3,4\}\)</span>. A tabela de busca é</p>
+<p><span class="math display">\[\begin{array}{c|c|c}\hline x &amp; F(x) &amp; \hbox{Intervalo de busca}\\ \hline 1  &amp; \frac{1}{10} &amp; (0,\frac{1}{10}] \\  2&amp; \frac{3}{10} &amp; (\frac{1}{10}, \frac{3}{10}]\\ 3 &amp; \frac{6}{10} &amp; (\frac{3}{10},\frac{6}{10}] \\ 4 &amp; 1 &amp; (\frac{6}{10},1]  \\ \hline  \end{array}\]</span></p>
+<p>Observe que o método de Busca Sequencial não precisa construir a tabela inteira para verificar se <span class="math inline">\(u\)</span> está no intervalo de busca. Por exemplo, se <span class="math inline">\(u= 2/10\)</span>, o método começa com <span class="math inline">\(j=1\)</span>, <span class="math inline">\(s=p_1=1/10\)</span> e faz as seguintes iterações:</p>
+<ul>
+<li><p>Iteração 1. Como <span class="math inline">\(u\nleq s=1/10\)</span>, não geramos um número. Temos que <span class="math inline">\(j=j+1=2\)</span> e <span class="math inline">\(s=s+p_2=3/10\)</span></p></li>
+<li><p>Iteração 2. Como <span class="math inline">\(u=2/10&lt;3/10\)</span>, o valor <span class="math inline">\(j=2\)</span> é gerado.</p></li>
+</ul>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> Considere um jogo eletrônico, no qual o jogador recebe um prêmio após derrotar um monstro. Existem 5 prêmios possíveis e a probabilidade do jogador receber cada um dos itens é dada abaixo.</p>
+<p><span class="math display">\[\begin{array}{c|l|c}\hline
+\hbox{Índice}&amp; \hbox{Item} &amp; \hbox{Probabilidade}\\ \hline
+1&amp;\hbox{500 Moedas de Ouro} &amp;0,50\\
+2&amp;\hbox{Gema Rara}  &amp;0,25\\
+3&amp;\hbox{Poção de Cura}  &amp;0,15\\
+4&amp;\hbox{Espada Mágica}  &amp;0,08 \\
+5&amp;\hbox{Pergaminho Lendário}    &amp;0,02\\ \hline
+\end{array}\]</span></p>
+<p>Construa um algoritmo para simular os itens acima, considerando a busca sequencial.</p>
+</div>
+<p>Como a busca sequencial não precisa construir a tabela toda, ela pode ser utilizada para variáveis discretas com suporte infinito.</p>
+<div class="alert alert-danger">
+<p><strong>Exercício</strong> Dizemos que <span class="math inline">\(X\sim\hbox{Borel}(\alpha)\)</span> se sua função de probabilidade é dada por <span class="math display">\[P(X=x)=\frac{e^{-\alpha x}(\alpha x)^{x-1}}{x!},\]</span> com <span class="math inline">\(\alpha\in(0,1)\)</span> e <span class="math inline">\(x=1,2,\ldots,\)</span>. Contrua um gerador para simular uma amostra de variáveis aleatórias independentes de tamanho <span class="math inline">\(n\)</span> para um <span class="math inline">\(\alpha\)</span> fixado utilizando a busca sequencial.</p>
+</div>
+<p>Considere uma distribuição discreta com suporte <span class="math inline">\(\{1,2,\ldots,k\}\)</span>. Considere que uma tabela com a função de distribuição está construída. O método da busca binária começa selecionando o ponto <span class="math inline">\(j\)</span> no meio da tabela. Ao comparar <span class="math inline">\(u\)</span> com <span class="math inline">\(F(j)\)</span>, temos duas situações:</p>
+<ul>
+<li><p>Se <span class="math inline">\(u\leq F(j)\)</span>, então todos os valores maiores que <span class="math inline">\(j\)</span> não podem ser gerados. O ponto que vai ser selecionado deve estar no conjunto <span class="math inline">\(\{1,\ldots,j\}\)</span></p></li>
+<li><p>Se <span class="math inline">\(u&gt; F(j)\)</span>, então os valores <span class="math inline">\(x\leq j\)</span>. Então, o ponto que vai ser selecionado deve estar no conjunto <span class="math inline">\(\{j+1,\ldots,k\}\)</span></p></li>
+</ul>
+<p>Deste modo, uma nova busca é criada, considerando apenas os valores que podem ser simulados.</p>
+<div class="alert alert-success">
+<p><strong>Algoritmo Busca Binária</strong></p>
+<p>Variáveis do Algoritmo:</p>
+<ul>
+<li><p>low: O índice mais baixo do nosso intervalo de busca atual.</p></li>
+<li><p>high: O índice mais alto do nosso intervalo de busca atual.</p></li>
+<li><p>mid: O índice do meio do intervalo de busca.</p></li>
+</ul>
+<p>Passos do Algoritmo (usando índices de 1 a k):</p>
+<p>Inicialização:</p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(U\sim\)</span>Uniforme(0,1). Defina os limites da busca: low = 1, high = k.</p></li>
+<li><p>Loop de Busca: Continue o processo enquanto o intervalo de busca tiver mais de um elemento (low &lt; high):</p></li>
+</ol>
+<ol type="a">
+<li>Calcular o meio: Encontre o índice do meio do intervalo atual (usando o piso para garantir um inteiro):</li>
+</ol>
+<p><span class="math display">\[\hbox{mid}=\left\lfloor \frac{\hbox{low}+\hbox{high}}{2}\right\rfloor\]</span></p>
+<ol start="2" type="a">
+<li>A Comparação Precisa: Compare <span class="math inline">\(U\)</span> com o valor de <span class="math inline">\(F(\hbox{mid})\)</span></li>
+</ol>
+<ul>
+<li>Se <span class="math inline">\(U&gt;F(\hbox{mid})\)</span>: Isso significa que <span class="math inline">\(U\)</span> está na metade superior do espaço de probabilidade. Portanto, descartamos a metade inferior da busca, incluindo o meio.</li>
+</ul>
+<p><span class="math display">\[\hbox{low}=\hbox{mid}+1\]</span> - Se <span class="math inline">\(U\leq F(\hbox{mod})\)</span>: Isso significa que <span class="math inline">\(U\)</span> está na metade inferior do espaço de probabilidade. Portanto, descartamos a metade superior da busca, mas mantemos mid como um candidato potencial.</p>
+<p><span class="math display">\[\hbox{high}=\hbox{mid}\]</span></p>
+<p>Terminação: O loop termina quando low e high se encontram (low = high). Retorne <span class="math inline">\(j=\)</span>low.</p>
+</div>
+<p>É importante notar que uma das vantagens do <code>R</code> é a vetorização. Nesse sentido, a busca binária pode ser rapidamente implementada uma vez que <span class="math inline">\(U\)</span> pode ser comparada simultaneamente com todos os valores de <span class="math inline">\(F(x)\)</span>. Essa verificação está implementada na função <code>findInterval</code>.</p>
+</section>
+<section id="inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas"><span class="header-section-number">5.5</span> 3. Inversão numérica de <span class="math inline">\(F_x(.)\)</span> e o Método da Interpolação em Tabelas</h2>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória contínua. Existem casos nos quais temos a expressão analítica para <span class="math inline">\(F_X(.)\)</span> mas não para <span class="math inline">\(F_X^{-1}(.)\)</span>. Ainda podemos utilizar o Método da Inversão da seguinte forma:</p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span></p></li>
+<li><p>Encontre numericamente o valor de <span class="math inline">\(x\)</span> que resolve <span class="math inline">\(u=F_X(x)\)</span></p></li>
+</ol>
+<p>Conforme discutido no Capítulo 1, a solução está sujeita a uma tolerância <span class="math inline">\(\varepsilon&gt;0\)</span> pré-especificada. Isso implica que qualquer valor <span class="math inline">\(x\)</span> que satisfaça</p>
+<p><span class="math display">\[|u-F_X(x)|&lt;\varepsilon\]</span></p>
+<p>é uma solução.</p>
+<div class="alert alert-danger">
+<p><strong>Exercício</strong></p>
+<p>Considere a densidade <span class="math display">\[f_X(x)=\frac{x\sin(x)}{\sin(1)-\cos(1)},\]</span> com <span class="math inline">\(x\in(0,1)\)</span>. Note que <span class="math display">\[F_X(x)=\frac{\sin(x)-x\cos(x)}{\sin(1)-\cos(1)}\]</span> mas não há expressão para <span class="math inline">\(F_X^{-1}(.)\)</span>. Crie um gerador para essa distribuição utilizando o método da inversão e utilize-o para obter uma amostra de tamanho 50000. Monitore o tempo de execução utilizando a função <code>Sys.time</code>.</p>
+</div>
+<p>O exercício acima mostra que o método a inversão utilizando algoritmos para obtenção de raízes pode ser demorado. Uma solução mais eficiente pode ser obtida combinando a busca binária das pesquisas em tabela e interpolações, conhecido como Método da Interpolação em Tabelas.</p>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória contínua com valores em <span class="math inline">\(D\)</span>. Assuma que existe, para <span class="math inline">\(\{y_1,\ldots,y_m\}\inD\)</span>, existe a tabela</p>
+<p><span class="math display">\[\begin{array}{c|c|c}\hline \hbox{Índice} &amp; \hbox{x} &amp; F(x)\\ \hline
+1 &amp; y_1 &amp; F(y_1) \\
+2 &amp; y_2 &amp; F(y_2) \\
+\vdots &amp; \vdots &amp; \vdots \\
+m &amp; y_m &amp; F(y_m)\\\hline \end{array}\]</span></p>
+<p>O Método da Interpolação de Tabelas consiste em utilizar um método de pesquisa em tabela para obter simular um índice <span class="math inline">\(j\in\{1,\ldots,m\}\)</span>. Ao simular o índice <span class="math inline">\(j\)</span> através de <span class="math inline">\(U\sim\hbox{Uniforme}(0,1)\)</span> sabemos que <span class="math display">\[F(y_{j-1})&lt;u\leq F(y_j),\]</span> o que implica que o valor de <span class="math inline">\(X\)</span> a ser simulado está entre <span class="math inline">\(y_{j-1}\)</span> e <span class="math inline">\(y_j\)</span>. Desde que <span class="math inline">\(m\)</span> seja grande o suficiente, teremos que <span class="math inline">\(F(y_{j-1})\approx F(y_j)\)</span>, e podemos utilizar uma intervalação para obter <span class="math inline">\(x\)</span> a partir de <span class="math inline">\(u\)</span>. As funções interpolantes mais simples são as lineares, embora polinômios de graus 2 ou 3 possam dar melhores ajustes. Para a interpolação linear, teremos que o valor simulado será</p>
+<p><span class="math display">\[x=\frac{u-F(y_{j-1})}{F(y_j)-F(y_{j-1})}.\]</span> Abaixo, ilustramos como <span class="math inline">\(x\)</span> pode ser simulado por interpolação linear. Alinha sólida em preto mostra <span class="math inline">\(F(x)\)</span> enquanto que a pontilhada em preto apresenta a interpolação linear. O valor real a ser simulado é <span class="math inline">\(x^o\)</span> enquanto <span class="math inline">\(x\)</span> é o valor simulado pela interpolação.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="inversao_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A função <code>rnorm</code> utiliza uma tabela com precisão de 16 dígitos para simular amostras da distribuição normal (ver Wichura (1988)).</p>
+<p>O algoritmo base para o Método da Interpolação em Tabela é dado abaixo.</p>
+<div class="alert alert-success">
+<p><strong>Método da Interpolação em Tabela (interpolação linear)</strong></p>
+<p>Sejam <span class="math inline">\(y_1,\ldots,y_M\)</span> os valores tabelados e sejam <span class="math inline">\(v_i=F_X(y_i)\)</span>, para <span class="math inline">\(i=1,\ldots,M\)</span></p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span></p></li>
+<li><p>Encontre <span class="math inline">\(k\)</span> tal que <span class="math inline">\(v_{k-1}&lt;u\leq v_k\)</span></p></li>
+<li><p>A partir da reta que passa em <span class="math inline">\((y_{k-1},v_{k-1}),(y_k,v_k)\)</span>, faça</p></li>
+</ol>
+<p><span class="math display">\[x=\frac{1}{v_k-v_{k-1}}\left[y_k(u-v_{k-1})+y_{k-1}(v_k-u)\right]\]</span></p>
+</div>
+<div class="alert alert-info">
+<p><strong>Exemplo.</strong> Considere a função densidade</p>
+<p><span class="math display">\[f(x)= 60x^3(1-x)^2\]</span> cuja função distribuição é dada por <span class="math display">\[F(x)=15x^4-24x^5 + 10x^6.\]</span> Abaixo, vamos construir uma tabela para a progressão 0,01 até 0,99 com razão 0,01.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Fx <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="dv">16</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">4</span> <span class="sc">-</span><span class="dv">24</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">5</span> <span class="sc">+</span> <span class="dv">10</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">6</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(.<span class="dv">01</span>, .<span class="dv">99</span>, .<span class="dv">01</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>Índice <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(y)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">F(y)</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">Fx</span>(y)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Índice, y, <span class="st">`</span><span class="at">F(y)</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Índice    y         F.y.
+1       1 0.01 1.576100e-07
+2       2 0.02 2.483840e-06
+3       3 0.03 1.238409e-05
+4       4 0.04 3.854336e-05
+5       5 0.05 9.265625e-05
+6       6 0.06 1.891642e-04
+7       7 0.07 3.449997e-04
+8       8 0.08 5.793382e-04
+9       9 0.09 9.133568e-04
+10     10 0.10 1.370000e-03
+11     11 0.11 1.973753e-03
+12     12 0.12 2.750423e-03
+13     13 0.13 3.726925e-03
+14     14 0.14 4.931078e-03
+15     15 0.15 6.391406e-03
+16     16 0.16 8.136950e-03
+17     17 0.17 1.019708e-02
+18     18 0.18 1.260132e-02
+19     19 0.19 1.537918e-02
+20     20 0.20 1.856000e-02
+21     21 0.21 2.217278e-02
+22     22 0.22 2.624604e-02
+23     23 0.23 3.080770e-02
+24     24 0.24 3.588489e-02
+25     25 0.25 4.150391e-02
+26     26 0.26 4.769002e-02
+27     27 0.27 5.446739e-02
+28     28 0.28 6.185898e-02
+29     29 0.29 6.988644e-02
+30     30 0.30 7.857000e-02
+31     31 0.31 8.792843e-02
+32     32 0.32 9.797894e-02
+33     33 0.33 1.087371e-01
+34     34 0.34 1.202168e-01
+35     35 0.35 1.324302e-01
+36     36 0.36 1.453876e-01
+37     37 0.37 1.590975e-01
+38     38 0.38 1.735667e-01
+39     39 0.39 1.887999e-01
+40     40 0.40 2.048000e-01
+41     41 0.41 2.215679e-01
+42     42 0.42 2.391027e-01
+43     43 0.43 2.574015e-01
+44     44 0.44 2.764596e-01
+45     45 0.45 2.962702e-01
+46     46 0.46 3.168248e-01
+47     47 0.47 3.381131e-01
+48     48 0.48 3.601229e-01
+49     49 0.49 3.828404e-01
+50     50 0.50 4.062500e-01
+51     51 0.51 4.303344e-01
+52     52 0.52 4.550750e-01
+53     53 0.53 4.804514e-01
+54     54 0.54 5.064420e-01
+55     55 0.55 5.330239e-01
+56     56 0.56 5.601729e-01
+57     57 0.57 5.878637e-01
+58     58 0.58 6.160700e-01
+59     59 0.59 6.447648e-01
+60     60 0.60 6.739200e-01
+61     61 0.61 7.035072e-01
+62     62 0.62 7.334973e-01
+63     63 0.63 7.638611e-01
+64     64 0.64 7.945689e-01
+65     65 0.65 8.255914e-01
+66     66 0.66 8.568991e-01
+67     67 0.67 8.884629e-01
+68     68 0.68 9.202544e-01
+69     69 0.69 9.522458e-01
+70     70 0.70 9.844100e-01
+71     71 0.71 1.016721e+00
+72     72 0.72 1.049155e+00
+73     73 0.73 1.081689e+00
+74     74 0.74 1.114301e+00
+75     75 0.75 1.146973e+00
+76     76 0.76 1.179687e+00
+77     77 0.77 1.212428e+00
+78     78 0.78 1.245186e+00
+79     79 0.79 1.277952e+00
+80     80 0.80 1.310720e+00
+81     81 0.81 1.343488e+00
+82     82 0.82 1.376259e+00
+83     83 0.83 1.409038e+00
+84     84 0.84 1.441835e+00
+85     85 0.85 1.474668e+00
+86     86 0.86 1.507554e+00
+87     87 0.87 1.540522e+00
+88     88 0.88 1.573601e+00
+89     89 0.89 1.606829e+00
+90     90 0.90 1.640250e+00
+91     91 0.91 1.673915e+00
+92     92 0.92 1.707881e+00
+93     93 0.93 1.742213e+00
+94     94 0.94 1.776985e+00
+95     95 0.95 1.812276e+00
+96     96 0.96 1.848178e+00
+97     97 0.97 1.884788e+00
+98     98 0.98 1.922215e+00
+99     99 0.99 1.960576e+00</code></pre>
+</div>
+</div>
+<p>Abaixo, simulamos <span class="math inline">\(5000\)</span> valores dessa distribuição utilizando o método da interpolação de tabelas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">5000</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">5000</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pesquisando o indice na tabela</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>j <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(u, <span class="fu">c</span>(<span class="dv">0</span>,<span class="st">`</span><span class="at">F(y)</span><span class="st">`</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># interpolação</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> ( y[j]<span class="sc">*</span>(u<span class="sc">-</span> <span class="fu">Fx</span>(y[j<span class="dv">-1</span>])) <span class="sc">+</span> y[j<span class="dv">-1</span>]<span class="sc">*</span>(<span class="fu">Fx</span>(y[j]) <span class="sc">-</span> u)  )<span class="sc">/</span>( <span class="fu">Fx</span>(y[j]) <span class="sc">-</span> <span class="fu">Fx</span>(y[j<span class="dv">-1</span>]))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># gráfico</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>fx <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="dv">60</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">3</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>x)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(x))</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>( <span class="fu">fx</span>(x), <span class="at">add=</span>T, <span class="at">col =</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="inversao_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="gerando-vetores-aleatórios" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="gerando-vetores-aleatórios"><span class="header-section-number">5.6</span> 6. Gerando vetores aleatórios</h2>
+<p>Não é possível aplicar o Método da Inversão diretamente em vetores aleatórios. Contudo, o método é válido para distribuições condicionais univariadas, pois</p>
+<p><span class="math display">\[F_{X|y}(x)=u\Leftrightarrow x=F_{X|y}^{-1}(u).\]</span></p>
+<p>Considere que <span class="math inline">\(\bf{X}=(X_1,\ldots,X_d)\)</span> é um vetor de variáveis aleatórias independentes. Então,</p>
+<p><span class="math display">\[F_{{\bf X}} ({\bf x} )=F_{X_1}(x_1)F_{X_2|x_1}(x_2)\cdots F_{X_d|x_1,\ldots,x_{d-1}}(x_d)\]</span></p>
+<p>Deste modo, geramos uma amostra do vetor <span class="math inline">\({\bf X}\)</span> do seguinte modo:</p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(u_1,\ldots,u_d\sim \hbox{Uniformes}(0,1)\)</span> independentes</p></li>
+<li><p>Faça <span class="math inline">\(x_1=F^{-1}_{X_1}(u_1)\)</span></p></li>
+<li><p>Faça <span class="math inline">\(x_2=F^{-1}_{X_2|x_1}(u_2)\)</span></p></li>
+</ol>
+<p>d+1. Faça <span class="math inline">\(x_d=F^{-1}_{X_d|x_1,\ldots,x_{d-1}}(u_d)\)</span></p>
+<div class="alert alert-info">
+<p><strong>Exemplo 2.6 </strong> Seja <span class="math inline">\((X,Y)\)</span> um vetor aleatório uniformemente distribuído no triângulo <span class="math inline">\(\Delta\)</span>, definido pelos vértices <span class="math inline">\(\{(0,0),(1,0),(1,1)\}\)</span>, cuja densidade é</p>
+<p><span class="math display">\[f_{X,Y}(x,y)=2I((x,y)\in\Delta).\]</span> Teremos que <span class="math inline">\(f_Y(y)=2y\)</span>, com <span class="math inline">\(F_Y(y)=y^2\)</span> e <span class="math inline">\(y\in(0,1)\)</span>. Além disso <span class="math inline">\(X|y\sim\hbox{Uniforme}(0,y)\)</span>. Então, podemos gerar <span class="math inline">\((x,y)\)</span> com o seguinte algoritmo:</p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span></p></li>
+<li><p>Faça <span class="math inline">\(y = \sqrt{u}\)</span></p></li>
+<li><p>Gere <span class="math inline">\(x\sim\hbox{Uniforme}(0,y)\)</span></p></li>
+</ol>
+</div>
+<p>Dizemos que <span class="math inline">\(X\)</span> é um modelo de mistura se, para algum vetor <span class="math inline">\({\bf Y}\)</span>,</p>
+<p><span class="math display">\[F_X(x)=\int F_{X|{\bf y}}(x)dF_{ {\bf Y}}({\bf y}).\]</span></p>
+<p>Note que pode ser conveniente gerar <span class="math inline">\(X\)</span> simulando o o vetor <span class="math inline">\((X,{\bf Y})\)</span>.</p>
+<div class="alert alert-info">
+<p><strong>Exemplo 2.7</strong></p>
+<p>Dizemos que <span class="math inline">\(X\)</span> tem distribuição binomial negativa se sua função de probabilidade é dada por</p>
+<p><span class="math display">\[P(X=x)=\frac{\Gamma(x+a)}{\Gamma(a)x!}p^a(1-p)^x,\]</span> com <span class="math inline">\(x=0,1,2,\ldots\)</span>, <span class="math inline">\(a&lt;0\)</span> e <span class="math inline">\(p\in(0,1)\)</span>. Este é um modelo de mistura com</p>
+<p><span class="math display">\[\begin{align}
+X|Y=y&amp;\sim\hbox{Poisson}(y),\\
+Y&amp;\sim\hbox{Gama}\left(a,\frac{p}{1-p}\right)\end{align}\]</span></p>
+<p>Deste modo, uma observação do modelo binomial pode ser gerada com o seguinte algoritmo:</p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(y\sim\hbox{Gama}(a,p/(1-p))\)</span></p></li>
+<li><p>Gete <span class="math inline">\(x\sim\hbox{Poisson}(y)\)</span></p></li>
+</ol>
+<p>A função <code>rnbinom</code> do <code>R</code> utiliza esse algoritmo para simular variáveis com distribuição binomial negativa.</p>
+</div>
+</section>
+<section id="referências" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="referências"><span class="header-section-number">5.7</span> Referências</h2>
+<div class="alert alert-warning">
+<p><strong>Geração eficiente de binomiais</strong></p>
+<ul>
+<li>Kachitvichyanukul, V. and Schmeiser, B. W. (1988) Binomial random variate generation. Communications of the ACM, 31, 216–222.</li>
+</ul>
+<p><strong>Gerador de números gaussianos usando o método da inversão por interpolação</strong></p>
+<ul>
+<li>Wichura, M. J. (1988) Algorithm AS 241: The percentage points of the normal distribution. Applied Statistics, 37, 477–484.</li>
+</ul>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./gerador_congruencial.html" class="pagination-link" aria-label="Introdução aos geradores de números pseudo-aleatórios">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introdução aos geradores de números pseudo-aleatórios</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./provas.html" class="pagination-link" aria-label="Provas">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Provas</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
