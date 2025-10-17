@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; Provas – Estatística Computacional I</title>
+<title>6&nbsp; Método da uniforme multivariada com marginais não uniformes – Estatística Computacional I</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +65,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./uniforme_multivariada.html" rel="prev">
+<link href="./provas.html" rel="next">
+<link href="./inversao.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -110,7 +146,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./provas.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Provas</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./uniforme_multivariada.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Método da uniforme multivariada com marginais não uniformes</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -179,13 +215,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./uniforme_multivariada.html" class="sidebar-item-text sidebar-link">
+  <a href="./uniforme_multivariada.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Método da uniforme multivariada com marginais não uniformes</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./provas.html" class="sidebar-item-text sidebar-link active">
+  <a href="./provas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
   </div>
 </li>
@@ -199,7 +235,9 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#revisão-para-a-prova-1" id="toc-revisão-para-a-prova-1" class="nav-link active" data-scroll-target="#revisão-para-a-prova-1"><span class="header-section-number">8</span> Revisão para a Prova 1</a></li>
+  <li><a href="#funções-indicadoras" id="toc-funções-indicadoras" class="nav-link active" data-scroll-target="#funções-indicadoras"><span class="header-section-number">6.1</span> Funções indicadoras</a></li>
+  <li><a href="#distribuição-uniforme-multivariada" id="toc-distribuição-uniforme-multivariada" class="nav-link" data-scroll-target="#distribuição-uniforme-multivariada"><span class="header-section-number">6.2</span> Distribuição uniforme multivariada</a></li>
+  <li><a href="#método-da-uniforme-multivariada-com-marginais-não-uniformes" id="toc-método-da-uniforme-multivariada-com-marginais-não-uniformes" class="nav-link" data-scroll-target="#método-da-uniforme-multivariada-com-marginais-não-uniformes"><span class="header-section-number">6.3</span> Método da uniforme multivariada com marginais não uniformes</a></li>
   </ul>
 </nav>
     </div>
@@ -208,7 +246,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Provas</span></h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Método da uniforme multivariada com marginais não uniformes</span></h1>
 </div>
 
 
@@ -225,30 +263,172 @@ window.Quarto = {
 </header>
 
 
-<p>Todas as provas possuem as seguintes regras:</p>
+<p>Nesta aula vamos discutir como simular <span class="math inline">\(X\)</span> a partir de uma distribuição uniforme multivariada. Esse método é a base para do método da aceitação/rejeição que será discutido posteriormente.</p>
+<section id="funções-indicadoras" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="funções-indicadoras"><span class="header-section-number">6.1</span> Funções indicadoras</h2>
+<p>Seja <span class="math inline">\(S\subset \mathbb{R}^d\)</span>. A função <span class="math inline">\(I_S:\mathbb{R}^d\rightarrow\{0,1\}\)</span>, dada por</p>
+<p><span class="math display">\[I_S(x)=\left\{\begin{array}{ll}1,&amp;x\in S\\ 0,&amp; x\in S^c\end{array}\right.\]</span> é denominada função indicadora de <span class="math inline">\(S\)</span></p>
+<div class="alert alert-success">
+<p><strong>Propriedades</strong></p>
 <ol type="1">
-<li>Não é permitido o uso de dispositivos eletrônicos</li>
-<li>Não é permitido deixar a sala de aula sem entregar a prova</li>
+<li><p><span class="math inline">\(I_A(x)I_B(x)=I_{A\cap B}(x)\)</span></p></li>
+<li><p><span class="math inline">\(\int_A f(x)dx=\int_{\mathbb{R}^d}I_A(x)f(x)dx\)</span></p></li>
 </ol>
-<section id="revisão-para-a-prova-1" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Revisão para a Prova 1</h1>
-<div class="alert alert-info">
-<p><strong>Questão 1.</strong> Considere o problema de encontrar a raiz de <span class="math inline">\(f(x)\)</span> no intervalo <span class="math inline">\([a,b]\)</span>. Explique porque ter <span class="math inline">\(f(a)f(b)&lt;0\)</span> não é suficiente para garantir que há uma única raiz no intervalo <span class="math inline">\([a,b]\)</span>. <strong>Sugestão.</strong> Esboce um gráfico de uma função periódica, como <span class="math inline">\(\sin(x)\)</span>.</p>
 </div>
-<div class="alert alert-info">
-<p><strong>Questão 2.</strong> Seja <span class="math inline">\(f(x)=x^2-4\)</span>. Considerando o problema de encontra a raiz de <span class="math inline">\(f(x)\)</span> e o ponto inicial <span class="math inline">\(x_0=1\)</span>, faça uma iteração do método de Newton-Raphson.</p>
+</section>
+<section id="distribuição-uniforme-multivariada" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="distribuição-uniforme-multivariada"><span class="header-section-number">6.2</span> Distribuição uniforme multivariada</h2>
+<p>Seja <span class="math inline">\(S\subset \mathbb{R}^d\)</span> satisfazendo</p>
+<p><span class="math display">\[0&lt;\int_{\mathbb{R}^d} I_S(x)dx&lt;\infty.\]</span> A integral acima é denominada volume de <span class="math inline">\(S\)</span> e é denotada por Vol(<span class="math inline">\(S\)</span>).</p>
+<p>Dizemos que o vetor <span class="math inline">\(\boldsymbol{X}\)</span> tem distribuição uniforme multivariada no conjunto <span class="math inline">\(S\)</span> se sua densidade é dada por</p>
+<p><span class="math display">\[f(\boldsymbol{x})=Vol(S)^{-1}I_S(\boldsymbol{x}).\]</span></p>
+<p>Neste caso, dizemos que <span class="math inline">\(\boldsymbol{X}\sim\)</span>Uniforme(<span class="math inline">\(S\)</span>).</p>
+<div class="alert alert-success">
+<p><strong>Lema</strong> Seja <span class="math inline">\(V\subset S\)</span>. Se <span class="math inline">\(\boldsymbol{X}\sim\)</span>Uniforme(<span class="math inline">\(S\)</span>), então <span class="math inline">\(\boldsymbol{X}|\boldsymbol{X}\in V\sim\)</span>Uniforme(<span class="math inline">\(V\)</span>).</p>
 </div>
-<div class="alert alert-info">
-<p><strong>Questão 3.</strong> Prove que nem todo minimizador local é um minimizador global.<strong>Sugestão.</strong> Você pode esboçar um gráfico para criar seu argumento.</p>
+<p>Considere que é fácil simular pontos uniformemente distribuídos em <span class="math inline">\(S\)</span>. Então, podemos simular pontos de uma região mais complicada <span class="math inline">\(V\subset S\)</span> com o seguinte algoritmo:</p>
+<div class="alert alert-success">
+<p><strong>Algoritmo</strong>.</p>
+<ol type="1">
+<li><p>Simule <span class="math inline">\(u\sim\)</span>Uniforme(<span class="math inline">\(S\)</span>)</p></li>
+<li><p>Se <span class="math inline">\(u\in V\)</span>, faça <span class="math inline">\(x=u\)</span>. Senão, volte ao passo 1.</p></li>
+</ol>
 </div>
-<div class="alert alert-info">
-<p><strong>Questão 4.</strong> Seja <span class="math inline">\(f(x)=x^4-1\)</span>. Considerando o problema de minimização de <span class="math inline">\(f(x)\)</span>, o ponto inicial <span class="math inline">\(x_0=1\)</span> e a taxa de aprendizagem <span class="math inline">\(\alpha=0,1\)</span>, faça uma iteração do método do gradiente e retorne o valor de <span class="math inline">\(x_1\)</span>.</p>
+<div id="exm-" class="alert alert-info theorem example">
+<p><span class="theorem-title"><strong>Example 6.1</strong></span> Vamos ilustrar o algoritmo acima simulando pontos uniformemente distribuídos dentro da circunferência de centro (1/2,1/2) e raio 1/2, isto é</p>
+<p><span class="math display">\[f(\boldsymbol{x})=\frac{4}{\pi}I_V(\boldsymbol{x}),\]</span> com <span class="math display">\[V=\{x\in \mathbb{R}^2:(x_1−1/2)^2+(x_2−1/2)^2&lt;1/4\}.\]</span></p>
+<p>Notemos que <span class="math inline">\(V\subset S\)</span>, onde</p>
+<p><span class="math display">\[S=\{\boldsymbol{x}\in\mathbb{R}^2:x_i∈(0,1),i=1,2\}\]</span> Notemos ainda que, se <span class="math inline">\(U_1,U_2\sim\)</span>Uniforme(0,1) são independentes, então a densidade do vetor <span class="math inline">\(\boldsymbol{U}=(U_1,U_2)\)</span> é dada por</p>
+<p><span class="math display">\[f_\boldsymbol{U}(\boldsymbol{u})=f_{U_1}(u_1)f_{U_2}(u_2)=I_{(0,1)}(u_1)I_{(0,1)}(u_2)=I_S(\boldsymbol{u})\]</span></p>
+<p>Então, podemos simular <span class="math inline">\(\boldsymbol{X}\)</span>∼Uniforme(<span class="math inline">\(V\)</span>) com o seguinte algoritmo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>r_uniformeV <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>,<span class="cn">NA</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>( <span class="fu">is.na</span>( x[<span class="dv">1</span>]) ){</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># gerando um ponto de S</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">2</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># verificando o ponto está em V</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>( <span class="fu">sum</span>( (u <span class="sc">-</span>.<span class="dv">5</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>){</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      x <span class="ot">&lt;-</span> u</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>}  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="alert alert-info">
-<p><strong>Questão 5.</strong> Considere a função <span class="math inline">\(f(x,y)=x^2+y^2\)</span>. Começando com com o simplex <span class="math inline">\((1,1),(2,1),(2,3)\)</span>, faça uma iteração do método de Nelder Mead e apresente o novo simplex.</p>
+<p>Vamos gerar 1000 pontos uniformes em <span class="math inline">\(V\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sapply</span>( <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="cf">function</span>(x) <span class="fu">r_uniformeV</span>() )</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>oo <span class="ot">&lt;-</span> <span class="fu">par</span>( <span class="at">pty =</span> <span class="st">"s"</span> )</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(x[<span class="dv">1</span>,],x[<span class="dv">2</span>,] , <span class="at">xlab=</span> <span class="st">"x1"</span>, <span class="at">ylab=</span><span class="st">"x2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="uniforme_multivariada_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
-<div class="alert alert-info">
-<p><strong>Questão 6.</strong> Aproxime a integral <span class="math display">\[\int_0^1 x^2dx\]</span> utilizando a regra de Newton-Cotes, considerando dois subintervalos e a regra do ponto médio.</p>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(oo)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>Note que o algoritmo dado simula um candidato no passo 1 e decide se aceita ou não esse candidato no passo 2. A probabilidade do candidato ser aceito é</p>
+<p><span class="math display">\[P(\boldsymbol{X}\in   V)=\frac{1}{Vol(S)}\int_V I_S(x)d\boldsymbol{x}=\frac{Vol(V)}{Vol(S)}\]</span></p>
+<p>Deste modo, se <span class="math inline">\(T\)</span> é o número de tentativas até a geração de <span class="math inline">\(X\)</span>, teremos que <span class="math inline">\(T\sim \hbox{Geométrica}(P(\boldsymbol{X}\in V))\)</span> e o número médio de tentativas é dado por <span class="math inline">\(1/P(X\in V)\)</span>.</p>
+<p>No Exemplo 1, <span class="math inline">\(P(\boldsymbol{X}\in V)=\pi/4\approx 0,78\)</span>. O simulador precisa de 1,27 tentativas em média para gerar um vetor da Uniforme(<span class="math inline">\(V\)</span>).</p>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> Considere o conjunto</p>
+<p><span class="math display">\[V=\{(x,y)\in[-3,3]^2:|y|&lt;e^{-|x|}\} \]</span></p>
+<p>Simule uma amostra de tamanho 5000 de pontos uniformes em <span class="math inline">\(V\)</span>.</p>
+</div>
+</section>
+<section id="método-da-uniforme-multivariada-com-marginais-não-uniformes" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="método-da-uniforme-multivariada-com-marginais-não-uniformes"><span class="header-section-number">6.3</span> Método da uniforme multivariada com marginais não uniformes</h2>
+<p>Suponha que desejamos simular o vetor <span class="math inline">\(\boldsymbol{X}\subset \mathbb{R}^d\)</span> com densidade <span class="math inline">\(f(\boldsymbol{x})\)</span>. Considere o conjunto</p>
+<p><span class="math display">\[V=\{(\boldsymbol{x},u):x\in\mathbb{R}^d,0&lt;u&lt;f(\boldsymbol{x})\}.\]</span> Note que</p>
+<p><span class="math display">\[Vol(V)=\int_{\mathbb{R}^d}\int_{0}^{f(\boldsymbol{x})}1dudx=\int_{\mathbb{R}^d}f(\boldsymbol{x})d\boldsymbol{x}=1\]</span></p>
+<p>Seja <span class="math inline">\((\boldsymbol{X},U)\)</span> um vetor aleatório uniformemente distribuído em <span class="math inline">\(V\)</span>, com densidade dada por</p>
+<p><span class="math display">\[f_{\boldsymbol{X},U}(\boldsymbol{x},u)=Vol(V)^{-1}I_V(\boldsymbol{x},u)=I_V(\boldsymbol{x},u).\]</span> Notemos que</p>
+<p><span class="math display">\[\int_{0}^{f(\boldsymbol{x})}f_{\boldsymbol{X},U}(x,u)du=\int_0^{f(\boldsymbol{x})}du=f(\boldsymbol{x}).\]</span> então, a distribuição marginal de <span class="math inline">\(X\)</span> tem densidade <span class="math inline">\(f(.)\)</span>. Então, se é fácil simular <span class="math inline">\((\boldsymbol{X},U)\)</span>∼Uniforme(<span class="math inline">\(S\)</span>), com <span class="math inline">\(V\subset S\)</span>, podemos simular <span class="math inline">\(\boldsymbol{X}\)</span> com o seguinte algoritmo:</p>
+<div class="alert alert-success">
+<p><strong>Método da uniforme multivariada com marginais não uniformes</strong></p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\((y,u)\sim\)</span>Uniforme(<span class="math inline">\(S\)</span>)</p></li>
+<li><p>Se <span class="math inline">\((y,u)\in V\)</span>, faça <span class="math inline">\(x=y\)</span>. Senão, retorne ao passo 1.</p></li>
+</ol>
+</div>
+<p>Em geral, escolhemos uma região <span class="math inline">\(S\)</span> simples, como um hipercubo, pois o passo 1 do algoritmo acima é resolvido a partir da simulação de uniformes univariadas independentes.</p>
+<div id="exm-" class="alert alert-info theorem example">
+<p><span class="theorem-title"><strong>Example 6.2</strong></span> Considere o problema de simular <span class="math inline">\(X\)</span>, com densidade dada por</p>
+<p><span class="math display">\[f(x)=60x^3(1−x)^2,\]</span></p>
+<p>com <span class="math inline">\(x\in(0,1)\)</span>. Seja</p>
+<p><span class="math display">\[V=\{(x,u):0&lt;x&lt;1,0&lt;u&lt;60x^3(1−x)^2\}.\]</span></p>
+<p>Vamos definir <span class="math display">\[S=\{(x,u):0&lt;x&lt;1,0&lt;u&lt;M\},\]</span></p>
+<p>onde <span class="math inline">\(M\)</span> é o valor máximo de <span class="math inline">\(f(.)\)</span>. Embora encontrar <span class="math inline">\(M\)</span> seja um exercício simples de cálculo, vamos realizar essa tarefa numericamente, utilizando a função <code>optim</code>, pelo método de Brent:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># densidade de interesse</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="dv">60</span><span class="sc">*</span> x<span class="sc">^</span><span class="dv">3</span> <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>x)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># menos a densidade de interesse</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>mf <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="sc">-</span><span class="fu">f</span>(x)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># encontrando o mínimo local</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">optim</span>( .<span class="dv">5</span>, mf, <span class="at">lower =</span> <span class="dv">0</span>, <span class="at">upper =</span><span class="dv">1</span>, <span class="at">method =</span> <span class="st">'Brent'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$par
+[1] 0.6
+
+$value
+[1] -2.0736
+
+$counts
+function gradient 
+      NA       NA 
+
+$convergence
+[1] 0
+
+$message
+NULL</code></pre>
+</div>
+</div>
+<p>Portanto, tomaremos <span class="math inline">\(S\)</span> como</p>
+<p><span class="math display">\[S=\{(x,u):0&lt;x&lt;1,0&lt;u&lt;2,0736\}\]</span></p>
+<p>onde pode-se constatar que <span class="math inline">\(V\subset S\)</span>. A função abaixo gera uma observação de <span class="math inline">\(X\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>( <span class="fu">is.na</span>(x) <span class="sc">==</span> T){</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># passo 1: gerando de (y,u)~Uniforme(S)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      y <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">2.0736</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># passo 2: testando o candidado</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span>( u <span class="sc">&lt;</span> <span class="fu">f</span>(y)){ x <span class="ot">&lt;-</span> y}</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Abaixo simulamos uma amostra de tamanho 1.000 dessa distribuição</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sapply</span>( <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="cf">function</span>(x) <span class="fu">rf</span>() )</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># histograma dos valores simulados de X</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">main =</span> <span class="st">""</span> ,<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">2.0736</span>), <span class="at">xlab =</span> <span class="st">"x"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">f</span>(x), <span class="at">add =</span> T, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="uniforme_multivariada_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício</strong> Utilize o método da uniforme multivariada com marginais não uniformes para obter um simulador para a função densidade</p>
+<p><span class="math display">\[f(x)=\frac{1}{\pi^2}x\cos(x)^2,\]</span> onde <span class="math inline">\(x(0,2\pi)\)</span>. Implemente o simulador e obtenha uma amostra de tamanho 5.000.</p>
 </div>
 
 
@@ -656,11 +836,14 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./uniforme_multivariada.html" class="pagination-link" aria-label="Método da uniforme multivariada com marginais não uniformes">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Método da uniforme multivariada com marginais não uniformes</span></span>
+      <a href="./inversao.html" class="pagination-link" aria-label="Método da inversão">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Método da inversão</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./provas.html" class="pagination-link" aria-label="Provas">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Provas</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

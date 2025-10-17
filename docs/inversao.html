@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./provas.html" rel="next">
+<link href="./uniforme_multivariada.html" rel="next">
 <link href="./gerador_congruencial.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -215,8 +215,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./uniforme_multivariada.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Método da uniforme multivariada com marginais não uniformes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./provas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
   </div>
 </li>
     </ul>
@@ -233,8 +239,8 @@ window.Quarto = {
   <li><a href="#funções-de-uniformes" id="toc-funções-de-uniformes" class="nav-link" data-scroll-target="#funções-de-uniformes"><span class="header-section-number">5.2</span> 1. Funções de uniformes</a></li>
   <li><a href="#teorema-da-probabilidade-integral" id="toc-teorema-da-probabilidade-integral" class="nav-link" data-scroll-target="#teorema-da-probabilidade-integral"><span class="header-section-number">5.3</span> 2. Teorema da Probabilidade Integral</a></li>
   <li><a href="#pesquisas-em-tabelas" id="toc-pesquisas-em-tabelas" class="nav-link" data-scroll-target="#pesquisas-em-tabelas"><span class="header-section-number">5.4</span> 3. Pesquisas em tabelas</a></li>
-  <li><a href="#inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas" id="toc-inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas" class="nav-link" data-scroll-target="#inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas"><span class="header-section-number">5.5</span> 3. Inversão numérica de <span class="math inline">\(F_x(.)\)</span> e o Método da Interpolação em Tabelas</a></li>
-  <li><a href="#gerando-vetores-aleatórios" id="toc-gerando-vetores-aleatórios" class="nav-link" data-scroll-target="#gerando-vetores-aleatórios"><span class="header-section-number">5.6</span> 6. Gerando vetores aleatórios</a></li>
+  <li><a href="#inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas" id="toc-inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas" class="nav-link" data-scroll-target="#inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas"><span class="header-section-number">5.5</span> 4. Inversão numérica de <span class="math inline">\(F_x(.)\)</span> e o Método da Interpolação em Tabelas</a></li>
+  <li><a href="#gerando-vetores-aleatórios" id="toc-gerando-vetores-aleatórios" class="nav-link" data-scroll-target="#gerando-vetores-aleatórios"><span class="header-section-number">5.6</span> 5. Gerando vetores aleatórios</a></li>
   <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências"><span class="header-section-number">5.7</span> Referências</a></li>
   </ul>
 </nav>
@@ -503,10 +509,45 @@ window.Quarto = {
 <p>Terminação: O loop termina quando low e high se encontram (low = high). Retorne <span class="math inline">\(j=\)</span>low.</p>
 </div>
 <p>É importante notar que uma das vantagens do <code>R</code> é a vetorização. Nesse sentido, a busca binária pode ser rapidamente implementada uma vez que <span class="math inline">\(U\)</span> pode ser comparada simultaneamente com todos os valores de <span class="math inline">\(F(x)\)</span>. Essa verificação está implementada na função <code>findInterval</code>.</p>
+<div id="exm-" class="alert alert-info theorem example">
+<p><span class="theorem-title"><strong>Example 5.3</strong></span> Considere novamente a função de distribuição</p>
+<p><span class="math display">\[P(X=x)=\frac{x}{10},\]</span> onde <span class="math inline">\(x\in\{1,2,3,4\}\)</span>. A tabela de busca é</p>
+<p><span class="math display">\[\begin{array}{c|c|c}\hline x &amp; F(x) &amp; \hbox{Intervalo de busca}\\ \hline 1  &amp; \frac{1}{10} &amp; (0,\frac{1}{10}] \\  2&amp; \frac{3}{10} &amp; (\frac{1}{10}, \frac{3}{10}]\\ 3 &amp; \frac{6}{10} &amp; (\frac{3}{10},\frac{6}{10}] \\ 4 &amp; 1 &amp; (\frac{6}{10},1]  \\ \hline  \end{array}\]</span> Vamos guardar os pontos que delimitam o intervalo de busca no vetor abaixo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>intervalos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">1</span>, .<span class="dv">3</span>, .<span class="dv">6</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Vamos simular uma amostra de tamanho 5000 desta tabela utilizando a função <code>findInterval</code>.:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(u, intervalos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Por último, vamos encontrar a tabela de frequências relativas e comparar com as probabilidades do modelo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>freq <span class="ot">&lt;-</span> <span class="fu">prop.table</span>( <span class="fu">table</span>(x) )</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(freq)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>( <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, (<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)<span class="sc">/</span><span class="dv">10</span>, <span class="at">col =</span><span class="dv">2</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">'topleft'</span>,<span class="fu">c</span>(<span class="st">'P(X=x)'</span>,<span class="st">'Frequência relativa'</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">bty=</span><span class="st">'n'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="inversao_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> Os dados a seguir mostram o número de meninos entre os 12 primeiros filhos de 6115 famílias com 13 filhos, retirados de registros hospitalares na Saxônia do século XIX.</p>
+<p><span class="math display">\[\begin{array}{l|cccccccccccc}\hline
+\hbox{Meninos} &amp; 0&amp; 1&amp;  2&amp;  3&amp;  4&amp;  5&amp;  6&amp;  7&amp;  8&amp;  9&amp;  10&amp; 11&amp; 12\\
+\hbox{Frequência}&amp;  3&amp;  24&amp; 104&amp;    286&amp;    670&amp;    1033&amp;   1343&amp;   1112&amp;   829&amp;    478&amp;    181&amp;    45&amp; 7\\ \hline\end{array}\]</span></p>
+<p>Considerando que as frequências relativas são bos aproximações para a função de probabilidade, crie um simulador para essa distribuição.</p>
+</div>
 </section>
 <section id="inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas"><span class="header-section-number">5.5</span> 3. Inversão numérica de <span class="math inline">\(F_x(.)\)</span> e o Método da Interpolação em Tabelas</h2>
-<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória contínua. Existem casos nos quais temos a expressão analítica para <span class="math inline">\(F_X(.)\)</span> mas não para <span class="math inline">\(F_X^{-1}(.)\)</span>. Ainda podemos utilizar o Método da Inversão da seguinte forma:</p>
+<h2 data-number="5.5" class="anchored" data-anchor-id="inversão-numérica-de-f_x.-e-o-método-da-interpolação-em-tabelas"><span class="header-section-number">5.5</span> 4. Inversão numérica de <span class="math inline">\(F_x(.)\)</span> e o Método da Interpolação em Tabelas</h2>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória contínua. Existem casos nos quais temos a expressão analítica para <span class="math inline">\(F_X(.)\)</span> mas não para <span class="math inline">\(F_X^{-1}(.)\)</span>. Ainda assim, podemos utilizar o Método da Inversão da seguinte forma:</p>
 <ol type="1">
 <li><p>Gere <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span></p></li>
 <li><p>Encontre numericamente o valor de <span class="math inline">\(x\)</span> que resolve <span class="math inline">\(u=F_X(x)\)</span></p></li>
@@ -518,20 +559,20 @@ window.Quarto = {
 <p><strong>Exercício</strong></p>
 <p>Considere a densidade <span class="math display">\[f_X(x)=\frac{x\sin(x)}{\sin(1)-\cos(1)},\]</span> com <span class="math inline">\(x\in(0,1)\)</span>. Note que <span class="math display">\[F_X(x)=\frac{\sin(x)-x\cos(x)}{\sin(1)-\cos(1)}\]</span> mas não há expressão para <span class="math inline">\(F_X^{-1}(.)\)</span>. Crie um gerador para essa distribuição utilizando o método da inversão e utilize-o para obter uma amostra de tamanho 50000. Monitore o tempo de execução utilizando a função <code>Sys.time</code>.</p>
 </div>
-<p>O exercício acima mostra que o método a inversão utilizando algoritmos para obtenção de raízes pode ser demorado. Uma solução mais eficiente pode ser obtida combinando a busca binária das pesquisas em tabela e interpolações, conhecido como Método da Interpolação em Tabelas.</p>
-<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória contínua com valores em <span class="math inline">\(D\)</span>. Assuma que existe, para <span class="math inline">\(\{y_1,\ldots,y_m\}\inD\)</span>, existe a tabela</p>
+<p>O exercício acima mostra que o método da inversão, quando requer algoritmos de busca de raízes, pode ser computacionalmente intensivo. Uma alternativa mais eficiente combina a pesquisa em tabela (geralmente implementada com busca binária) e a interpolação, método conhecido como Interpolação em Tabela.</p>
+<p>Seja <span class="math inline">\(X\)</span> uma variável aleatória contínua com valores no domínio <span class="math inline">\(D\)</span>. Assuma que, para um conjunto de pontos <span class="math inline">\(\{y_1,\ldots,y_m\}\in D\)</span>, a seguinte tabela está disponível</p>
 <p><span class="math display">\[\begin{array}{c|c|c}\hline \hbox{Índice} &amp; \hbox{x} &amp; F(x)\\ \hline
 1 &amp; y_1 &amp; F(y_1) \\
 2 &amp; y_2 &amp; F(y_2) \\
 \vdots &amp; \vdots &amp; \vdots \\
 m &amp; y_m &amp; F(y_m)\\\hline \end{array}\]</span></p>
-<p>O Método da Interpolação de Tabelas consiste em utilizar um método de pesquisa em tabela para obter simular um índice <span class="math inline">\(j\in\{1,\ldots,m\}\)</span>. Ao simular o índice <span class="math inline">\(j\)</span> através de <span class="math inline">\(U\sim\hbox{Uniforme}(0,1)\)</span> sabemos que <span class="math display">\[F(y_{j-1})&lt;u\leq F(y_j),\]</span> o que implica que o valor de <span class="math inline">\(X\)</span> a ser simulado está entre <span class="math inline">\(y_{j-1}\)</span> e <span class="math inline">\(y_j\)</span>. Desde que <span class="math inline">\(m\)</span> seja grande o suficiente, teremos que <span class="math inline">\(F(y_{j-1})\approx F(y_j)\)</span>, e podemos utilizar uma intervalação para obter <span class="math inline">\(x\)</span> a partir de <span class="math inline">\(u\)</span>. As funções interpolantes mais simples são as lineares, embora polinômios de graus 2 ou 3 possam dar melhores ajustes. Para a interpolação linear, teremos que o valor simulado será</p>
-<p><span class="math display">\[x=\frac{u-F(y_{j-1})}{F(y_j)-F(y_{j-1})}.\]</span> Abaixo, ilustramos como <span class="math inline">\(x\)</span> pode ser simulado por interpolação linear. Alinha sólida em preto mostra <span class="math inline">\(F(x)\)</span> enquanto que a pontilhada em preto apresenta a interpolação linear. O valor real a ser simulado é <span class="math inline">\(x^o\)</span> enquanto <span class="math inline">\(x\)</span> é o valor simulado pela interpolação.</p>
+<p>O Método da Interpolação de Tabelas consiste em usar um algoritmo de busca para encontrar o índice <span class="math inline">\(j\in\{1,\ldots,m\}\)</span> tal que <span class="math inline">\(F(y_{j-1})&lt;u\leq F(y_j)\)</span>. Desde que <span class="math inline">\(m\)</span> seja grande o suficiente, o intervalo <span class="math inline">\([y_{j-1},y_j]\)</span> será pequeno e podemos utilizar uma interpolação para uma boa aproximação de <span class="math inline">\(x\)</span> a partir de <span class="math inline">\(u\)</span>. As funções interpolantes mais simples são as lineares, embora polinômios de graus 2 ou 3 possam dar melhores ajustes. Para a interpolação linear, o valor simulado é a coordenada <span class="math inline">\(x\)</span> sobre a reta que conecta <span class="math inline">\((y_{j-1},F(y_{j-1}))\)</span> e <span class="math inline">\((y_{j},F(y_{j}))\)</span>, dado por</p>
+<p><span class="math display">\[x=y_{j-1}+(y_j-y_{j-1})\frac{u-F(y_{j-1})}{F(y_j)-F(y_{j-1})}.\]</span> Abaixo, ilustramos como <span class="math inline">\(x\)</span> pode ser simulado por interpolação linear. Alinha sólida em preto mostra <span class="math inline">\(F(x)\)</span> enquanto que a pontilhada em preto apresenta a interpolação linear. O valor real a ser simulado é <span class="math inline">\(x^o\)</span> enquanto <span class="math inline">\(x\)</span> é o valor simulado pela interpolação.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="inversao_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="inversao_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -546,184 +587,112 @@ m &amp; y_m &amp; F(y_m)\\\hline \end{array}\]</span></p>
 <li><p>Encontre <span class="math inline">\(k\)</span> tal que <span class="math inline">\(v_{k-1}&lt;u\leq v_k\)</span></p></li>
 <li><p>A partir da reta que passa em <span class="math inline">\((y_{k-1},v_{k-1}),(y_k,v_k)\)</span>, faça</p></li>
 </ol>
-<p><span class="math display">\[x=\frac{1}{v_k-v_{k-1}}\left[y_k(u-v_{k-1})+y_{k-1}(v_k-u)\right]\]</span></p>
+<p><span class="math display">\[x=y_k+(y_k-y_{k-1})\frac{u-v_{k-1}}{v_k-v_{k-1}}\]</span></p>
 </div>
 <div class="alert alert-info">
 <p><strong>Exemplo.</strong> Considere a função densidade</p>
-<p><span class="math display">\[f(x)= 60x^3(1-x)^2\]</span> cuja função distribuição é dada por <span class="math display">\[F(x)=15x^4-24x^5 + 10x^6.\]</span> Abaixo, vamos construir uma tabela para a progressão 0,01 até 0,99 com razão 0,01.</p>
+<p><span class="math display">\[f(x)= 60x^3(1-x)^2,\]</span> com <span class="math inline">\(x\in(0,1)\)</span>, cuja função distribuição é dada por <span class="math display">\[F(x)=15x^4-24x^5 + 10x^6.\]</span> Abaixo, vamos construir uma tabela para a progressão 0,01 até 0,99 com razão 0,01.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Fx <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="dv">16</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">4</span> <span class="sc">-</span><span class="dv">24</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">5</span> <span class="sc">+</span> <span class="dv">10</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">6</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(.<span class="dv">01</span>, .<span class="dv">99</span>, .<span class="dv">01</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>Índice <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(y)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">F(y)</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">Fx</span>(y)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Índice, y, <span class="st">`</span><span class="at">F(y)</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Fx <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="dv">15</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">4</span> <span class="sc">-</span><span class="dv">24</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">5</span> <span class="sc">+</span> <span class="dv">10</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">6</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">seq</span>(.<span class="dv">01</span>, .<span class="dv">99</span>, .<span class="dv">01</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>Índice <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(y)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">Fx</span>(y)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( <span class="fu">data.frame</span>(Índice, y, v) ,<span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   Índice    y         F.y.
-1       1 0.01 1.576100e-07
-2       2 0.02 2.483840e-06
-3       3 0.03 1.238409e-05
-4       4 0.04 3.854336e-05
-5       5 0.05 9.265625e-05
-6       6 0.06 1.891642e-04
-7       7 0.07 3.449997e-04
-8       8 0.08 5.793382e-04
-9       9 0.09 9.133568e-04
-10     10 0.10 1.370000e-03
-11     11 0.11 1.973753e-03
-12     12 0.12 2.750423e-03
-13     13 0.13 3.726925e-03
-14     14 0.14 4.931078e-03
-15     15 0.15 6.391406e-03
-16     16 0.16 8.136950e-03
-17     17 0.17 1.019708e-02
-18     18 0.18 1.260132e-02
-19     19 0.19 1.537918e-02
-20     20 0.20 1.856000e-02
-21     21 0.21 2.217278e-02
-22     22 0.22 2.624604e-02
-23     23 0.23 3.080770e-02
-24     24 0.24 3.588489e-02
-25     25 0.25 4.150391e-02
-26     26 0.26 4.769002e-02
-27     27 0.27 5.446739e-02
-28     28 0.28 6.185898e-02
-29     29 0.29 6.988644e-02
-30     30 0.30 7.857000e-02
-31     31 0.31 8.792843e-02
-32     32 0.32 9.797894e-02
-33     33 0.33 1.087371e-01
-34     34 0.34 1.202168e-01
-35     35 0.35 1.324302e-01
-36     36 0.36 1.453876e-01
-37     37 0.37 1.590975e-01
-38     38 0.38 1.735667e-01
-39     39 0.39 1.887999e-01
-40     40 0.40 2.048000e-01
-41     41 0.41 2.215679e-01
-42     42 0.42 2.391027e-01
-43     43 0.43 2.574015e-01
-44     44 0.44 2.764596e-01
-45     45 0.45 2.962702e-01
-46     46 0.46 3.168248e-01
-47     47 0.47 3.381131e-01
-48     48 0.48 3.601229e-01
-49     49 0.49 3.828404e-01
-50     50 0.50 4.062500e-01
-51     51 0.51 4.303344e-01
-52     52 0.52 4.550750e-01
-53     53 0.53 4.804514e-01
-54     54 0.54 5.064420e-01
-55     55 0.55 5.330239e-01
-56     56 0.56 5.601729e-01
-57     57 0.57 5.878637e-01
-58     58 0.58 6.160700e-01
-59     59 0.59 6.447648e-01
-60     60 0.60 6.739200e-01
-61     61 0.61 7.035072e-01
-62     62 0.62 7.334973e-01
-63     63 0.63 7.638611e-01
-64     64 0.64 7.945689e-01
-65     65 0.65 8.255914e-01
-66     66 0.66 8.568991e-01
-67     67 0.67 8.884629e-01
-68     68 0.68 9.202544e-01
-69     69 0.69 9.522458e-01
-70     70 0.70 9.844100e-01
-71     71 0.71 1.016721e+00
-72     72 0.72 1.049155e+00
-73     73 0.73 1.081689e+00
-74     74 0.74 1.114301e+00
-75     75 0.75 1.146973e+00
-76     76 0.76 1.179687e+00
-77     77 0.77 1.212428e+00
-78     78 0.78 1.245186e+00
-79     79 0.79 1.277952e+00
-80     80 0.80 1.310720e+00
-81     81 0.81 1.343488e+00
-82     82 0.82 1.376259e+00
-83     83 0.83 1.409038e+00
-84     84 0.84 1.441835e+00
-85     85 0.85 1.474668e+00
-86     86 0.86 1.507554e+00
-87     87 0.87 1.540522e+00
-88     88 0.88 1.573601e+00
-89     89 0.89 1.606829e+00
-90     90 0.90 1.640250e+00
-91     91 0.91 1.673915e+00
-92     92 0.92 1.707881e+00
-93     93 0.93 1.742213e+00
-94     94 0.94 1.776985e+00
-95     95 0.95 1.812276e+00
-96     96 0.96 1.848178e+00
-97     97 0.97 1.884788e+00
-98     98 0.98 1.922215e+00
-99     99 0.99 1.960576e+00</code></pre>
+<pre><code>  Índice    y            v
+1      1 0.00 0.000000e+00
+2      2 0.01 1.476100e-07
+3      3 0.02 2.323840e-06
+4      4 0.03 1.157409e-05
+5      5 0.04 3.598336e-05
+6      6 0.05 8.640625e-05</code></pre>
 </div>
 </div>
 <p>Abaixo, simulamos <span class="math inline">\(5000\)</span> valores dessa distribuição utilizando o método da interpolação de tabelas:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">5000</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">5000</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pesquisando o indice na tabela</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>j <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(u, <span class="fu">c</span>(<span class="dv">0</span>,<span class="st">`</span><span class="at">F(y)</span><span class="st">`</span>))</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># interpolação</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> ( y[j]<span class="sc">*</span>(u<span class="sc">-</span> <span class="fu">Fx</span>(y[j<span class="dv">-1</span>])) <span class="sc">+</span> y[j<span class="dv">-1</span>]<span class="sc">*</span>(<span class="fu">Fx</span>(y[j]) <span class="sc">-</span> u)  )<span class="sc">/</span>( <span class="fu">Fx</span>(y[j]) <span class="sc">-</span> <span class="fu">Fx</span>(y[j<span class="dv">-1</span>]))</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># gráfico</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>fx <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="dv">60</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">3</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>x)<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(x))</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>( <span class="fu">fx</span>(x), <span class="at">add=</span>T, <span class="at">col =</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">5000</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">5000</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pesquisando o indice na tabela</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>j <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(u, v)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># interpolação</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> y[j] <span class="sc">+</span> (y[j] <span class="sc">-</span> y[j<span class="dv">-1</span>])<span class="sc">*</span>( u<span class="sc">-</span> v[j<span class="dv">-1</span>])<span class="sc">/</span>( v[j] <span class="sc">-</span> v[j<span class="dv">-1</span>])</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># gráfico</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>fx <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="dv">60</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">3</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>x)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>( <span class="fu">fx</span>(x), <span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(x), <span class="at">col =</span><span class="dv">2</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Amostra Simulada"</span>, <span class="st">"f(x) Teórica"</span>),</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>   <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"black"</span>), <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">bty =</span> <span class="st">'n'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="inversao_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="inversao_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> A função densidade da distribuição coseno elevado é dada por</p>
+<p><span class="math display">\[f(x)=\frac{1}{2s}\left[1+\cos\left(\frac{x-\mu}{s}\pi\right)\right],\]</span> onde <span class="math inline">\(x\in(-s+\mu,s+\mu)\)</span>. Pode-se mostrar que <span class="math display">\[Z=\frac{X-\mu}{s}\]</span> também tem distribuiçãoo coseno elevado, mas com <span class="math inline">\(\mu=0\)</span> e <span class="math inline">\(s=1\)</span> (ou seja, <span class="math inline">\(Z\)</span> é a coseno elevado padrão). Deste modo, precisamos apenas construir um simulador para <span class="math inline">\(Z\)</span>, uma vez que <span class="math inline">\(X\)</span> pode ser simulado através do seguinte algoritmo:</p>
+<ol type="1">
+<li><p>Simule <span class="math inline">\(z\)</span> da distribuição coseno elevado padrão</p></li>
+<li><p>Faça <span class="math inline">\(x=\mu+sz\)</span>.</p></li>
+</ol>
+<p>Considerando que a função distribuição de <span class="math inline">\(Z\)</span> é dada por</p>
+<p><span class="math display">\[F(z)=\frac{1}{2}\left[1+z+\frac{\sin(\pi z)}{\pi}\right],\]</span> com <span class="math inline">\(z\in(-1,1)\)</span>, construa um simulador para a distribuição coseno elevado padrão utilizando o método da interpolação em tabelas. Gere uma amostra de tamanho 50.000 e verifique se a amostra gerada se comporta como o esperado (utilize estatísticas como histograma, função de distribuição empírica ou o eestimador <em>kernel</em>).</p>
+</div>
 </section>
 <section id="gerando-vetores-aleatórios" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="gerando-vetores-aleatórios"><span class="header-section-number">5.6</span> 6. Gerando vetores aleatórios</h2>
+<h2 data-number="5.6" class="anchored" data-anchor-id="gerando-vetores-aleatórios"><span class="header-section-number">5.6</span> 5. Gerando vetores aleatórios</h2>
 <p>Não é possível aplicar o Método da Inversão diretamente em vetores aleatórios. Contudo, o método é válido para distribuições condicionais univariadas, pois</p>
 <p><span class="math display">\[F_{X|y}(x)=u\Leftrightarrow x=F_{X|y}^{-1}(u).\]</span></p>
-<p>Considere que <span class="math inline">\(\bf{X}=(X_1,\ldots,X_d)\)</span> é um vetor de variáveis aleatórias independentes. Então,</p>
-<p><span class="math display">\[F_{{\bf X}} ({\bf x} )=F_{X_1}(x_1)F_{X_2|x_1}(x_2)\cdots F_{X_d|x_1,\ldots,x_{d-1}}(x_d)\]</span></p>
 <p>Deste modo, geramos uma amostra do vetor <span class="math inline">\({\bf X}\)</span> do seguinte modo:</p>
 <ol type="1">
 <li><p>Gere <span class="math inline">\(u_1,\ldots,u_d\sim \hbox{Uniformes}(0,1)\)</span> independentes</p></li>
 <li><p>Faça <span class="math inline">\(x_1=F^{-1}_{X_1}(u_1)\)</span></p></li>
 <li><p>Faça <span class="math inline">\(x_2=F^{-1}_{X_2|x_1}(u_2)\)</span></p></li>
 </ol>
-<p>d+1. Faça <span class="math inline">\(x_d=F^{-1}_{X_d|x_1,\ldots,x_{d-1}}(u_d)\)</span></p>
+<ol start="4" type="a">
+<li>Faça <span class="math inline">\(x_d=F^{-1}_{X_d|x_1,\ldots,x_{d-1}}(u_d)\)</span></li>
+</ol>
 <div class="alert alert-info">
+<p>O algoritmo acima funciona porque ele imita proceduralmente a regra da cadeia da probabilidade. Cada variável no vetor é gerada de sua respectiva distribuição condicional, dados os valores de todas as variáveis que a precederam. Ao encadear esses valores, o vetor resultante é, por construção, uma amostra da distribuição conjunta desejada.</p>
 <p><strong>Exemplo 2.6 </strong> Seja <span class="math inline">\((X,Y)\)</span> um vetor aleatório uniformemente distribuído no triângulo <span class="math inline">\(\Delta\)</span>, definido pelos vértices <span class="math inline">\(\{(0,0),(1,0),(1,1)\}\)</span>, cuja densidade é</p>
-<p><span class="math display">\[f_{X,Y}(x,y)=2I((x,y)\in\Delta).\]</span> Teremos que <span class="math inline">\(f_Y(y)=2y\)</span>, com <span class="math inline">\(F_Y(y)=y^2\)</span> e <span class="math inline">\(y\in(0,1)\)</span>. Além disso <span class="math inline">\(X|y\sim\hbox{Uniforme}(0,y)\)</span>. Então, podemos gerar <span class="math inline">\((x,y)\)</span> com o seguinte algoritmo:</p>
+<p><span class="math display">\[f_{X,Y}(x,y)=2I((x,y)\in\Delta).\]</span> Teremos que</p>
+<p><span class="math display">\[f_Y(y)=\int_y^{1}2dx=2(1-y)\]</span> com <span class="math inline">\(y\in(0,1).\)</span> Além disso, <span class="math display">\[F_Y(y)=\int_0^y 2(1-t)dt=2y-y^2\]</span> e <span class="math inline">\(y\in(0,1)\)</span>. Portanto, podemos gerar <span class="math inline">\(Y\)</span> através do Método da Inversão</p>
+<ol type="1">
+<li><p>Simule <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span></p></li>
+<li><p>Faça <span class="math inline">\(y=1-\sqrt{1-u}\)</span></p></li>
+</ol>
+<p>Agora, note que</p>
+<p><span class="math display">\[f(x|y)=\frac{f_{X,Y}(x,y)}{f_Y(y)}=\frac{2}{2(1-y)}=\frac{1}{1-y},\]</span> com <span class="math inline">\(x\in(y,1)\)</span>, ou seja <span class="math inline">\(X|Y=y\sim\hbox{Uniforme}(y,1)\)</span>. Então, podemos gerar <span class="math inline">\((x,y)\)</span> com o seguinte algoritmo:</p>
 <ol type="1">
 <li><p>Gere <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span></p></li>
-<li><p>Faça <span class="math inline">\(y = \sqrt{u}\)</span></p></li>
-<li><p>Gere <span class="math inline">\(x\sim\hbox{Uniforme}(0,y)\)</span></p></li>
+<li><p>Faça <span class="math inline">\(y = 1-\sqrt{1-u}\)</span></p></li>
+<li><p>Gere <span class="math inline">\(x\sim\hbox{Uniforme}(y,1)\)</span></p></li>
 </ol>
+<p>Abaixo, geramos uma amostra de tamanho 5000 dessa distribuição e mostramos um diagrama de dispersão.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">5000</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">-</span>u)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">5000</span>, y, <span class="dv">1</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="inversao_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
-<p>Dizemos que <span class="math inline">\(X\)</span> é um modelo de mistura se, para algum vetor <span class="math inline">\({\bf Y}\)</span>,</p>
-<p><span class="math display">\[F_X(x)=\int F_{X|{\bf y}}(x)dF_{ {\bf Y}}({\bf y}).\]</span></p>
-<p>Note que pode ser conveniente gerar <span class="math inline">\(X\)</span> simulando o o vetor <span class="math inline">\((X,{\bf Y})\)</span>.</p>
-<div class="alert alert-info">
-<p><strong>Exemplo 2.7</strong></p>
-<p>Dizemos que <span class="math inline">\(X\)</span> tem distribuição binomial negativa se sua função de probabilidade é dada por</p>
-<p><span class="math display">\[P(X=x)=\frac{\Gamma(x+a)}{\Gamma(a)x!}p^a(1-p)^x,\]</span> com <span class="math inline">\(x=0,1,2,\ldots\)</span>, <span class="math inline">\(a&lt;0\)</span> e <span class="math inline">\(p\in(0,1)\)</span>. Este é um modelo de mistura com</p>
-<p><span class="math display">\[\begin{align}
-X|Y=y&amp;\sim\hbox{Poisson}(y),\\
-Y&amp;\sim\hbox{Gama}\left(a,\frac{p}{1-p}\right)\end{align}\]</span></p>
-<p>Deste modo, uma observação do modelo binomial pode ser gerada com o seguinte algoritmo:</p>
-<ol type="1">
-<li><p>Gere <span class="math inline">\(y\sim\hbox{Gama}(a,p/(1-p))\)</span></p></li>
-<li><p>Gete <span class="math inline">\(x\sim\hbox{Poisson}(y)\)</span></p></li>
-</ol>
-<p>A função <code>rnbinom</code> do <code>R</code> utiliza esse algoritmo para simular variáveis com distribuição binomial negativa.</p>
+</div>
+</div>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> Seja <span class="math display">\[P(X=x)=\frac{|x|+1}{4}\]</span> e <span class="math display">\[f(y|x)=\frac{1}{2s}\left[1+\cos\left(\frac{y-x}{s}\pi\right)\right]\]</span> com <span class="math inline">\(y\in(-s+x,s+x)\)</span>. Para <span class="math inline">\(s=1\)</span>, simule uma amostra de tamanho 5.000 do vetor <span class="math inline">\((X,Y)\)</span>.</p>
 </div>
 </section>
 <section id="referências" class="level2" data-number="5.7">
@@ -1149,8 +1118,8 @@ Y&amp;\sim\hbox{Gama}\left(a,\frac{p}{1-p}\right)\end{align}\]</span></p>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./provas.html" class="pagination-link" aria-label="Provas">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Provas</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./uniforme_multivariada.html" class="pagination-link" aria-label="Método da uniforme multivariada com marginais não uniformes">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Método da uniforme multivariada com marginais não uniformes</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -355,13 +355,54 @@ Terminação: O loop termina quando low e high se encontram (low = high). Retorn
 </div>
 
 É importante notar que uma das vantagens do `R` é a vetorização. Nesse sentido,
-a busca binária pode ser rapidamente implementada uma vez que $U$ pode ser comparada
-simultaneamente com todos os valores de $F(x)$. Essa verificação está implementada na função `findInterval`.
+a busca binária pode ser rapidamente implementada uma vez que $U$ pode ser comparada simultaneamente com todos os valores de $F(x)$. Essa verificação está implementada na função `findInterval`.
 
 
-## 3. Inversão numérica de $F_x(.)$ e o Método da Interpolação em Tabelas
+:::{#exm- .alert .alert-info}
+Considere novamente a função de distribuição 
 
-Seja $X$ uma variável aleatória contínua. Existem casos nos quais temos a expressão analítica para $F_X(.)$ mas não para $F_X^{-1}(.)$. Ainda podemos utilizar o Método da Inversão da seguinte forma:
+$$P(X=x)=\frac{x}{10},$$
+onde $x\in\{1,2,3,4\}$. A tabela de busca é  
+
+$$\begin{array}{c|c|c}\hline x & F(x) & \hbox{Intervalo de busca}\\ \hline 1  & \frac{1}{10} & (0,\frac{1}{10}] \\  2& \frac{3}{10} & (\frac{1}{10}, \frac{3}{10}]\\ 3 & \frac{6}{10} & (\frac{3}{10},\frac{6}{10}] \\ 4 & 1 & (\frac{6}{10},1]  \\ \hline  \end{array}$$
+Vamos guardar os pontos que delimitam o intervalo de busca no vetor abaixo:
+
+```{r}
+intervalos <- c(0, .1, .3, .6, 1)
+```
+
+Vamos simular uma amostra de tamanho 5000 desta tabela utilizando a função `findInterval`.:
+
+```{r}
+n <- 5000
+u <- runif(n)
+x <- findInterval(u, intervalos)
+```
+
+Por último, vamos encontrar a tabela de frequências relativas e comparar com as probabilidades do modelo:
+
+```{r}
+freq <- prop.table( table(x) )
+plot(freq)
+lines( 1:4, (1:4)/10, col =2)
+legend('topleft',c('P(X=x)','Frequência relativa'), col = c(2,1), lty=1, bty='n')
+```
+:::
+
+<div class='alert alert-danger'>
+**Exercício.** Os dados a seguir mostram o número de meninos entre os 12 primeiros filhos de 6115 famílias com 13 filhos, retirados de registros hospitalares na Saxônia do século XIX.
+
+$$\begin{array}{l|cccccccccccc}\hline
+\hbox{Meninos} & 0&	1&	2&	3&	4&	5&	6&	7&	8&	9&	10&	11&	12\\
+\hbox{Frequência}&	3&	24&	104&	286&	670&	1033&	1343&	1112&	829&	478&	181&	45&	7\\ \hline\end{array}$$
+
+Considerando que as frequências relativas são bos aproximações para a função de probabilidade, crie um simulador para essa distribuição.
+
+</div>
+
+## 4. Inversão numérica de $F_x(.)$ e o Método da Interpolação em Tabelas
+
+Seja $X$ uma variável aleatória contínua. Existem casos nos quais temos a expressão analítica para $F_X(.)$ mas não para $F_X^{-1}(.)$. Ainda assim, podemos utilizar o Método da Inversão da seguinte forma:
 
 1. Gere $u\sim\hbox{Uniforme}(0,1)$
 
@@ -386,10 +427,10 @@ mas não há expressão para $F_X^{-1}(.)$. Crie um gerador para essa distribui�
 </div>
 
 
-O exercício acima mostra que o método a inversão utilizando algoritmos para obtenção de raízes pode ser demorado. Uma solução mais eficiente pode ser obtida combinando a busca binária das pesquisas em tabela e interpolações, conhecido como Método da Interpolação em Tabelas.
+O exercício acima mostra que o método da inversão, quando requer algoritmos de busca de raízes, pode ser computacionalmente intensivo. Uma alternativa mais eficiente combina a pesquisa em tabela (geralmente implementada com busca binária) e a interpolação, método conhecido como Interpolação em Tabela.
 
-Seja $X$ uma variável aleatória contínua com valores em $D$. Assuma que existe, para 
-$\{y_1,\ldots,y_m\}\inD$, existe a tabela 
+Seja $X$ uma variável aleatória contínua com valores no domínio $D$. Assuma que, para um conjunto de pontos 
+$\{y_1,\ldots,y_m\}\in D$, a seguinte tabela está disponível
 
 $$\begin{array}{c|c|c}\hline \hbox{Índice} & \hbox{x} & F(x)\\ \hline 
 1 & y_1 & F(y_1) \\
@@ -397,11 +438,9 @@ $$\begin{array}{c|c|c}\hline \hbox{Índice} & \hbox{x} & F(x)\\ \hline
 \vdots & \vdots & \vdots \\
 m & y_m & F(y_m)\\\hline \end{array}$$
 
-O Método da Interpolação de Tabelas consiste em utilizar um método de pesquisa em tabela para obter simular um índice $j\in\{1,\ldots,m\}$. Ao simular o índice $j$ através de $U\sim\hbox{Uniforme}(0,1)$ sabemos que
-$$F(y_{j-1})<u\leq F(y_j),$$
-o que implica que o valor de $X$ a ser simulado está entre $y_{j-1}$ e $y_j$. Desde que $m$ seja grande o suficiente, teremos que $F(y_{j-1})\approx F(y_j)$, e podemos utilizar uma intervalação para obter $x$ a partir de $u$. As funções interpolantes mais simples são as lineares, embora polinômios de graus 2 ou 3 possam dar melhores ajustes. Para a interpolação linear, teremos que o valor simulado será
+O Método da Interpolação de Tabelas consiste em usar um algoritmo de busca para encontrar o índice $j\in\{1,\ldots,m\}$ tal que $F(y_{j-1})<u\leq F(y_j)$. Desde que $m$ seja grande o suficiente, o intervalo $[y_{j-1},y_j]$ será pequeno e podemos utilizar uma interpolação para uma boa aproximação de $x$ a partir de $u$. As funções interpolantes mais simples são as lineares, embora polinômios de graus 2 ou 3 possam dar melhores ajustes. Para a interpolação linear, o valor simulado é a coordenada $x$ sobre a reta que conecta $(y_{j-1},F(y_{j-1}))$ e $(y_{j},F(y_{j}))$, dado por 
 
-$$x=\frac{u-F(y_{j-1})}{F(y_j)-F(y_{j-1})}.$$
+$$x=y_{j-1}+(y_j-y_{j-1})\frac{u-F(y_{j-1})}{F(y_j)-F(y_{j-1})}.$$
 Abaixo, ilustramos como $x$ pode ser simulado por interpolação linear.  Alinha sólida em preto mostra $F(x)$ enquanto que a pontilhada em preto apresenta a interpolação linear. O valor real a ser simulado é $x^o$ enquanto $x$ é o valor simulado pela interpolação. 
 
 
@@ -439,7 +478,7 @@ Sejam $y_1,\ldots,y_M$ os valores tabelados e sejam $v_i=F_X(y_i)$, para $i=1,\l
 
 3. A partir da reta que passa em $(y_{k-1},v_{k-1}),(y_k,v_k)$, faça
 
-$$x=\frac{1}{v_k-v_{k-1}}\left[y_k(u-v_{k-1})+y_{k-1}(v_k-u)\right]$$
+$$x=y_k+(y_k-y_{k-1})\frac{u-v_{k-1}}{v_k-v_{k-1}}$$
 
 </div>
 
@@ -447,18 +486,18 @@ $$x=\frac{1}{v_k-v_{k-1}}\left[y_k(u-v_{k-1})+y_{k-1}(v_k-u)\right]$$
 <div class='alert alert-info'>
 **Exemplo.** Considere a função densidade 
 
-$$f(x)= 60x^3(1-x)^2$$
-cuja função distribuição é dada por
+$$f(x)= 60x^3(1-x)^2,$$
+com $x\in(0,1)$, cuja função distribuição é dada por
 $$F(x)=15x^4-24x^5 + 10x^6.$$
 Abaixo, vamos construir uma tabela para a progressão 0,01 até 0,99 com razão 0,01.
 
 ```{r}
-Fx <- function(x) 16*x^4 -24*x^5 + 10*x^6
+Fx <- function(x) 15*x^4 -24*x^5 + 10*x^6
 
-y <- seq(.01, .99, .01)
+y <- c(0,seq(.01, .99, .01))
 Índice = 1:length(y)
-`F(y)` <- Fx(y)
-data.frame(Índice, y, `F(y)`)
+v <- Fx(y)
+head( data.frame(Índice, y, v) ,6)
 ```
 
 Abaixo, simulamos $5000$ valores dessa distribuição utilizando o método da interpolação de tabelas:
@@ -468,29 +507,50 @@ n = 5000
 u <- runif(5000)
 
 # pesquisando o indice na tabela
-j <- findInterval(u, c(0,`F(y)`))
+j <- findInterval(u, v)
 
 # interpolação
-x <- ( y[j]*(u- Fx(y[j-1])) + y[j-1]*(Fx(y[j]) - u)  )/( Fx(y[j]) - Fx(y[j-1]))
+x <- y[j] + (y[j] - y[j-1])*( u- v[j-1])/( v[j] - v[j-1])
 
 # gráfico
 fx <- function(x) 60*x^3*(1-x)^2
-plot(density(x))
-curve( fx(x), add=T, col =2)
+curve( fx(x), 0,1)
+lines(density(x), col =2)
+legend("topleft", legend = c("Amostra Simulada", "f(x) Teórica"),
+   col = c("red", "black"), lty = 1, lwd = c(1, 2), bty = 'n')
 ```
 
 </div>
 
 
-## 6. Gerando vetores aleatórios
+
+<div class='alert alert-danger'>
+**Exercício.** A função densidade da distribuição coseno elevado é dada por
+
+$$f(x)=\frac{1}{2s}\left[1+\cos\left(\frac{x-\mu}{s}\pi\right)\right],$$
+onde $x\in(-s+\mu,s+\mu)$. Pode-se mostrar que 
+$$Z=\frac{X-\mu}{s}$$
+também tem distribuiçãoo coseno elevado, mas com $\mu=0$ e $s=1$ (ou seja, $Z$ é a coseno elevado padrão). Deste modo, precisamos apenas construir um simulador para $Z$, uma vez que $X$ pode ser simulado através do seguinte algoritmo: 
+
+1. Simule $z$ da distribuição coseno elevado padrão
+
+2. Faça $x=\mu+sz$.
+
+
+Considerando que a função distribuição de $Z$ é dada por
+
+$$F(z)=\frac{1}{2}\left[1+z+\frac{\sin(\pi z)}{\pi}\right],$$
+com $z\in(-1,1)$, construa um simulador para a distribuição coseno elevado padrão utilizando o método da interpolação em tabelas. Gere uma amostra de tamanho 50.000 e verifique se a amostra gerada se comporta como o esperado (utilize estatísticas como histograma, função de distribuição empírica ou o eestimador *kernel*).
+</div>
+
+
+## 5. Gerando vetores aleatórios
 
 Não é possível aplicar o Método da Inversão diretamente em vetores aleatórios. Contudo, o método é válido para distribuições condicionais univariadas, pois
 
 $$F_{X|y}(x)=u\Leftrightarrow x=F_{X|y}^{-1}(u).$$
 
-Considere que $\bf{X}=(X_1,\ldots,X_d)$ é um vetor de variáveis aleatórias independentes. Então,
 
-$$F_{{\bf X}} ({\bf x} )=F_{X_1}(x_1)F_{X_2|x_1}(x_2)\cdots F_{X_d|x_1,\ldots,x_{d-1}}(x_d)$$
 
 Deste modo, geramos uma amostra do vetor ${\bf X}$ do seguinte modo:
 
@@ -500,49 +560,57 @@ Deste modo, geramos uma amostra do vetor ${\bf X}$ do seguinte modo:
 
 3. Faça $x_2=F^{-1}_{X_2|x_1}(u_2)$
 
-d+1. Faça $x_d=F^{-1}_{X_d|x_1,\ldots,x_{d-1}}(u_d)$
+d. Faça $x_d=F^{-1}_{X_d|x_1,\ldots,x_{d-1}}(u_d)$
 
 <div class="alert alert-info">
+
+O algoritmo acima funciona porque ele imita proceduralmente a regra da cadeia da probabilidade. Cada variável no vetor é gerada de sua respectiva distribuição condicional, dados os valores de todas as variáveis que a precederam. Ao encadear esses valores, o vetor resultante é, por construção, uma amostra da distribuição conjunta desejada.
+
+
 <strong>Exemplo 2.6 </strong>
 Seja $(X,Y)$ um vetor aleatório uniformemente distribuído no triângulo $\Delta$, definido pelos  vértices $\{(0,0),(1,0),(1,1)\}$, cuja densidade é
 
 $$f_{X,Y}(x,y)=2I((x,y)\in\Delta).$$
-Teremos que $f_Y(y)=2y$, com $F_Y(y)=y^2$ e $y\in(0,1)$. Além disso $X|y\sim\hbox{Uniforme}(0,y)$. Então, podemos gerar $(x,y)$ com o seguinte algoritmo:
+Teremos que 
+
+$$f_Y(y)=\int_y^{1}2dx=2(1-y)$$
+com $y\in(0,1).$  Além disso,
+$$F_Y(y)=\int_0^y 2(1-t)dt=2y-y^2$$
+e $y\in(0,1)$. Portanto, podemos gerar $Y$ através do Método da Inversão
+
+1. Simule $u\sim\hbox{Uniforme}(0,1)$
+
+2. Faça $y=1-\sqrt{1-u}$
+
+Agora, note que
+
+$$f(x|y)=\frac{f_{X,Y}(x,y)}{f_Y(y)}=\frac{2}{2(1-y)}=\frac{1}{1-y},$$
+com $x\in(y,1)$, ou seja $X|Y=y\sim\hbox{Uniforme}(y,1)$. Então, podemos gerar $(x,y)$ com o seguinte algoritmo:
 
 1. Gere $u\sim\hbox{Uniforme}(0,1)$
 
-2. Faça $y = \sqrt{u}$
+2. Faça $y = 1-\sqrt{1-u}$
 
-3. Gere $x\sim\hbox{Uniforme}(0,y)$
+3. Gere $x\sim\hbox{Uniforme}(y,1)$
 
+
+Abaixo, geramos uma amostra de tamanho 5000 dessa distribuição e mostramos um diagrama de dispersão.
+
+```{r}
+u <- runif(5000)
+y <- 1 - sqrt(1-u)
+x <- runif(5000, y, 1)
+
+plot(x,y)
+```
 </div>
 
-Dizemos que $X$ é um modelo de mistura se, para algum vetor ${\bf Y}$, 
-
-$$F_X(x)=\int F_{X|{\bf y}}(x)dF_{ {\bf Y}}({\bf y}).$$
-
-Note que pode ser conveniente gerar $X$ simulando o o vetor $(X,{\bf Y})$.
-
-<div class="alert alert-info">
-<strong>Exemplo 2.7</strong>
-
-Dizemos que $X$ tem distribuição binomial negativa se sua função de probabilidade é dada por
-
-$$P(X=x)=\frac{\Gamma(x+a)}{\Gamma(a)x!}p^a(1-p)^x,$$
-com $x=0,1,2,\ldots$, $a<0$ e $p\in(0,1)$. Este é um modelo de mistura com
-
-$$\begin{align}
-X|Y=y&\sim\hbox{Poisson}(y),\\
-Y&\sim\hbox{Gama}\left(a,\frac{p}{1-p}\right)\end{align}$$
-
-Deste modo, uma observação do modelo binomial pode ser gerada com o seguinte algoritmo:
-
-1. Gere $y\sim\hbox{Gama}(a,p/(1-p))$
-
-2. Gete $x\sim\hbox{Poisson}(y)$
-
-A função `rnbinom` do `R` utiliza esse algoritmo para simular variáveis com distribuição binomial negativa.
-
+<div class='alert alert-danger'>
+**Exercício.** Seja
+$$P(X=x)=\frac{|x|+1}{4}$$
+e
+$$f(y|x)=\frac{1}{2s}\left[1+\cos\left(\frac{y-x}{s}\pi\right)\right]$$
+com $y\in(-s+x,s+x)$. Para $s=1$, simule uma amostra de tamanho 5.000 do vetor $(X,Y)$.
 </div>
 ## Referências
 
