@@ -612,6 +612,7 @@ e
 $$f(y|x)=\frac{1}{2s}\left[1+\cos\left(\frac{y-x}{s}\pi\right)\right]$$
 com $y\in(-s+x,s+x)$. Para $s=1$, simule uma amostra de tamanho 5.000 do vetor $(X,Y)$.
 </div>
+
 ## Referências
 
 <div class="alert alert-warning">

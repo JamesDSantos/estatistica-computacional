@@ -15,6 +15,7 @@ book:
     - gerador_congruencial.qmd
     - inversao.qmd
     - uniforme_multivariada.qmd
+    - AR.qmd
     - provas.qmd
 
 bibliography: references.bib

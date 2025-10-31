@@ -97,10 +97,9 @@ Note que o algoritmo dado simula um candidato no passo 1 e decide se aceita ou n
 
 $$P(\boldsymbol{X}\in   V)=\frac{1}{Vol(S)}\int_V I_S(x)d\boldsymbol{x}=\frac{Vol(V)}{Vol(S)}$$
 
-Deste modo, se $T$ é o número de tentativas até a geração de $X$, teremos que $T\sim \hbox{Geométrica}(P(\boldsymbol{X}\in V))$ e o número médio de tentativas é dado por $1/P(X\in V)$.
+Essa probabilidade de aceitação é um indicador da qualidade do gerador. Em geral, desejamos que essa probabilidade esteja próxima de 1. No exemplo anterior, tal probabilidade foi igual a $\pi/4\approx 0,78.$
 
-
-No Exemplo 1, $P(\boldsymbol{X}\in V)=\pi/4\approx 0,78$. O simulador precisa de 1,27 tentativas em média para gerar um vetor da Uniforme($V$).
+Alternativamente, podemos definir $T$ como sendo o número de tentativas até a geração de $X$. Isto implica que$T\sim \hbox{Geométrica}(P(\boldsymbol{X}\in V))$ e o número médio de tentativas é dado por $1/P(X\in V)$. No exemplo anterior, o número médio de tentativas era $4/\pi\approx  1,27$.
 
 <div class='alert alert-danger'>
 **Exercício.** Considere o conjunto
@@ -202,5 +201,5 @@ curve(f(x), add = T, lwd = 2)
 **Exercício** Utilize o método da uniforme multivariada com marginais não uniformes para obter um simulador para a função densidade
 
 $$f(x)=\frac{1}{\pi^2}x\cos(x)^2,$$
-onde $x(0,2\pi)$. Implemente o simulador e obtenha uma amostra de tamanho 5.000.
+onde $x\in(0,2\pi)$. Implemente o simulador e obtenha uma amostra de tamanho 5.000.
 </div>

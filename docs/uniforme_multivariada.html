@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./provas.html" rel="next">
+<link href="./AR.html" rel="next">
 <link href="./inversao.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -221,8 +221,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./AR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">O método da aceitação/rejeição</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./provas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
   </div>
 </li>
     </ul>
@@ -335,8 +341,8 @@ window.Quarto = {
 </div>
 <p>Note que o algoritmo dado simula um candidato no passo 1 e decide se aceita ou não esse candidato no passo 2. A probabilidade do candidato ser aceito é</p>
 <p><span class="math display">\[P(\boldsymbol{X}\in   V)=\frac{1}{Vol(S)}\int_V I_S(x)d\boldsymbol{x}=\frac{Vol(V)}{Vol(S)}\]</span></p>
-<p>Deste modo, se <span class="math inline">\(T\)</span> é o número de tentativas até a geração de <span class="math inline">\(X\)</span>, teremos que <span class="math inline">\(T\sim \hbox{Geométrica}(P(\boldsymbol{X}\in V))\)</span> e o número médio de tentativas é dado por <span class="math inline">\(1/P(X\in V)\)</span>.</p>
-<p>No Exemplo 1, <span class="math inline">\(P(\boldsymbol{X}\in V)=\pi/4\approx 0,78\)</span>. O simulador precisa de 1,27 tentativas em média para gerar um vetor da Uniforme(<span class="math inline">\(V\)</span>).</p>
+<p>Essa probabilidade de aceitação é um indicador da qualidade do gerador. Em geral, desejamos que essa probabilidade esteja próxima de 1. No exemplo anterior, tal probabilidade foi igual a <span class="math inline">\(\pi/4\approx 0,78.\)</span></p>
+<p>Alternativamente, podemos definir <span class="math inline">\(T\)</span> como sendo o número de tentativas até a geração de <span class="math inline">\(X\)</span>. Isto implica que<span class="math inline">\(T\sim \hbox{Geométrica}(P(\boldsymbol{X}\in V))\)</span> e o número médio de tentativas é dado por <span class="math inline">\(1/P(X\in V)\)</span>. No exemplo anterior, o número médio de tentativas era <span class="math inline">\(4/\pi\approx  1,27\)</span>.</p>
 <div class="alert alert-danger">
 <p><strong>Exercício.</strong> Considere o conjunto</p>
 <p><span class="math display">\[V=\{(x,y)\in[-3,3]^2:|y|&lt;e^{-|x|}\} \]</span></p>
@@ -428,7 +434,7 @@ NULL</code></pre>
 </div>
 <div class="alert alert-danger">
 <p><strong>Exercício</strong> Utilize o método da uniforme multivariada com marginais não uniformes para obter um simulador para a função densidade</p>
-<p><span class="math display">\[f(x)=\frac{1}{\pi^2}x\cos(x)^2,\]</span> onde <span class="math inline">\(x(0,2\pi)\)</span>. Implemente o simulador e obtenha uma amostra de tamanho 5.000.</p>
+<p><span class="math display">\[f(x)=\frac{1}{\pi^2}x\cos(x)^2,\]</span> onde <span class="math inline">\(x\in(0,2\pi)\)</span>. Implemente o simulador e obtenha uma amostra de tamanho 5.000.</p>
 </div>
 
 
@@ -841,8 +847,8 @@ NULL</code></pre>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./provas.html" class="pagination-link" aria-label="Provas">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Provas</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./AR.html" class="pagination-link" aria-label="O método da aceitação/rejeição">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">O método da aceitação/rejeição</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
