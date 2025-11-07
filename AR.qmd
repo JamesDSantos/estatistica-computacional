@@ -129,6 +129,18 @@ legend("topright", c("Normal(0,1)","envelope"), col =c(1,2),lwd = 3, bty = "n")
 :::
 
 <div class='alert alert-danger'>
+**Exercício** Considere que $X$ é uma variável aleatória contínua com densidade 
+$$f(x)=\frac{1}{4}x^4(1-x)^3,$$
+com $x\in(0,1)$. Considerando a proposta Uniforme(0,1).
+
+1. Encontre a função envelope
+
+2. Escreva um algoritmo para simular uma amostra de tamanho 5000 de $f(x)$ utilizando o método da aceitação/rejeição.
+
+</div>
+
+
+<div class='alert alert-danger'>
 **Exercício.** Dizemos que $X$ tem distribuição normal assimétrica se função densidade é dada por
 
 $$f(x)=2\phi(x)\Phi(ax),$$
@@ -136,6 +148,26 @@ onde $x\in\mathbb{R}$, $\phi(.)$ e $\Phi(.)$ são a função densidade e distrib
 
 Utilizando como proposta a distribuição normal, construa um simulador para gerar amostras de $f$ utilizando o método AR. Qual é o número esperado de tentativas até obter um sucesso?
 </div>
+
+
+<div class='alert alert-danger'>
+**Exercício** Considere a simulação de uma distribuição Gama(2, 1), cuja densidade. é:
+
+$$f(x) = x e^{-x}, \quad \text{para } x > 0$$
+
+Queremos usar uma distribuição Exponencial($\lambda$) como proposta $g(x)$. A densidade da proposta é:
+
+$$g(x) = \lambda e^{-\lambda x}, \quad \text{para } x > 0$$
+
+A eficiência do método A/R depende da constante $c = \sup_x \frac{f(x)}{g(x)}$. Para uma proposta $g(x)$ ser válida, $c$ deve ser finito. Para ser eficiente, $c$ deve ser o menor possível. Com base nesses princípios:
+
+a. Encontre $c(\lambda)$: Para um $\lambda > 0$ genérico, encontre a constante $c$ em função de $\lambda$. Ou seja, encontre $c(\lambda) = \max_x \frac{f(x)}{g(x)} = \max_x \frac{x e^{-x}}{\lambda e^{-\lambda x}}$.
+
+b. Determine o $\lambda$ ótimo: O método A/R mais eficiente usará o valor de $\lambda$ que minimiza $c(\lambda)$. Encontre o valor $\lambda^*$ que torna a taxa de aceitação (inversamente proporcional a $c$) a maior possível.
+
+c. Calcule $c^*$: Qual é o valor da constante $c$ (e a probabilidade de aceitação) quando se utiliza o $\lambda^*$ ótimo encontrado em (b)?
+</div>
+
 
 ## Construindo a densidade proposta com uma função linear por partes
 
@@ -151,10 +183,179 @@ para todo $x$. Note que $g^* é a função envelope. Então, sem perda de genera
 
 $$f(x)\leq \underbrace{\frac{g^*(x)}{\int g^*(t)dt}}_{g(x)} \underbrace{\int g^*(t)dt}_{c}.$$
 
-Portanto, podemos primeiro construir uma função envelope e em seguida transformá-la na densidade proposta. Envelopes podem ser construídos utilizando uma função linear por partes, uma vez que é fácil simular desta distribuição.
+Portanto, podemos primeiro construir uma função envelope $g^*(x)$ e em seguida transformá-la na densidade proposta. Envelopes podem ser construídos utilizando uma função linear por partes, uma vez que é fácil simular desta distribuição. 
 
-:::{#exm- .alert .alert-info}:::
+Uma função linear por partes é uma função cujo gráfico é composto por segmentos de reta. Formalmente, dizemos que a função $g^*(x)$ definida no intervalo fechado $x \in [a, b]$ é linear por partes se existir uma partição do intervalo $[a, b]$, definida por um conjunto de $n+1$ pontos:$a = t_0 < t_1 < t_2 < \ldots < t_n = b$ tal que, para cada sub-intervalo $[t_i, t_{i+1}]$ (onde $i = 0, 1, \ldots, n-1$), a função envelope $g^*(x)$ é uma função linear:
 
+$$g^*(x) = m_i x + d_i \quad \text{para } x \in [t_i, t_{i+1}]$$
+
+onde $m_i$ (a inclinação) e $d_i$ (o intercepto) são constantes reais específicas para aquele $i$-ésimo intervalo.
+
+Estamos interessados em funções lineares por partes contínuas, o que implica em 
+
+$$m_{i-1} t_i + d_{i-1} = m_i t_i + d_i \quad \text{para todo } i = 1, 2, \ldots, n-1$$
+
+Portanto, a densidade da proposta é dada por
+
+$$g(x)= \frac{g^{*}(x)}{\int_a^b g^{*}(x)dx}=\frac{g^{*}(x)}{\sum_{i=0}^{n-1}\frac{ g^{*}(t_i) + g^{*}(t_{i+1})}{2} (t_{i+1} - t_i)}=\frac{g^{*}(x)}{c}.$$
+Para simular desta proposta, observe que, para $x\in(t_j,t_{j+1}]$,
+
+$$\begin{align}G(x)&=\int_a^x g(y)dy=\frac{1}{c}\int_a^{x}g^{*}(y)dy\\&=\frac{1}{c}\underbrace{\sum_{i=0}^{j-1}\frac{g^{*}(t_i)+g^{*}(t_{i+1})}{2}(t_{i+1}-t_i)}_{c_{j-1}}+\frac{1}{c}\int_{t_j}^x(ym_j+d_j)dy\end{align}$$
+o que implica em
+$$G(x)= c_{j-1}+\frac{1}{c}\left[\frac{m_j}{2}(x^2- t_j^2)+d_j(x-t_j)\right].$$
+Portanto, podemos simular da proposta pelo método da inversão, conforme o algoritmo abaixo:
+
+0. (Preliminares) Para $j=0,\ldots,n-1$, calcule
+
+$$A_j=\int_{t_{j}}^{t_{j+1}}(m_j x +d_j)dx=\frac{1}{2}m_j(t_{j+1}^2-t_{j} ^2)+d_j(t_{j+1}-t_{j})$$
+e calcule $c=\sum_{i=0}^{n-1}A_i$. Faça $c_0=0$ e, para $j=1,\ldots,n$, calcule
+$$c_j=c_{j-1}+\frac{A_{j-1}}{c}.$$
+
+1. Gere $u\sim\hbox{Uniforme}(0,1)$
+
+2. Determine $j$ tal que $c_{j}<u<c_{j+1}$. O valor de $x$ simulado é a raiz, dentro de $[t_j,t_{j+1}]$, da equação 
+$$\frac{m_j}{2c}x^2+\frac{d_j}{c}x+\left[\frac{t_jd_j}{c}-\frac{m_jt_j^2}{2c}+c_{j-1}-u\right].$$
+
+Após ter $x$ gerado pela proposta, podemos fazer o passo de aceitação rejeição:
+
+1. Simule $y$ da proposta e $u\sim\hbox{Uniforme}(0,1)$
+
+2. Se $u< f(y)/g^*(y)$, aceite $x$ como proveniente de $f$ e faça $x=y$. Senão, retorne ao passo 1. 
+
+
+<div class='alert alert-success'>
+**Funções auxiliares.** Considere que os vetores `xp` e `yp` formam um envelope para
+a função $f$. A função abaixo implementa o evelope $g^{*}(x)$ baseado nesses pontos:
+
+```{r}
+envelope <- function(xp, yp, x) {
+  
+  # Verificação de conformidade dos vetores
+  if (length(xp) != length(yp)) {
+    stop("Os vetores 'xp' e 'yp' devem ter o mesmo comprimento.")
+  }
+  if (length(xp) < 2) {
+    stop("São necessários pelo menos 2 pontos para a interpolação.")
+  }
+  
+  # A função 'approx' faz exatamente a interpolação linear 
+  resultado_interp <- approx(x = xp, y = yp, xout = x)
+  
+  # Para x, a função retorne g*(x) baseada em (xp, yp)
+  return(resultado_interp$y)
+}
+```
+
+A próxima função cria o gerador da proposta $g(x)$ baseada no envelope. Essa função
+calcula $A_j$ e $c_j$ no Passo 0. Criar essa função separada do simulador evita que essas
+constantes sejam recriadas constantemente dentro do loop do método da aceitação/rejeição.
+
+```{r}
+criador_do_simulador_proposta <- function(xp, yp, n = 1) {
+  
+  # Verificação de conformidade dos vetores
+  if (length(xp) != length(yp)) {
+    stop("Os vetores 'xp' e 'yp' devem ter o mesmo comprimento.")
+  }
+  k <- length(xp)
+  if (k < 2) {
+    stop("Você precisa de pelo menos 2 pontos (um segmento) para definir a envelope.")
+  }
+  
+  # Número de segmentos lineares
+    n_segmentos <- k - 1
+    
+  # Renomear, seguindo a notação do contexto
+    t_i <- xp
+    g_star_t_i <- yp
+  
+  # Cálculo de (m_j) e (d_j) para cada segmento j
+    delta_t <- t_i[2:k] - t_i[1:n_segmentos]
+    delta_g_star <- g_star_t_i[2:k] - g_star_t_i[1:n_segmentos]
+  
+    m_vec <- delta_g_star / delta_t
+    d_vec <- g_star_t_i[1:n_segmentos] - m_vec * t_i[1:n_segmentos]
+  
+  # Calculo de (A_j)
+    Aj_vec <- (g_star_t_i[1:n_segmentos] + g_star_t_i[2:k]) / 2 * delta_t
+  
+  # Calcular a constante de normalização c
+    c_total <- sum(Aj_vec)
+    
+  # Calcular as probabilidades de cada segmento
+    prob_segmento <- Aj_vec / c_total
+  
+  # Calcular as probabilidades acumuladas (c_j)
+    c_j_vec <- c(0, cumsum(prob_segmento))
+  
+  
+  # --- Montar o objeto gerador ---
+  gerador <- list(
+    t_i = t_i,
+    m_vec = m_vec,
+    d_vec = d_vec,
+    c_total = c_total,
+    c_j_vec = c_j_vec,
+    n_segmentos = n_segmentos
+  )
+  
+  return(gerador)
+}
+```
+
+
+Por último, a função abaixo gera uma observação a partir da proposta.
+
+```{r}
+simular_proposta <- function(gerador) {
+  
+  # Passo 1: Gerar U ~ Uniforme(0, 1)
+  u <- runif(1)
+  
+    # Encontra o índice 'j' do segmento (1-based)
+    j <- findInterval(u, gerador$c_j_vec, rightmost.closed = TRUE)
+  
+    # Recuperar os parâmetros do gerador
+    m_j <- gerador$m_vec[j]
+    d_j <- gerador$d_vec[j]
+    t_j <- gerador$t_i[j]
+    c_j_cumul <- gerador$c_j_vec[j] # Prob. acumulada até t_j
+    
+    # Resolver G(x) = u (equação quadrática: Ax^2 + Bx + C = 0)
+    A <- m_j / (2 * gerador$c_total)
+    B <- d_j / gerador$c_total
+    C <- c_j_cumul - u - (m_j * t_j^2) / (2 * gerador$c_total) - (d_j * t_j) / gerador$c_total
+    
+    # Caso 1: Segmento horizontal (m_j = 0 -> A = 0)
+    if (abs(A) < 1e-10) { 
+      x <- -C / B
+    } else {
+      # Caso 2: Segmento inclinado (A != 0)
+      discriminante <- B^2 - 4*A*C
+      if (discriminante < 0) discriminante <- 0 # Estabilidade numérica
+      
+      raiz_disc <- sqrt(discriminante)
+      
+      r1 <- (-B + raiz_disc) / (2 * A)
+      r2 <- (-B - raiz_disc) / (2 * A)
+      
+      # A raiz é a única dentro do intervalo [t_j, t_{j+1}]
+      t_j_mais_1 <- gerador$t_i[j + 1]
+      tol <- 1e-9 
+      
+      if (r1 >= (t_j - tol) && r1 <= (t_j_mais_1 + tol)) {
+        x <- r1
+      } else {
+        x <- r2
+      }
+    }
+
+  return(x)
+}
+```
+</div>
+  
+:::{#exm- .alert .alert-info}
 Considere que desejamos simular amostras da variável $X$ com densidade dada por
 
 $$f(x)= \frac{3}{16}\left(x^2+\frac{1}{2}x^3\right),$$
@@ -166,104 +367,246 @@ curve( fx(x),-2,2, lwd = 2)
 
 ```
 
-Com um pouco de tentativa e erro, vamos construir o seguinte envelope:
-
-$$g^*(x)=\left\{\begin{array}{ll}\frac{2}{10},&x\in\left(-2,\frac{1}{2}\right)\\ \frac{13}{15}x-\frac{7}{30},&x\in\left[\frac{1}{2},2\right) \end{array}\right.$$
-
-Abaixo, apresentamos $f(x)$ com o envelope (em vermelho).
+Com um pouco de tentativa e erro, escolhemos os pontos $x=(-2,-1.5, 0,1,2)$ e $y=(0.05,0.15,0.05,0.3,1.5)$ para construir o envelope, dado abaixo em vermelho:
 
 ```{r}
-curve( fx(x), -2,2, lwd = 2)
-segments(-2,.2,.5,.2 , lwd =2, col =2)
-segments(.5,.2,2,(3/16)*8, lwd = 2, col =2)
+fx <- function(x) (3/16)*(x^2+.5*x^3)
+curve( fx(x),-2,2, lwd = 2)
+xp = c(-2,-1.5,0,1,2)
+yp = c(.05,.15,.05,.3,1.5)
+
+lines(xp,yp, col =2, lwd =2)
 ```
 
-Como,
-
-$$c=\int_{-2}^{2}g^*(x)dx=\frac{71}{40}$$
-a função densidade proposta baseada no envelope é dada por $g(x)= g^*(x)/c$. Observe que a função distribuição da proposta é dada por 
-
-$$G(x)=\left\{\begin{array}{ll} 0, & x < -2 \\ \frac{8x + 16}{71}, & x \in [-2, 1/2) \\ \frac{52x^2 - 28x + 61}{213}, & x \in [1/2, 2) \\ 1, & x \ge 2 \end{array}\right.$$
-
-e sua inversa é dada por
-
-$$G^{-1}(u)=\left\{\begin{array}{ll} \frac{71u - 16}{8}, & u \in [0, \frac{20}{71}) \\ \frac{7 + \sqrt{2769u - 744}}{26}, & u \in [\frac{20}{71}, 1] \end{array}\right.$$
-
-
-Podemos então simular da proposta pelo método da inversão:
-
-1. Simule $u\sim\hbox{Uniforme}(0,1)$
-
-2. Se $u<20/71$, faça $$x=\frac{71u-16}{8}.$$ Senão, faça $$x=\frac{7+\sqrt{2769u-744}}{26}$$
-
-Abaixo, segue a implementação da proposta
+Vamos criar a função envelope e o simulador da proposta.
 
 ```{r}
-rproposta <- function(){
-  u <- runif(1)
-  if(u < 20/71){
-    x = ( 71 * u - 16 )/8
-  } else{
-    x = ( 7 + sqrt(2769*u - 744))/26
-  }
-  x
-}
+g_estrela <- function(x) envelope(xp,yp,x)
+gerador <- criador_do_simulador_proposta(xp,yp)
 ```
 
-Podemos finalmente simular $X$ utilizando o método AR, como segue
-
-1. Simule $y$ da proposta $g$
-
-2. Simule $u\sim\hbox{Uniforme}(0,1)$. Se
-$$u<\frac{f(y)}{cg(y)}$$
-então $x=y$. Caso contrário, volte ao passo 1.
-
-Abaixo, simulamos uma amostra de tamanho $50000$ da distribuição de $X$.
+Agora, vamos utilizar o método da aceitação/rejeição para obter amostras de $f(x)$:
 
 ```{r}
-# função envelope
-gs <- function(x){
-  if(x < .5){
-    resposta <- .2
-  } else{
-    resposta <- (13/15)*x - (7/30)
-  }
-  resposta
-}
+B <- 10000 # número de simulações desejadas
+x <- array(NA, c(B))
 
-k <- 0
-x <- NULL
-while(k < 50000){
-  y <- rproposta()
-  u <- runif(1)
+aceitos = 0    # número de simulações aceitas
+tentativas = 0 # número de tentativas do AR
+
+while( aceitos < B){
+  # passo 1
+  u <- runif(1); y <- simular_proposta(gerador)
   
-  razao <- fx(y)/gs(y)
-  if( u < razao ){
-    k <- k+1
-    x[k] <- y
+  # passo 2
+  tentativas <- tentativas+1
+  if( u < fx(y)/g_estrela(y) ){
+    aceitos <- aceitos + 1
+    x[aceitos] <- y
   }
 }
 
-
-hist(x, freq = FALSE)
-curve(fx(x),add=T, lty =2)
+#% de aceitação
+aceitos/tentativas
 ```
-:::       
+Abaixo, segue o histograma das simulações em conjunto com a densidade de $X$.
+
+```{r}
+hist( x, freq = FALSE)
+curve( fx(x), add = T, lwd = 2)
+```
+:::
+
 
 <div class='alert alert-danger'>
 **Exercício.**
 
-Considere que $x\in(a,b)$. Um envelope simples pode ser gerado particionando o intervalo $(a,b)$. Considerando a partição $(a_i,b_i)$, você pode encontrar $d_i$ tal que 
-
-$$d_i>f(x),\hbox{ para todo }x\in(a_i,b_i)$$
-e então, definir
-$$g^*(x)=d_i,\hbox{ se }x\in(a_i,b_i).$$
-
-$$g^*(x)=d_i.$$
-
 Considerando a função densidade dada por
 
 $$f(x)=\frac{16\pi^3}{\pi^2 - 8}x^2\cos(2\pi x),$$
-com $x\in(-1/4,1/4)$ e uma proposta definida a partir do envelope proposto nesse exercício, simule uma amostra de tamanho 5.000 de $f(x)$.
+com $x\in(-1/4,1/4)$, construa uma função envelope e simule uma amostra de tamanho 5.000 de $f(x)$ uitilizando o método da aceitação/rejeição.
 </div>
+
+
+<div class='alert alert-danger'>
+**Exercício.** Mostramos como utilizar o método A/R com o envelope linear por partes quando $X$ está limitado a um intervalo $[a,b]$. Quando $X$ está um um intervalo de comprimento finito, realizamos um truncamento. Para ilustrar, considere que desejamos simular de
+
+$$f(x)=x e^{-x},$$
+com $x\in(0,\infty)$.
+
+a. **Truncamento.** utilizando os métodos computacionais discutidos no Capítulo 1, encontre o valor $b$ tal que
+$$\int_0^b f(x)dx=\tau,$$
+onde $\tau$ é escolhido para ser representativo para a distribuição. Assuma que  $100\tau\%=99,9999\%$, o que implica que estamos ignorando eventuais pontos no intervalo $[b,\infty)$, que ocorrem com probabilidade $1-\tau=0,0000001$.
+
+b. **Simulação**.Utilize o método A/R com envelope linear por partes, considerando intervalo $[a,b]$.
+</div>
+
+## O método da aceitação/rejeição adaptativo
+
+Nessa seção, introduzimos o conceito de função densidade log-côncava. Para essas distribuições, mostramso que é possível construir uma densidade proposta dinamicamente.
+
+
+### Distribuição log-côncava
+Dizemos que a função $\psi(x)$ é côncava no domínio $D$ se, para qualquer par $(x,y)\in D$ e para qualquer $a\in(0,1)$
+
+$$\psi( a x + (1-a)y ) \geq a\psi(x)+(1-a)\psi(y).$$
+
+A figura abaixo mostra a função $\psi(x)=\log(x)$, que é côncava. É importante notar que, para qualquer função côncava, a imagem do segmento de reta que passa pelos pontos $(x,\psi(x))$ e $(y,\psi(y))$ (representado em vermelho no gráfico) é menor que a imagem de $\psi(z)$, com $z\in(x,y)$ (representada em azul).
+
+```{r, echo = FALSE}
+plot.new()
+plot.window(xlim = c(.5,3), ylim=c(log(.5),log(3)))
+curve( log(x), add = TRUE, lwd = 2)
+axis(1, at = c(.5,1,2,3), labels = c("" ,"x","y", ""))
+segments(1,-1,1,0, lty = 2, lwd = 2)
+segments(2,-1,2,log(2), lty = 2, lwd = 2)
+segments(1,0,.5,0, lty = 2, lwd = 2)
+segments(2,log(2),.5,log(2), lty = 2, lwd = 2)
+axis(2, at = c(log(.5),0,log(2),log(3)), labels = c("", expression(psi(x)), expression(psi(y)) , "") )
+title(ylab = expression(psi(.)))
+abline(-log(2),log(2), lwd = 2, col = 1)
+lines( seq(1,2,length = 100),  log(seq(1,2,length = 100)), col = 4, lwd = 2)
+segments( 1,log(1),2,log(2), col = 2, lwd = 2)
+```
+
+Se $\psi(.)$ é diferenciável duas vezes, então ela é côncava se e somente se sua segunda derivda é não-positiva.
+
+Dizemos que uma densidade é log-côncava se ela pode ser expressada como
+
+$$f(x)=e^{\psi(x)},$$
+onde $\psi(.)$ é uma função côncava. Existem muitas distribuições com esta propriedade. Por exemplo, distribuição Normal(0,1) é escrita como,
+
+$$f(x)\propto e^{\psi(x)},$$
+onde $\psi(x)=-\frac{x^2}{2}$. A derivada segunda de $\psi(x)$ é igual a -1, logo a densidade da normal padrão é log-côncava.
+
+
+### Médoto da aceitação/rejeição adaptativo
+
+Para uma densidade log-côncava qualquer, considere que existe $c$ tal que, para certa densidade proposta $g(x)$,
+
+$$\frac{f(x)}{g(x)}=\frac{e^{\psi(x)}}{g(x)}\leq c$$
+então,
+$$\log\left(\frac{f(x)}{g(x)}\right)\leq \log c\Rightarrow \psi(x)-\log g(x) \leq M \Rightarrow \psi(x)\leq \underbrace{\log g(x)-\log c}_{u(x)}.$$
+
+No método A/R adaptativo, a proposta $g(.)$ é construída através de $u(x)$, tal que $\psi(x)\leq u(x)$  para todo $x$.
+
+Para entender o método, seja
+
+$$\psi'(x)=\frac{d}{dx}\psi(x).$$
+
+O sinal da derivada primeira dá o sentido da reta que passa tangente ao ponto. Considere os seguintes pontos $x_1,x_2$, escolhidos de modo harbitrário, mas que satisfazem $\psi'(x_1)>0$ e $\psi'(x_2)<0$. Em seguida, encontre as duas retas tangentes a estes pontos. Abaixo ilustramos a ideia.
+
+```{r, echo = FALSE}
+plot.new()
+psi <- function(x) -x^2/2
+psil <- function(x) -x 
+plot.window(xlim = c(-3,3), ylim = c(-9/2,2))
+curve( psi(x), add = TRUE, lwd = 2)
+axis(1, at = c(-3,-2,1,3), labels = c("",expression(x[1]), expression(x[2]),""))
+abline( psi(1)-1*psil(1), psil(1), lwd = 2, lty =2)
+abline( psi(-2)+2*psil(-2), psil(-2), lwd = 2, lty =2)
+x0 <- ( psi(-2)+2*psil(-2) -(psi(1)-1*psil(1)) )/( psil(1) - psil(-2) )
+y0 <- psi(1)-1*psil(1) + psil(1)*x0
+#segments(-3,psi(-2)+2*psil(-2)+(-3)*psil(-2), x0 , y0, lwd = 2, col = 2)
+#segments(3,psi(1)+(-1)*psil(1)+(3)*psil(1), x0 , y0, lwd = 2, col = 2)
+points(c(-2,1),c(psi(-2),psi(1)), pch = 16, cex = 1.2)
+
+```
+
+De modo geral, a reta tangente ao ponto $x_k$ é escrita como
+$$t_k(x)= \underbrace{\psi(x_k) - x_k\psi'(x_k)}_{a_k} + \underbrace{\psi'(x_k)}_{b_k} x =a_k + b_k x$$
+
+Seja $z_1$ o valor no eixo-$x$ referente à interseção entre as retas $t_1$ e $t_{2}$, ou seja,
+
+$$z_1 = \frac{a_{2}-a_1}{b_1 - b_{2}}$$
+A partir de $z_1$, podemos definir *uma cobertura (upper hull)* $u(x)$ para $\psi(x)$:
+
+* Se $x < z_1$, então $u(x)=t_1(x)$
+
+* Se $x \geq z_1$, então $u(x)=t_{2}(x)$
+
+```{r, echo = FALSE}
+plot.new()
+psi <- function(x) -x^2/2
+psil <- function(x) -x 
+plot.window(xlim = c(-3,3), ylim = c(-9/2,2))
+curve( psi(x), add = TRUE, lwd = 2)
+#abline( psi(1)-1*psil(1), psil(1), lwd = 2, lty =2)
+#abline( psi(-2)+2*psil(-2), psil(-2), lwd = 2, lty =2)
+x0 <- ( psi(-2)+2*psil(-2) -(psi(1)-1*psil(1)) )/( psil(1) - psil(-2) )
+y0 <- psi(1)-1*psil(1) + psil(1)*x0
+axis(1, at = c(-3,-2,1,3,x0), labels = c("",expression(x[1]), expression(x[2]),"",expression(z[1])))
+
+segments(-3,psi(-2)+2*psil(-2)+(-3)*psil(-2), x0 , y0, lwd = 2, col = 2)
+segments(3,psi(1)+(-1)*psil(1)+(3)*psil(1), x0 , y0, lwd = 2, col = 2)
+points(c(-2,1),c(psi(-2),psi(1)), pch = 16, cex = 1.2)
+points(x0,y0, pch = 16 ,col = 2)
+segments(x0,-9/2,x0,y0, lwd = 2, lty = 2, col =2)
+```
+
+Agora, note que
+$$\psi(x)\leq u(x)\Rightarrow e^{\psi(x)}\leq e^{u(x)}\Rightarrow f(x)\leq e^{u(x)},$$
+
+portanto $e^{u(x)}$ é um envelope para $f(x)$. Defininido $z_0$ e $z_2$ como os valores extremos do domínio de $x$, teremos a proposta
+$$g(x)= \frac{e^{u(x)}}{\int_{z_0}^{z_2} e^{u(w)}dw}=\frac{e^{u(x)}}{\int_{z_0}^{z_1} e^{t_1(w)}dw + \int_{z_1}^{z_2} e^{t_2(w)}dw}$$
+Mas note que, para $x\in(z_{k-1},z_{k})$ (para $k=0,1$), 
+$$\int_{z_{k-1}}^x e^{u(w)}dw=\int_{z_{k-1}}^x e^{t_k(w)}dw=\int_{z_{k-'}}^x e^{a_k+b_k x}dx=\frac{e^{a_k}}{b_k}\left[e^{b_kx}-e^{b_k z_{k-1}}\right].$$
+logo,
+$$G(x)=G(z_{k-1})+\frac{e^{a_k}}{b_kN}\left[e^{b_kx}-e^{b_k z_{k-1}}\right],$$
+onde $N=\int_{z_0}^{z_2} e^{u(w)}dw.$ Portanto, $x$ pode ser obtido via método da inversão, pois, fazendo $G(x)=u$, teremos
+
+$$
+x=\frac{1}{b_k}\log\left( \frac{N b_k}{e^{a_k}}\left[u-G(z_{k-1})\right] +e^{b_k z_{k-1}} \right).\;\;\;\;(1)
+$$
+Para utilizar a fórmula acima, devemos determinar se $x\in (z_0,z_1]$ ou $x\in(z_1,z_2)$. Note que a probabilidade de $x$ estar no primeiro intervalo é $G(z_1)-G(z_0)=G(z_1)$. Portanto, podemos propor o seguinte algoritmo para gerar da proposta:
+
+1. Gere $u\sim \hbox{Uniforme}(0,1)$.
+
+2. Se $u<G(z_1)$, faça $k=1$. Em caso contrário faça $z=2$
+
+3. Use a fórmula (1) para encontrar $x$.
+
+Mostramos como criar uma proposta utilizando apenas 2 pontos, dados por $(x_1,x_2)$. Claramente poderíamos ter feito isto com mais pontos, mas podemos ter dificuldade em determinar quais pontos são úteis. O método A/R Adaptativo consiste em rescontruir a proposta para cada novo ponto aceito. 
+
+Considere inicialmente os dois pontos dados acima, $(x_1,x_2)$. Após a construção do envelope, suponha que o ponto $y$ foi aceito. Então, construímos o vetor $(x_1,x_2,y)$, o colocamos em ordem crescente e o denotamos por $(x_1,x_2,x_3)$. Agora teremos 3 retas tangentes a este ponto, gerando o novo *upper hull*, conforme ilustrado nas figuras abaixo.  
+
+
+```{r, echo = FALSE}
+plot.new()
+psi <- function(x) -x^2/2
+psil <- function(x) -x 
+a1 = psi(1)-1*psil(1) ; b1 = psil(1) 
+a2 = psi(2.5)-2.5*psil(2.5) ; b2= psil(2.5) 
+a3 = psi(-2)+2*psil(-2); b3 = psil(-2) 
+
+
+x01 <- (a1-a2)/(b2-b1)
+y01 <- a1 + b1*x01
+
+x02 <- (a3-a2)/(b2-b3)
+y02 <- a2 + b2*x02
+
+x03 <- (a1-a3)/(b3-b1)
+y03 <- a1 + b1*x03
+
+plot.window(xlim = c(-3,3), ylim = c(-9/2,2.5))
+curve( psi(x), add = TRUE, lwd = 2)
+axis(1, at = c(-3,-2,1,2,0,x03,x01), labels = c("",expression(x[1]), 
+expression(x[2]),expression(x[3]),"",expression(z[1]), expression(z[2])))
+abline( a1, b1, lwd = 2, lty =2)
+abline( a2, b2, lwd = 2, lty =2)
+abline( a3, b3, lwd = 2, lty =2)
+
+points(c(-2,1,2.5),c(psi(-2),psi(1),psi(2.5)), pch = 16, cex = 1.2)
+points(c(x01, x02,x03), c(y01, y02,y03), pch = 16, col = "red", cex = 1)
+
+segments( -3,-8/2,x03,y03, lwd = 2, col =2)
+segments( x03,y03, x01,y01, lwd = 2, col =2)
+segments(x01,y01,3,-9/2, lwd = 2, col =2)
+
+segments(x03,-9/2,x03,y03, lty =2, col=2)
+segments(x01,-9/2,x01,y01, lty =2, col=2)
+```
+Novamente, teremos a função $u(x)$ linear por partes e um novo simulador da proposta será construído
+
 

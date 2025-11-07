@@ -243,6 +243,11 @@ window.Quarto = {
   <ul>
   <li><a href="#introdução-ao-método" id="toc-introdução-ao-método" class="nav-link active" data-scroll-target="#introdução-ao-método"><span class="header-section-number">7.1</span> Introdução ao método</a></li>
   <li><a href="#construindo-a-densidade-proposta-com-uma-função-linear-por-partes" id="toc-construindo-a-densidade-proposta-com-uma-função-linear-por-partes" class="nav-link" data-scroll-target="#construindo-a-densidade-proposta-com-uma-função-linear-por-partes"><span class="header-section-number">7.2</span> Construindo a densidade proposta com uma função linear por partes</a></li>
+  <li><a href="#o-método-da-aceitaçãorejeição-adaptativo" id="toc-o-método-da-aceitaçãorejeição-adaptativo" class="nav-link" data-scroll-target="#o-método-da-aceitaçãorejeição-adaptativo"><span class="header-section-number">7.3</span> O método da aceitação/rejeição adaptativo</a>
+  <ul class="collapse">
+  <li><a href="#distribuição-log-côncava" id="toc-distribuição-log-côncava" class="nav-link" data-scroll-target="#distribuição-log-côncava"><span class="header-section-number">7.3.1</span> Distribuição log-côncava</a></li>
+  <li><a href="#médoto-da-aceitaçãorejeição-adaptativo" id="toc-médoto-da-aceitaçãorejeição-adaptativo" class="nav-link" data-scroll-target="#médoto-da-aceitaçãorejeição-adaptativo"><span class="header-section-number">7.3.2</span> Médoto da aceitação/rejeição adaptativo</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -361,9 +366,28 @@ window.Quarto = {
 </div>
 </div>
 <div class="alert alert-danger">
+<p><strong>Exercício</strong> Considere que <span class="math inline">\(X\)</span> é uma variável aleatória contínua com densidade <span class="math display">\[f(x)=\frac{1}{4}x^4(1-x)^3,\]</span> com <span class="math inline">\(x\in(0,1)\)</span>. Considerando a proposta Uniforme(0,1).</p>
+<ol type="1">
+<li><p>Encontre a função envelope</p></li>
+<li><p>Escreva um algoritmo para simular uma amostra de tamanho 5000 de <span class="math inline">\(f(x)\)</span> utilizando o método da aceitação/rejeição.</p></li>
+</ol>
+</div>
+<div class="alert alert-danger">
 <p><strong>Exercício.</strong> Dizemos que <span class="math inline">\(X\)</span> tem distribuição normal assimétrica se função densidade é dada por</p>
 <p><span class="math display">\[f(x)=2\phi(x)\Phi(ax),\]</span> onde <span class="math inline">\(x\in\mathbb{R}\)</span>, <span class="math inline">\(\phi(.)\)</span> e <span class="math inline">\(\Phi(.)\)</span> são a função densidade e distribuição da normal padrão e <span class="math inline">\(a\in\mathbb{R}\)</span>. O parâmetro <span class="math inline">\(a\)</span> é denominado assimetria, sendo que <span class="math inline">\(f(x)\)</span> se torna a normal padrão quando <span class="math inline">\(a=0\)</span>.</p>
 <p>Utilizando como proposta a distribuição normal, construa um simulador para gerar amostras de <span class="math inline">\(f\)</span> utilizando o método AR. Qual é o número esperado de tentativas até obter um sucesso?</p>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício</strong> Considere a simulação de uma distribuição Gama(2, 1), cuja densidade. é:</p>
+<p><span class="math display">\[f(x) = x e^{-x}, \quad \text{para } x &gt; 0\]</span></p>
+<p>Queremos usar uma distribuição Exponencial(<span class="math inline">\(\lambda\)</span>) como proposta <span class="math inline">\(g(x)\)</span>. A densidade da proposta é:</p>
+<p><span class="math display">\[g(x) = \lambda e^{-\lambda x}, \quad \text{para } x &gt; 0\]</span></p>
+<p>A eficiência do método A/R depende da constante <span class="math inline">\(c = \sup_x \frac{f(x)}{g(x)}\)</span>. Para uma proposta <span class="math inline">\(g(x)\)</span> ser válida, <span class="math inline">\(c\)</span> deve ser finito. Para ser eficiente, <span class="math inline">\(c\)</span> deve ser o menor possível. Com base nesses princípios:</p>
+<ol type="a">
+<li><p>Encontre <span class="math inline">\(c(\lambda)\)</span>: Para um <span class="math inline">\(\lambda &gt; 0\)</span> genérico, encontre a constante <span class="math inline">\(c\)</span> em função de <span class="math inline">\(\lambda\)</span>. Ou seja, encontre <span class="math inline">\(c(\lambda) = \max_x \frac{f(x)}{g(x)} = \max_x \frac{x e^{-x}}{\lambda e^{-\lambda x}}\)</span>.</p></li>
+<li><p>Determine o <span class="math inline">\(\lambda\)</span> ótimo: O método A/R mais eficiente usará o valor de <span class="math inline">\(\lambda\)</span> que minimiza <span class="math inline">\(c(\lambda)\)</span>. Encontre o valor <span class="math inline">\(\lambda^*\)</span> que torna a taxa de aceitação (inversamente proporcional a <span class="math inline">\(c\)</span>) a maior possível.</p></li>
+<li><p>Calcule <span class="math inline">\(c^*\)</span>: Qual é o valor da constante <span class="math inline">\(c\)</span> (e a probabilidade de aceitação) quando se utiliza o <span class="math inline">\(\lambda^*\)</span> ótimo encontrado em (b)?</p></li>
+</ol>
 </div>
 </section>
 <section id="construindo-a-densidade-proposta-com-uma-função-linear-por-partes" class="level2" data-number="7.2">
@@ -374,91 +398,156 @@ window.Quarto = {
 <p><span class="math display">\[f(x)\leq g^*(x),\]</span></p>
 <p>para todo <span class="math inline">\(x\)</span>. Note que $g^* é a função envelope. Então, sem perda de generalidade, podemos fazer</p>
 <p><span class="math display">\[f(x)\leq \underbrace{\frac{g^*(x)}{\int g^*(t)dt}}_{g(x)} \underbrace{\int g^*(t)dt}_{c}.\]</span></p>
-<p>Portanto, podemos primeiro construir uma função envelope e em seguida transformá-la na densidade proposta. Envelopes podem ser construídos utilizando uma função linear por partes, uma vez que é fácil simular desta distribuição.</p>
+<p>Portanto, podemos primeiro construir uma função envelope <span class="math inline">\(g^*(x)\)</span> e em seguida transformá-la na densidade proposta. Envelopes podem ser construídos utilizando uma função linear por partes, uma vez que é fácil simular desta distribuição.</p>
+<p>Uma função linear por partes é uma função cujo gráfico é composto por segmentos de reta. Formalmente, dizemos que a função <span class="math inline">\(g^*(x)\)</span> definida no intervalo fechado <span class="math inline">\(x \in [a, b]\)</span> é linear por partes se existir uma partição do intervalo <span class="math inline">\([a, b]\)</span>, definida por um conjunto de <span class="math inline">\(n+1\)</span> pontos:<span class="math inline">\(a = t_0 &lt; t_1 &lt; t_2 &lt; \ldots &lt; t_n = b\)</span> tal que, para cada sub-intervalo <span class="math inline">\([t_i, t_{i+1}]\)</span> (onde <span class="math inline">\(i = 0, 1, \ldots, n-1\)</span>), a função envelope <span class="math inline">\(g^*(x)\)</span> é uma função linear:</p>
+<p><span class="math display">\[g^*(x) = m_i x + d_i \quad \text{para } x \in [t_i, t_{i+1}]\]</span></p>
+<p>onde <span class="math inline">\(m_i\)</span> (a inclinação) e <span class="math inline">\(d_i\)</span> (o intercepto) são constantes reais específicas para aquele <span class="math inline">\(i\)</span>-ésimo intervalo.</p>
+<p>Estamos interessados em funções lineares por partes contínuas, o que implica em</p>
+<p><span class="math display">\[m_{i-1} t_i + d_{i-1} = m_i t_i + d_i \quad \text{para todo } i = 1, 2, \ldots, n-1\]</span></p>
+<p>Portanto, a densidade da proposta é dada por</p>
+<p><span class="math display">\[g(x)= \frac{g^{*}(x)}{\int_a^b g^{*}(x)dx}=\frac{g^{*}(x)}{\sum_{i=0}^{n-1}\frac{ g^{*}(t_i) + g^{*}(t_{i+1})}{2} (t_{i+1} - t_i)}=\frac{g^{*}(x)}{c}.\]</span> Para simular desta proposta, observe que, para <span class="math inline">\(x\in(t_j,t_{j+1}]\)</span>,</p>
+<p><span class="math display">\[\begin{align}G(x)&amp;=\int_a^x g(y)dy=\frac{1}{c}\int_a^{x}g^{*}(y)dy\\&amp;=\frac{1}{c}\underbrace{\sum_{i=0}^{j-1}\frac{g^{*}(t_i)+g^{*}(t_{i+1})}{2}(t_{i+1}-t_i)}_{c_{j-1}}+\frac{1}{c}\int_{t_j}^x(ym_j+d_j)dy\end{align}\]</span> o que implica em <span class="math display">\[G(x)= c_{j-1}+\frac{1}{c}\left[\frac{m_j}{2}(x^2- t_j^2)+d_j(x-t_j)\right].\]</span> Portanto, podemos simular da proposta pelo método da inversão, conforme o algoritmo abaixo:</p>
+<ol start="0" type="1">
+<li>(Preliminares) Para <span class="math inline">\(j=0,\ldots,n-1\)</span>, calcule</li>
+</ol>
+<p><span class="math display">\[A_j=\int_{t_{j}}^{t_{j+1}}(m_j x +d_j)dx=\frac{1}{2}m_j(t_{j+1}^2-t_{j} ^2)+d_j(t_{j+1}-t_{j})\]</span> e calcule <span class="math inline">\(c=\sum_{i=0}^{n-1}A_i\)</span>. Faça <span class="math inline">\(c_0=0\)</span> e, para <span class="math inline">\(j=1,\ldots,n\)</span>, calcule <span class="math display">\[c_j=c_{j-1}+\frac{A_{j-1}}{c}.\]</span></p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span></p></li>
+<li><p>Determine <span class="math inline">\(j\)</span> tal que <span class="math inline">\(c_{j}&lt;u&lt;c_{j+1}\)</span>. O valor de <span class="math inline">\(x\)</span> simulado é a raiz, dentro de <span class="math inline">\([t_j,t_{j+1}]\)</span>, da equação <span class="math display">\[\frac{m_j}{2c}x^2+\frac{d_j}{c}x+\left[\frac{t_jd_j}{c}-\frac{m_jt_j^2}{2c}+c_{j-1}-u\right].\]</span></p></li>
+</ol>
+<p>Após ter <span class="math inline">\(x\)</span> gerado pela proposta, podemos fazer o passo de aceitação rejeição:</p>
+<ol type="1">
+<li><p>Simule <span class="math inline">\(y\)</span> da proposta e <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span></p></li>
+<li><p>Se <span class="math inline">\(u&lt; f(y)/g^*(y)\)</span>, aceite <span class="math inline">\(x\)</span> como proveniente de <span class="math inline">\(f\)</span> e faça <span class="math inline">\(x=y\)</span>. Senão, retorne ao passo 1.</p></li>
+</ol>
+<div class="alert alert-success">
+<p><strong>Funções auxiliares.</strong> Considere que os vetores <code>xp</code> e <code>yp</code> formam um envelope para a função <span class="math inline">\(f\)</span>. A função abaixo implementa o evelope <span class="math inline">\(g^{*}(x)\)</span> baseado nesses pontos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>envelope <span class="ot">&lt;-</span> <span class="cf">function</span>(xp, yp, x) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Verificação de conformidade dos vetores</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(xp) <span class="sc">!=</span> <span class="fu">length</span>(yp)) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Os vetores 'xp' e 'yp' devem ter o mesmo comprimento."</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(xp) <span class="sc">&lt;</span> <span class="dv">2</span>) {</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"São necessários pelo menos 2 pontos para a interpolação."</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># A função 'approx' faz exatamente a interpolação linear </span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  resultado_interp <span class="ot">&lt;-</span> <span class="fu">approx</span>(<span class="at">x =</span> xp, <span class="at">y =</span> yp, <span class="at">xout =</span> x)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Para x, a função retorne g*(x) baseada em (xp, yp)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(resultado_interp<span class="sc">$</span>y)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A próxima função cria o gerador da proposta <span class="math inline">\(g(x)\)</span> baseada no envelope. Essa função calcula <span class="math inline">\(A_j\)</span> e <span class="math inline">\(c_j\)</span> no Passo 0. Criar essa função separada do simulador evita que essas constantes sejam recriadas constantemente dentro do loop do método da aceitação/rejeição.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>criador_do_simulador_proposta <span class="ot">&lt;-</span> <span class="cf">function</span>(xp, yp, <span class="at">n =</span> <span class="dv">1</span>) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Verificação de conformidade dos vetores</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(xp) <span class="sc">!=</span> <span class="fu">length</span>(yp)) {</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Os vetores 'xp' e 'yp' devem ter o mesmo comprimento."</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="fu">length</span>(xp)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (k <span class="sc">&lt;</span> <span class="dv">2</span>) {</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Você precisa de pelo menos 2 pontos (um segmento) para definir a envelope."</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Número de segmentos lineares</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    n_segmentos <span class="ot">&lt;-</span> k <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Renomear, seguindo a notação do contexto</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    t_i <span class="ot">&lt;-</span> xp</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    g_star_t_i <span class="ot">&lt;-</span> yp</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Cálculo de (m_j) e (d_j) para cada segmento j</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    delta_t <span class="ot">&lt;-</span> t_i[<span class="dv">2</span><span class="sc">:</span>k] <span class="sc">-</span> t_i[<span class="dv">1</span><span class="sc">:</span>n_segmentos]</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    delta_g_star <span class="ot">&lt;-</span> g_star_t_i[<span class="dv">2</span><span class="sc">:</span>k] <span class="sc">-</span> g_star_t_i[<span class="dv">1</span><span class="sc">:</span>n_segmentos]</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    m_vec <span class="ot">&lt;-</span> delta_g_star <span class="sc">/</span> delta_t</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    d_vec <span class="ot">&lt;-</span> g_star_t_i[<span class="dv">1</span><span class="sc">:</span>n_segmentos] <span class="sc">-</span> m_vec <span class="sc">*</span> t_i[<span class="dv">1</span><span class="sc">:</span>n_segmentos]</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculo de (A_j)</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    Aj_vec <span class="ot">&lt;-</span> (g_star_t_i[<span class="dv">1</span><span class="sc">:</span>n_segmentos] <span class="sc">+</span> g_star_t_i[<span class="dv">2</span><span class="sc">:</span>k]) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">*</span> delta_t</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcular a constante de normalização c</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    c_total <span class="ot">&lt;-</span> <span class="fu">sum</span>(Aj_vec)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcular as probabilidades de cada segmento</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    prob_segmento <span class="ot">&lt;-</span> Aj_vec <span class="sc">/</span> c_total</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcular as probabilidades acumuladas (c_j)</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    c_j_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">cumsum</span>(prob_segmento))</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># --- Montar o objeto gerador ---</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  gerador <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">t_i =</span> t_i,</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">m_vec =</span> m_vec,</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">d_vec =</span> d_vec,</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">c_total =</span> c_total,</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">c_j_vec =</span> c_j_vec,</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_segmentos =</span> n_segmentos</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(gerador)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Por último, a função abaixo gera uma observação a partir da proposta.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>simular_proposta <span class="ot">&lt;-</span> <span class="cf">function</span>(gerador) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Passo 1: Gerar U ~ Uniforme(0, 1)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Encontra o índice 'j' do segmento (1-based)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    j <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(u, gerador<span class="sc">$</span>c_j_vec, <span class="at">rightmost.closed =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Recuperar os parâmetros do gerador</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    m_j <span class="ot">&lt;-</span> gerador<span class="sc">$</span>m_vec[j]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    d_j <span class="ot">&lt;-</span> gerador<span class="sc">$</span>d_vec[j]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    t_j <span class="ot">&lt;-</span> gerador<span class="sc">$</span>t_i[j]</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    c_j_cumul <span class="ot">&lt;-</span> gerador<span class="sc">$</span>c_j_vec[j] <span class="co"># Prob. acumulada até t_j</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Resolver G(x) = u (equação quadrática: Ax^2 + Bx + C = 0)</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    A <span class="ot">&lt;-</span> m_j <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> gerador<span class="sc">$</span>c_total)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    B <span class="ot">&lt;-</span> d_j <span class="sc">/</span> gerador<span class="sc">$</span>c_total</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    C <span class="ot">&lt;-</span> c_j_cumul <span class="sc">-</span> u <span class="sc">-</span> (m_j <span class="sc">*</span> t_j<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> gerador<span class="sc">$</span>c_total) <span class="sc">-</span> (d_j <span class="sc">*</span> t_j) <span class="sc">/</span> gerador<span class="sc">$</span>c_total</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Caso 1: Segmento horizontal (m_j = 0 -&gt; A = 0)</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">abs</span>(A) <span class="sc">&lt;</span> <span class="fl">1e-10</span>) { </span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>      x <span class="ot">&lt;-</span> <span class="sc">-</span>C <span class="sc">/</span> B</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Caso 2: Segmento inclinado (A != 0)</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>      discriminante <span class="ot">&lt;-</span> B<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span>A<span class="sc">*</span>C</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (discriminante <span class="sc">&lt;</span> <span class="dv">0</span>) discriminante <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># Estabilidade numérica</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>      raiz_disc <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(discriminante)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>      r1 <span class="ot">&lt;-</span> (<span class="sc">-</span>B <span class="sc">+</span> raiz_disc) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> A)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>      r2 <span class="ot">&lt;-</span> (<span class="sc">-</span>B <span class="sc">-</span> raiz_disc) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> A)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>      <span class="co"># A raiz é a única dentro do intervalo [t_j, t_{j+1}]</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>      t_j_mais_1 <span class="ot">&lt;-</span> gerador<span class="sc">$</span>t_i[j <span class="sc">+</span> <span class="dv">1</span>]</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>      tol <span class="ot">&lt;-</span> <span class="fl">1e-9</span> </span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (r1 <span class="sc">&gt;=</span> (t_j <span class="sc">-</span> tol) <span class="sc">&amp;&amp;</span> r1 <span class="sc">&lt;=</span> (t_j_mais_1 <span class="sc">+</span> tol)) {</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        x <span class="ot">&lt;-</span> r1</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>        x <span class="ot">&lt;-</span> r2</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 <div id="exm-" class="alert alert-info theorem example">
 <p><span class="theorem-title"><strong>Example 7.2</strong></span> Considere que desejamos simular amostras da variável <span class="math inline">\(X\)</span> com densidade dada por</p>
 <p><span class="math display">\[f(x)= \frac{3}{16}\left(x^2+\frac{1}{2}x^3\right),\]</span> onde <span class="math inline">\(x\in(-2,2)\)</span>. Esta densidade é dada abaixo:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fx <span class="ot">&lt;-</span> <span class="cf">function</span>(x) (<span class="dv">3</span><span class="sc">/</span><span class="dv">16</span>)<span class="sc">*</span>(x<span class="sc">^</span><span class="dv">2</span><span class="fl">+.5</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">3</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>( <span class="fu">fx</span>(x),<span class="sc">-</span><span class="dv">2</span>,<span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="AR_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Com um pouco de tentativa e erro, vamos construir o seguinte envelope:</p>
-<p><span class="math display">\[g^*(x)=\left\{\begin{array}{ll}\frac{2}{10},&amp;x\in\left(-2,\frac{1}{2}\right)\\ \frac{13}{15}x-\frac{7}{30},&amp;x\in\left[\frac{1}{2},2\right) \end{array}\right.\]</span></p>
-<p>Abaixo, apresentamos <span class="math inline">\(f(x)\)</span> com o envelope (em vermelho).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>( <span class="fu">fx</span>(x), <span class="sc">-</span><span class="dv">2</span>,<span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="sc">-</span><span class="dv">2</span>,.<span class="dv">2</span>,.<span class="dv">5</span>,.<span class="dv">2</span> , <span class="at">lwd =</span><span class="dv">2</span>, <span class="at">col =</span><span class="dv">2</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(.<span class="dv">5</span>,.<span class="dv">2</span>,<span class="dv">2</span>,(<span class="dv">3</span><span class="sc">/</span><span class="dv">16</span>)<span class="sc">*</span><span class="dv">8</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="AR_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Como,</p>
-<p><span class="math display">\[c=\int_{-2}^{2}g^*(x)dx=\frac{71}{40}\]</span> a função densidade proposta baseada no envelope é dada por <span class="math inline">\(g(x)= g^*(x)/c\)</span>. Observe que a função distribuição da proposta é dada por</p>
-<p><span class="math display">\[G(x)=\left\{\begin{array}{ll} 0, &amp; x &lt; -2 \\ \frac{8x + 16}{71}, &amp; x \in [-2, 1/2) \\ \frac{52x^2 - 28x + 61}{213}, &amp; x \in [1/2, 2) \\ 1, &amp; x \ge 2 \end{array}\right.\]</span></p>
-<p>e sua inversa é dada por</p>
-<p><span class="math display">\[G^{-1}(u)=\left\{\begin{array}{ll} \frac{71u - 16}{8}, &amp; u \in [0, \frac{20}{71}) \\ \frac{7 + \sqrt{2769u - 744}}{26}, &amp; u \in [\frac{20}{71}, 1] \end{array}\right.\]</span></p>
-<p>Podemos então simular da proposta pelo método da inversão:</p>
-<ol type="1">
-<li><p>Simule <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span></p></li>
-<li><p>Se <span class="math inline">\(u&lt;20/71\)</span>, faça <span class="math display">\[x=\frac{71u-16}{8}.\]</span> Senão, faça <span class="math display">\[x=\frac{7+\sqrt{2769u-744}}{26}\]</span></p></li>
-</ol>
-<p>Abaixo, segue a implementação da proposta</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rproposta <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(u <span class="sc">&lt;</span> <span class="dv">20</span><span class="sc">/</span><span class="dv">71</span>){</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">=</span> ( <span class="dv">71</span> <span class="sc">*</span> u <span class="sc">-</span> <span class="dv">16</span> )<span class="sc">/</span><span class="dv">8</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">=</span> ( <span class="dv">7</span> <span class="sc">+</span> <span class="fu">sqrt</span>(<span class="dv">2769</span><span class="sc">*</span>u <span class="sc">-</span> <span class="dv">744</span>))<span class="sc">/</span><span class="dv">26</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  x</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Podemos finalmente simular <span class="math inline">\(X\)</span> utilizando o método AR, como segue</p>
-<ol type="1">
-<li><p>Simule <span class="math inline">\(y\)</span> da proposta <span class="math inline">\(g\)</span></p></li>
-<li><p>Simule <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span>. Se <span class="math display">\[u&lt;\frac{f(y)}{cg(y)}\]</span> então <span class="math inline">\(x=y\)</span>. Caso contrário, volte ao passo 1.</p></li>
-</ol>
-<p>Abaixo, simulamos uma amostra de tamanho <span class="math inline">\(50000\)</span> da distribuição de <span class="math inline">\(X\)</span>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># função envelope</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>gs <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(x <span class="sc">&lt;</span> .<span class="dv">5</span>){</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    resposta <span class="ot">&lt;-</span> .<span class="dv">2</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    resposta <span class="ot">&lt;-</span> (<span class="dv">13</span><span class="sc">/</span><span class="dv">15</span>)<span class="sc">*</span>x <span class="sc">-</span> (<span class="dv">7</span><span class="sc">/</span><span class="dv">30</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  resposta</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span>(k <span class="sc">&lt;</span> <span class="dv">50000</span>){</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">rproposta</span>()</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  razao <span class="ot">&lt;-</span> <span class="fu">fx</span>(y)<span class="sc">/</span><span class="fu">gs</span>(y)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>( u <span class="sc">&lt;</span> razao ){</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    k <span class="ot">&lt;-</span> k<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    x[k] <span class="ot">&lt;-</span> y</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x, <span class="at">freq =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">fx</span>(x),<span class="at">add=</span>T, <span class="at">lty =</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fx <span class="ot">&lt;-</span> <span class="cf">function</span>(x) (<span class="dv">3</span><span class="sc">/</span><span class="dv">16</span>)<span class="sc">*</span>(x<span class="sc">^</span><span class="dv">2</span><span class="fl">+.5</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">3</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>( <span class="fu">fx</span>(x),<span class="sc">-</span><span class="dv">2</span>,<span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -467,17 +556,160 @@ window.Quarto = {
 </div>
 </div>
 </div>
+<p>Com um pouco de tentativa e erro, escolhemos os pontos <span class="math inline">\(x=(-2,-1.5, 0,1,2)\)</span> e <span class="math inline">\(y=(0.05,0.15,0.05,0.3,1.5)\)</span> para construir o envelope, dado abaixo em vermelho:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fx <span class="ot">&lt;-</span> <span class="cf">function</span>(x) (<span class="dv">3</span><span class="sc">/</span><span class="dv">16</span>)<span class="sc">*</span>(x<span class="sc">^</span><span class="dv">2</span><span class="fl">+.5</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">3</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>( <span class="fu">fx</span>(x),<span class="sc">-</span><span class="dv">2</span>,<span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>xp <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>yp <span class="ot">=</span> <span class="fu">c</span>(.<span class="dv">05</span>,.<span class="dv">15</span>,.<span class="dv">05</span>,.<span class="dv">3</span>,<span class="fl">1.5</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xp,yp, <span class="at">col =</span><span class="dv">2</span>, <span class="at">lwd =</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="AR_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Vamos criar a função envelope e o simulador da proposta.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>g_estrela <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">envelope</span>(xp,yp,x)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>gerador <span class="ot">&lt;-</span> <span class="fu">criador_do_simulador_proposta</span>(xp,yp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Agora, vamos utilizar o método da aceitação/rejeição para obter amostras de <span class="math inline">\(f(x)\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># número de simulações desejadas</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="fu">c</span>(B))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>aceitos <span class="ot">=</span> <span class="dv">0</span>    <span class="co"># número de simulações aceitas</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>tentativas <span class="ot">=</span> <span class="dv">0</span> <span class="co"># número de tentativas do AR</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span>( aceitos <span class="sc">&lt;</span> B){</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># passo 1</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>); y <span class="ot">&lt;-</span> <span class="fu">simular_proposta</span>(gerador)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># passo 2</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  tentativas <span class="ot">&lt;-</span> tentativas<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>( u <span class="sc">&lt;</span> <span class="fu">fx</span>(y)<span class="sc">/</span><span class="fu">g_estrela</span>(y) ){</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    aceitos <span class="ot">&lt;-</span> aceitos <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    x[aceitos] <span class="ot">&lt;-</span> y</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">#% de aceitação</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>aceitos<span class="sc">/</span>tentativas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7876497</code></pre>
+</div>
+</div>
+<p>Abaixo, segue o histograma das simulações em conjunto com a densidade de <span class="math inline">\(X\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( x, <span class="at">freq =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>( <span class="fu">fx</span>(x), <span class="at">add =</span> T, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="AR_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <div class="alert alert-danger">
 <p><strong>Exercício.</strong></p>
-<p>Considere que <span class="math inline">\(x\in(a,b)\)</span>. Um envelope simples pode ser gerado particionando o intervalo <span class="math inline">\((a,b)\)</span>. Considerando a partição <span class="math inline">\((a_i,b_i)\)</span>, você pode encontrar <span class="math inline">\(d_i\)</span> tal que</p>
-<p><span class="math display">\[d_i&gt;f(x),\hbox{ para todo }x\in(a_i,b_i)\]</span> e então, definir <span class="math display">\[g^*(x)=d_i,\hbox{ se }x\in(a_i,b_i).\]</span></p>
-<p><span class="math display">\[g^*(x)=d_i.\]</span></p>
 <p>Considerando a função densidade dada por</p>
-<p><span class="math display">\[f(x)=\frac{16\pi^3}{\pi^2 - 8}x^2\cos(2\pi x),\]</span> com <span class="math inline">\(x\in(-1/4,1/4)\)</span> e uma proposta definida a partir do envelope proposto nesse exercício, simule uma amostra de tamanho 5.000 de <span class="math inline">\(f(x)\)</span>.</p>
+<p><span class="math display">\[f(x)=\frac{16\pi^3}{\pi^2 - 8}x^2\cos(2\pi x),\]</span> com <span class="math inline">\(x\in(-1/4,1/4)\)</span>, construa uma função envelope e simule uma amostra de tamanho 5.000 de <span class="math inline">\(f(x)\)</span> uitilizando o método da aceitação/rejeição.</p>
 </div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> Mostramos como utilizar o método A/R com o envelope linear por partes quando <span class="math inline">\(X\)</span> está limitado a um intervalo <span class="math inline">\([a,b]\)</span>. Quando <span class="math inline">\(X\)</span> está um um intervalo de comprimento finito, realizamos um truncamento. Para ilustrar, considere que desejamos simular de</p>
+<p><span class="math display">\[f(x)=x e^{-x},\]</span> com <span class="math inline">\(x\in(0,\infty)\)</span>.</p>
+<ol type="a">
+<li><p><strong>Truncamento.</strong> utilizando os métodos computacionais discutidos no Capítulo 1, encontre o valor <span class="math inline">\(b\)</span> tal que <span class="math display">\[\int_0^b f(x)dx=\tau,\]</span> onde <span class="math inline">\(\tau\)</span> é escolhido para ser representativo para a distribuição. Assuma que <span class="math inline">\(100\tau\%=99,9999\%\)</span>, o que implica que estamos ignorando eventuais pontos no intervalo <span class="math inline">\([b,\infty)\)</span>, que ocorrem com probabilidade <span class="math inline">\(1-\tau=0,0000001\)</span>.</p></li>
+<li><p><strong>Simulação</strong>.Utilize o método A/R com envelope linear por partes, considerando intervalo <span class="math inline">\([a,b]\)</span>.</p></li>
+</ol>
+</div>
+</section>
+<section id="o-método-da-aceitaçãorejeição-adaptativo" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="o-método-da-aceitaçãorejeição-adaptativo"><span class="header-section-number">7.3</span> O método da aceitação/rejeição adaptativo</h2>
+<p>Nessa seção, introduzimos o conceito de função densidade log-côncava. Para essas distribuições, mostramso que é possível construir uma densidade proposta dinamicamente.</p>
+<section id="distribuição-log-côncava" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="distribuição-log-côncava"><span class="header-section-number">7.3.1</span> Distribuição log-côncava</h3>
+<p>Dizemos que a função <span class="math inline">\(\psi(x)\)</span> é côncava no domínio <span class="math inline">\(D\)</span> se, para qualquer par <span class="math inline">\((x,y)\in D\)</span> e para qualquer <span class="math inline">\(a\in(0,1)\)</span></p>
+<p><span class="math display">\[\psi( a x + (1-a)y ) \geq a\psi(x)+(1-a)\psi(y).\]</span></p>
+<p>A figura abaixo mostra a função <span class="math inline">\(\psi(x)=\log(x)\)</span>, que é côncava. É importante notar que, para qualquer função côncava, a imagem do segmento de reta que passa pelos pontos <span class="math inline">\((x,\psi(x))\)</span> e <span class="math inline">\((y,\psi(y))\)</span> (representado em vermelho no gráfico) é menor que a imagem de <span class="math inline">\(\psi(z)\)</span>, com <span class="math inline">\(z\in(x,y)\)</span> (representada em azul).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="AR_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Se <span class="math inline">\(\psi(.)\)</span> é diferenciável duas vezes, então ela é côncava se e somente se sua segunda derivda é não-positiva.</p>
+<p>Dizemos que uma densidade é log-côncava se ela pode ser expressada como</p>
+<p><span class="math display">\[f(x)=e^{\psi(x)},\]</span> onde <span class="math inline">\(\psi(.)\)</span> é uma função côncava. Existem muitas distribuições com esta propriedade. Por exemplo, distribuição Normal(0,1) é escrita como,</p>
+<p><span class="math display">\[f(x)\propto e^{\psi(x)},\]</span> onde <span class="math inline">\(\psi(x)=-\frac{x^2}{2}\)</span>. A derivada segunda de <span class="math inline">\(\psi(x)\)</span> é igual a -1, logo a densidade da normal padrão é log-côncava.</p>
+</section>
+<section id="médoto-da-aceitaçãorejeição-adaptativo" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="médoto-da-aceitaçãorejeição-adaptativo"><span class="header-section-number">7.3.2</span> Médoto da aceitação/rejeição adaptativo</h3>
+<p>Para uma densidade log-côncava qualquer, considere que existe <span class="math inline">\(c\)</span> tal que, para certa densidade proposta <span class="math inline">\(g(x)\)</span>,</p>
+<p><span class="math display">\[\frac{f(x)}{g(x)}=\frac{e^{\psi(x)}}{g(x)}\leq c\]</span> então, <span class="math display">\[\log\left(\frac{f(x)}{g(x)}\right)\leq \log c\Rightarrow \psi(x)-\log g(x) \leq M \Rightarrow \psi(x)\leq \underbrace{\log g(x)-\log c}_{u(x)}.\]</span></p>
+<p>No método A/R adaptativo, a proposta <span class="math inline">\(g(.)\)</span> é construída através de <span class="math inline">\(u(x)\)</span>, tal que <span class="math inline">\(\psi(x)\leq u(x)\)</span> para todo <span class="math inline">\(x\)</span>.</p>
+<p>Para entender o método, seja</p>
+<p><span class="math display">\[\psi'(x)=\frac{d}{dx}\psi(x).\]</span></p>
+<p>O sinal da derivada primeira dá o sentido da reta que passa tangente ao ponto. Considere os seguintes pontos <span class="math inline">\(x_1,x_2\)</span>, escolhidos de modo harbitrário, mas que satisfazem <span class="math inline">\(\psi'(x_1)&gt;0\)</span> e <span class="math inline">\(\psi'(x_2)&lt;0\)</span>. Em seguida, encontre as duas retas tangentes a estes pontos. Abaixo ilustramos a ideia.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="AR_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>De modo geral, a reta tangente ao ponto <span class="math inline">\(x_k\)</span> é escrita como <span class="math display">\[t_k(x)= \underbrace{\psi(x_k) - x_k\psi'(x_k)}_{a_k} + \underbrace{\psi'(x_k)}_{b_k} x =a_k + b_k x\]</span></p>
+<p>Seja <span class="math inline">\(z_1\)</span> o valor no eixo-<span class="math inline">\(x\)</span> referente à interseção entre as retas <span class="math inline">\(t_1\)</span> e <span class="math inline">\(t_{2}\)</span>, ou seja,</p>
+<p><span class="math display">\[z_1 = \frac{a_{2}-a_1}{b_1 - b_{2}}\]</span> A partir de <span class="math inline">\(z_1\)</span>, podemos definir <em>uma cobertura (upper hull)</em> <span class="math inline">\(u(x)\)</span> para <span class="math inline">\(\psi(x)\)</span>:</p>
+<ul>
+<li><p>Se <span class="math inline">\(x &lt; z_1\)</span>, então <span class="math inline">\(u(x)=t_1(x)\)</span></p></li>
+<li><p>Se <span class="math inline">\(x \geq z_1\)</span>, então <span class="math inline">\(u(x)=t_{2}(x)\)</span></p></li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="AR_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Agora, note que <span class="math display">\[\psi(x)\leq u(x)\Rightarrow e^{\psi(x)}\leq e^{u(x)}\Rightarrow f(x)\leq e^{u(x)},\]</span></p>
+<p>portanto <span class="math inline">\(e^{u(x)}\)</span> é um envelope para <span class="math inline">\(f(x)\)</span>. Defininido <span class="math inline">\(z_0\)</span> e <span class="math inline">\(z_2\)</span> como os valores extremos do domínio de <span class="math inline">\(x\)</span>, teremos a proposta <span class="math display">\[g(x)= \frac{e^{u(x)}}{\int_{z_0}^{z_2} e^{u(w)}dw}=\frac{e^{u(x)}}{\int_{z_0}^{z_1} e^{t_1(w)}dw + \int_{z_1}^{z_2} e^{t_2(w)}dw}\]</span> Mas note que, para <span class="math inline">\(x\in(z_{k-1},z_{k})\)</span> (para <span class="math inline">\(k=0,1\)</span>), <span class="math display">\[\int_{z_{k-1}}^x e^{u(w)}dw=\int_{z_{k-1}}^x e^{t_k(w)}dw=\int_{z_{k-'}}^x e^{a_k+b_k x}dx=\frac{e^{a_k}}{b_k}\left[e^{b_kx}-e^{b_k z_{k-1}}\right].\]</span> logo, <span class="math display">\[G(x)=G(z_{k-1})+\frac{e^{a_k}}{b_kN}\left[e^{b_kx}-e^{b_k z_{k-1}}\right],\]</span> onde <span class="math inline">\(N=\int_{z_0}^{z_2} e^{u(w)}dw.\)</span> Portanto, <span class="math inline">\(x\)</span> pode ser obtido via método da inversão, pois, fazendo <span class="math inline">\(G(x)=u\)</span>, teremos</p>
+<p><span class="math display">\[
+x=\frac{1}{b_k}\log\left( \frac{N b_k}{e^{a_k}}\left[u-G(z_{k-1})\right] +e^{b_k z_{k-1}} \right).\;\;\;\;(1)
+\]</span> Para utilizar a fórmula acima, devemos determinar se <span class="math inline">\(x\in (z_0,z_1]\)</span> ou <span class="math inline">\(x\in(z_1,z_2)\)</span>. Note que a probabilidade de <span class="math inline">\(x\)</span> estar no primeiro intervalo é <span class="math inline">\(G(z_1)-G(z_0)=G(z_1)\)</span>. Portanto, podemos propor o seguinte algoritmo para gerar da proposta:</p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(u\sim \hbox{Uniforme}(0,1)\)</span>.</p></li>
+<li><p>Se <span class="math inline">\(u&lt;G(z_1)\)</span>, faça <span class="math inline">\(k=1\)</span>. Em caso contrário faça <span class="math inline">\(z=2\)</span></p></li>
+<li><p>Use a fórmula (1) para encontrar <span class="math inline">\(x\)</span>.</p></li>
+</ol>
+<p>Mostramos como criar uma proposta utilizando apenas 2 pontos, dados por <span class="math inline">\((x_1,x_2)\)</span>. Claramente poderíamos ter feito isto com mais pontos, mas podemos ter dificuldade em determinar quais pontos são úteis. O método A/R Adaptativo consiste em rescontruir a proposta para cada novo ponto aceito.</p>
+<p>Considere inicialmente os dois pontos dados acima, <span class="math inline">\((x_1,x_2)\)</span>. Após a construção do envelope, suponha que o ponto <span class="math inline">\(y\)</span> foi aceito. Então, construímos o vetor <span class="math inline">\((x_1,x_2,y)\)</span>, o colocamos em ordem crescente e o denotamos por <span class="math inline">\((x_1,x_2,x_3)\)</span>. Agora teremos 3 retas tangentes a este ponto, gerando o novo <em>upper hull</em>, conforme ilustrado nas figuras abaixo.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="AR_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Novamente, teremos a função <span class="math inline">\(u(x)\)</span> linear por partes e um novo simulador da proposta será construído</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
