@@ -1,0 +1,406 @@
+# Método de Monte Carlo via Cadeias de Markov
+
+## Introdução à Cadeias de Markov
+
+A coleção $\{X(t),t\in T\}$ é um processo estocástico se $X(t)$  é uma variável aleatória para cada $t\inT$. A variável $X(t)$ é denominada estado. O processo é dito ser a tempo discreto se $T\subseteq \mathbb{Z}$.
+
+Em um processo a tempo discreto, é usual utilizar a notação $X(t)\equiv X_t$.
+
+
+O processo estocástico $\{\ldots,X_1,X_0,X_1,X_2,\ldots\}$ é uma cadeia de Markov de ordem $d$ se
+
+$$P(X_n\in A|X_{n−1}=x_{n−1},\ldots,X_0=x_0)=P(X_n\in A|X_{n−1}=x_{n−1},…,X_{n−d}=x_{n−d}).$$
+
+Uma cadeia de Markov é dita ser homogênea se, para qualquer $m>0$
+ natural,
+
+$$P(X_n\in A|X_{n−1}=x_{n−1},…,X_{n−d}=x_{n−d})=P(X_{n+m}\in A|X_{n+m−1}=x_{n−1},…,X_{n+m−d}=x_{n−d}).$$
+Estamos interessados nas cadeias homogêneas de ordem $d=1$, que doravante serão denominadas simplesmente por cadeias de Markov.
+
+
+:::{#exm- .alert .alert-info}
+Considere a seguinte cadeia de Markov:
+
+$$X_{n}|X_{n−1}=y∼\hbox{Uniforme}(1−y,1).$$
+
+Abaixo, simulamos duas trajetórias deste processo, cada uma com um valor diferente para $x_0$:
+
+```{r}
+set.seed(123)
+# pontos iniciais as trajetórias
+x_1 <- .01
+x_2 <- .99
+
+for(i in 2:100){
+  x_1[i] <- runif(1, 1 - x_1 [i - 1] , 1)
+  x_2[i] <- runif(1, 1 - x_2 [i - 1] , 1)
+}
+
+# gráfico das duas trajetórias
+plot(x_1, type='l', ylim=c(0,1))
+plot(x_2, type='l', ylim=c(0,1))
+plot(x_1,x_2, type = "l", col =1)
+points(x_1[1] , x_2[1] , pch=16) # ponto inicial
+```
+
+:::
+
+A evolução da cadeia de $X_n$ até $X_{n+1}$ é denominada transição 1
+-passos à frente. A densidade $k(.|y)$ que satisfaz
+
+$$P(X_{n+1}\in A|X_n=y)=\int_A k(x|y)dx$$
+
+é denominada núcleo de transição (ou núcleo de transição 1
+-passo à frente). De maneira análoga, a densidade $k^{(d)}(.|y)$ que
+ que satisfaz
+
+$$P(X_{n+d}\in A|X_{n}=y)=\int_A k^{(d)}(x|y)dx$$
+é denominada núcleo de transição $d$-passos à frente.
+
+<div class='alert alert-success'>
+**Equações de Chapman-Kolmogorov**
+Para qualquer $0<m<n$ tem-se que
+
+$$k^{(n)}(x|y)=\int_{\mathbb{R}} k^{(m)}(x|u)k^{(n−m)}(u|y)du.$$
+</div>
+
+Dizemos que $\pi(.)$ é a densidade da distribuição estacionária de uma cadeia de Markov se 
+
+$$\pi(y)=\int_{\mathbb{R}} \pi(x)k(y|x)dx,$$
+ou seja a distribuição estacionária é a distribuição marginal do processo. Como
+
+$$\begin{align}\int_{\mathbb{R}}\pi(x)k^{(2)}(y|x)dx&=\int_{\mathbb{R}}\pi(x)\int_{\mathbb{R}}k(y|u)k(u|x)dudx\\&=\int_{\mathbb{R}}k(y|u)[\int_{\mathbb{R}}\pi(x)k(u|x)dx]du\\&=\int_{\mathbb{R}}k(y|u)\pi(u)du=\pi(y)\end{align}$$
+é simples mostrar por indução que $\pi(.)$ satisfaz
+
+$$\pi(y)=\int_{\mathbb{R}}\pi(x)k^{(n)}(y|x)dx.$$
+
+Suponha que valem as seguintes afirmações:
+
+1. Existe $n>0$ tal que $P(X_n\in A|X_0=x_0)$ para quaisquer $A$
+ e $x_0$. Além disso, o número médio de passos para realizar a transição é finito.
+
+2. $P(X_n\in A|X_0=x_0)$ não é uma função periódica em $n$.
+
+Então, faz sentido em falar sobre
+
+$$\lim_{n\rightarrow \infty}k^{(n)}(x|y).$$
+
+Sob as condições acima, a única densidade que satifaz esse limite é  distribuição estacionária, isto é,
+
+$$\lim_{n\rightarrow \infty}k^{(n)}(x|y)=\pi(x).$$
+
+A seguinte definição será útil adiante.
+
+:::{#def- .alert .alert-success}
+Dizemos que uma cadeia de Markov com núcleo de transição $k(x|y)$
+ é reversível com relação à $\pi(x)$ se
+
+$$\pi(x)k(y|x)=\pi(y)k(x|y)$$
+para todo $x$ e $y$ no espaço dos estados. A equação acima é conhecida como balanço detalhado.
+
+:::
+
+
+Nem toda cadeia de Markov seja reversível em relação à sua distribuição estacionária. Contudo, se vale equação de balanço detalalhado para alguma função densidade $\pi(.)$ qualquer, então esta é a distribuição estacionária, pois
+
+$$\int_{\mathbb{R}}\pi(x)k(y|x)dx=\int_{\mathbb{R}}\pi(y)k(x|y)dx=\pi(y)$$.
+
+
+:::{#exm- .alert .alert-info}
+Considere novamente a seguinte cadeia de Markov:
+
+$$X_n|X_{n−1}=y∼Uniforme(1−y,1),$$
+ou seja
+$$k(x|y)=\frac{1}{y}I(1-y<x<1).$$
+
+Vamos mostrar que sua distribuição estacionária é $\pi(x)=2x$, com $x\in(0,1)$. Observe que
+
+$$\begin{align}
+\pi(y)k(x|y)&=2yI(0<y<1)\frac{1}{y}I(1-y<x<1)=I(0<y<1)I(1-y<x<1)\\&=I(0<y<1)I(1-x<y<1+y-x)=I(1-x<y<1),\end{align}$$
+e que
+$$\begin{align}
+\pi(x)k(y|x)&=2x\frac{1}{x}I(0<x<1)I(1-x<y<1)=I(1-x<y<1),\end{align}$$
+
+logo, a equações de balanço detalhado estão satisfeitas. 
+
+Portanto, o comportamento marginal de uma trajetória simulada deve se comportar como a distribuição estacionária. Abaixo simulammos uma trajetória de tamanho 5000 e mostramos o seu histograma em conjunto com a densidade da distribuição estacionária,
+
+```{r}
+
+x <- 2/3
+for(i in 2:5000) x[i] <- runif( 1, 1-x[i-1])
+d_estacionaria <- function(x) 2*x
+
+hist(x, freq = FALSE)
+curve(d_estacionaria(x), add = T , lwd = 2)
+```
+:::
+
+
+##  Introdução aos Métodos de Monte Carlo via Cadeias de Markov (MCMC)
+
+Os métodos para simular a distribuição $f(x)$  gerando variáveis aleatórias utilizando uma cadeia de Markov são denominados métodos de Monte Carlo via Cadeias de Markov (MCMC).
+
+Diferente dos outros métodos de simulação, os MCMCs exigem alguns cuidados adicionais para garantir que estamos simulando variáveis independentes e identicamente distribuídas.
+
+Ao longo desta seção, vamos utilizar a cadeia do exemplo abaixo.
+
+
+:::{#exm- .alert .alert-info}
+Considere uma cadeia de Markov com o seguinte núcleo de transição,
+
+$$X_t|X_{t−1}=y∼N(\alpha y,1)$$
+
+com $\alpha\in(−1,1)$. Pode-se provar que sua distribuição estacionária é a distribuição Normal(0,$1/(1-\alpha)$). Ao longo desta seção, utilizaremos $\alpha=0,7$.
+:::
+
+
+
+O objetivo dos métodos do tipo MCMC é desenvolver uma cadeia de Markov, com certo núcleo de transição $k(x_{i}|x_{i−1})$ que tenha como distribuição estacionária a distribuição de interesse, doravante denotada por $f(x)$. 
+
+Em tese, bastaria gerar uma trajetória da cadeia utilizando o núcleo de transição para obter amostras de $f(x)$. Como a trajetória deve começar em um ponto $x_0$, existem duas situações:
+
+* $x_0$ é escolhida na região de alta densidade de $f(x)$: nesse caso, os pontos simulados pelo processo terão distribuição marginal igual à $f(x)$
+
+* $x_0$ é escolhida fora da região de alta densidade de $f(x)$: nesse caso, a trajetória inicial não deve corresponder à distribuição de $f(x)$. Entretanto, como 
+
+$$f(x)=\lim_{n\rightarrow\infty} k^{(n)}(x|x_0)$$
+existe um momento no qual a patir dele, a trajetória vai começar a simular pontos de $f(x)$.
+
+Quando das características de $f(x)$ são desconhecidas, é boa prática comelcar a simular diversas cadeias començando em pontos distintos. O gráfico de linha (*traceplot*), que é um gráfico do tempo do processo contra os valores simulados, é útil para verificar a convergência, uma vez que todas as trajetórias devem se encontrar em algum momento.
+
+
+O traceplot de um processo estacionário com variância finita tem um comportamento típico de pontos em torno da média da distribuição estacionária. Deste modo, ele é uma ferramenta exploratória que nos auxilia a detectar se a cadeia não está em equilíbrio ao perceber um padrão fora do que se esperaria de uma distribuição estacionária.
+
+
+:::{#exm-}
+Abaixo, ilustramos o traceplot de duas cadeias simuladas, sendo que a única diferença entre elas é o valor de $x_0$. A distribuição estacionária está representada ao longo do eixo das ordenadas com as linhas tracejadas em azul representando os quantis 99,5% e 0,05%. Mostramos dois traceplots (linhas pretas) com valores distintos de $x_0$. No primeiro, escolhemos $x_0=0$ que é a média da distribuição estacionária e na segunda $x_0=−10$, um valor extremo.
+
+
+![Trajetória começando na média de $f(x)$](traceplot1_intro.png)
+
+![Trajetória começando distante da região de alta densidade de $f(x)$](traceplot2_intro.png)
+
+
+Com $x_0=0$, o traceplot não dá evidências contra a hipótese de equilíbrio, pois os pontos simulados condizem com o que é esperado para a distribuição estacionária. Já com $x_0=−10$, temos que o traceplot dá evidências de que a convergência ocorreu após 3 ou 4 iterações. 
+:::
+
+
+O exemplo acima nos mostra que os métodos do tipo MCMC são sensíveis aos valores iniciais. Note que no exemplo dado foi trivial decidir que $x_0=0$ era uma escolha adequada, mas para distribuições multivariadas isso pode ser um desafio. Portanto, é usual considerar que as primeiras simulações sempre estão erradas e as descartamos. Esse processo é denominado *burn-in*. Não há uma proporção recomendada para o *burn-in* embora em geral uma inspeção visual ao *traceplot* de trajetórias realizadas com valores iniciais distintos seja o suficiente. Em termos de teoria da decisão, é sempre melhor aumentar o tamanho das trajetórias para descartar mais observações no *burn-in* do que evitar o custo computacional e fazer inferências com uma amostra que não represente $f(x)$.
+
+
+:::{#exm- .alert .alert-info}
+Voltando ao nosso exemplo, vamos simular 5 cadeias, com os valores iniciais $\{-10,-5,0,5,10\}$. Abaixo seguem as trajetórias simuladas e seus respectivos *traceplots* (por didática, vamos colocar apenas as 100 primeiras iterações).
+
+```{r}
+set.seed(123)
+n = 5000
+trajetorias <- array(NA, c(5000,5))
+trajetorias[1,] <- c(-10,-5,0,5,10)
+
+for(i in 2:n){
+  trajetorias[i,] <- .7*trajetorias[i-1,] + rnorm(5)
+}
+
+ts.plot(trajetorias[1:100,], col =1:5, xlab = 'Iterações')
+```
+Observe que as trajetórias já estão em equilíbrio após poucas iterações. Como é uma simulação barata, podemos fazer um *burn-in* das primeiras 20 simulações sem prejuízos.
+
+
+:::
+
+
+Lembremos que o objetivo da simulação estocástica sob a ótica deste curso é simular variáveis independentes e identicamente distribuídas de uma distribuição alvo. Já o objetivo de um método MCMC é gerar variáveis dependentes e identicamente distribuídas segundo a distribuição alvo. É importante ressaltar que o uso moderno dos métodos do tipo MCMC consideram a dependência como uma característica natural e as inferências utilizam esse aspecto (veremos mais sobre isso no capítulo sobre Integração de Monte Carlo). Contudo, como nosso objetivo nesta seção é a obtenção de amostras iid, essa dependência deve ser minimizada.
+
+Considerando as variáveis simuladas (após o burn-in) $x_1,x_2\ldots,x_n$, a dependência (linear) das variáveis obtidas via MCMC é estimada pela função de autocorrelação:
+
+$$r(h)=\frac{\sum_{i=1}^{n-h}(x_i−\bar{x})(x_{i+h}−\bar{x})}{\sum_{i=1}^n (x_i−\bar{x})^2.$$
+
+Para termos uma amostra de variáveis aproximadamente independentes, podemos remover o efeito da autocorrelação encontrando o valor $h′$
+ tal que $r(h′)\approx 0$  e tormar ficar somente com as variáveis $x_1,x_{1+h′},x_{1+2h′},\ldots$. Esse processo é conhecido como *thinning*. O *traceplot* desta subamostra deve apresentar os pontos em torno da média mas sem um padrão.
+
+:::{#exm- .alert .alert-info}
+
+Voltemos ao exemplo anterior. Após um *burn-in* de vinte observações, temos os seguintes *traceplots* 
+
+
+```{r}
+ts.plot(trajetorias[-(1:20),], col =1:5)
+```
+
+A figura abaixo apresenta as autocorrelações da trajetória 1. Note que após a defasagem(lag) 15, as autorrelações podem ser consideradas nulas.  
+
+```{r}
+(acf(trajetorias[-(1:20),1]))
+
+```
+
+Portanto, podemos eliminar essa autocorrelação com um *thinning* de tamanho 15 (ou seja, guardamos uma em cada 15 pontos da simulação). As figuras abaixo apresentam os *traceplots* das simulações finais após o burn-in e o thinning. A autocorrelação para a simulação baseada na trajetória 1 também é apresentada. 
+
+
+```{r}
+amostra_final <- trajetorias[ seq(21,n, 15), ]
+ts.plot(amostra_final,col=1:5)
+acf(amostra_final[,1])
+```
+
+Por último, podemos reunir todas as simulações em um único vetor, gerando nossa amostra final. Abaixo, apresentamos um histograma em conjunto com a densidade da distribuição estacionária.
+
+```{r}
+amostra <- as.vector(amostra_final)
+hist(amostra, freq = FALSE, ylim=c(0,.5))
+curve( dnorm(x,0,sqrt(1/(1-.3^2))), add = T)
+```
+:::
+
+
+É comum que a convergência seja checada através do comportamento do *traceplot*. Entretanto, é possível que este se comporte como o esperado sem que a convergência tenha sido atingida.
+
+:::{#exm- .alert .alert-info}
+Considere o núcleo de transição
+
+$$k(x|y)=\phi(x|\frac{y}{2}+5,1)I_{(7,\infty)}(y)+\phi(x|\frac{y}{2},1)I_{(−\infty,7]}(y),$$
+onde $\phi(.|\mu,\sigma^2)$ é a função densidade da distribuição Normal$(\mu,\sigma^2)$. Esta cadeia exibe dois comportamentos distintos, dependendo do valor de $x_0$
+
+* Se $x_0$  está próximo de 0, a cadeia deve ser comportar como uma distribuição Normal(0,1). Neste caso, a probabilidade da cadeia gerar um valor superior a 7 é de $1,2×10^{−12}$, o que implica que, ela deve permanecer nesta distribuição para fins práticos de simulação.
+
+* se $x_0$ está proximo ( ou é superior a ) de 10, é possível que a cadeia se comporte como uma Normal(10,1) por um período de tempo, como se estivesse atingido o equilíbrio. Entretanto, como há uma probabilidade de 0,13% da cadeia gerar um valor inferior a 7, eventualmente a cadeia vai abandonar este comportamento e vai convergir para a Normal(0,1).
+
+Abaixo segue um exemplo com $x_0=10$.
+
+```{r}
+k <- function(y){ ifelse ( y > 7 ,x <- .5*y +rnorm(1,5,1) ,x <- .5* y + rnorm(1,0,.5) ) 
+  x 
+}
+
+# simulador da cadeia
+k <- function(y){
+  ifelse ( y > 7 ,x <- .5*y +rnorm(1,5,1) ,x <- .5 * y + rnorm(1,0,.5) )
+x
+}
+
+# simulando uma tragetória
+set.seed(1)
+
+n <- 600
+x <- 10
+for(i in 2:n){
+  x[i] <- k(x[i-1])
+}
+
+# traceplot
+ts.plot(x, main = "Traceplot")
+```
+Portanto, se considerarmos um traceplot com as primeiras 200 iterações, podemos acreditar que estamos simulando da distribuição estacionária, quando na verdade esta ainda não foi atingida.
+
+:::
+
+
+O exemplo acima ilustra a necessidade prática de gerar diversas cadeias com valores iniciais distintos. Quando todas as trajetórias estiverem na mesma região, teremos evidências de que a distribuição estacionária foi atingida. Contudo, a análise gráfica é subjetiva e métodos mais robustos são necessários. Para tanto, é comum o uso da estatística $R$ de Gelman-Rubin. Seja $M$ o número de cadeias utilizadas, todas de tamanbho $n$. Então, a estatística $R$ é dada por
+
+$$R=\sqrt{\frac{\hat{\sigma}^2}{s^2}},$$
+onde $s_j^2$ é a variância amostral da $j$-ésima trajetória, 
+$$s^2= \frac{1}{M}\sum_{j=1}^M s_j^2$$
+é a média das variâncias, $B/n$ é a variância entre as médias amostrais das trajetórias, ou seja
+$$\frac{B}{n}=\frac{1}{M-1}\sum_{j=1}^M(\bar{x}_j-\bar{x})^2,$$
+onde $\bar{x}_j$ é a média da $j$-ésima trajetória e $\bar{x}$ é a média geral, considerando todas as cadeias. Por último,
+$$\hat{\sigma}^2=\frac{n-1}{n}s^2+\frac{B}{n}.$$
+
+Como $s^2$ subestima $σ^2$, o valor de $R$ deve ser, em geral, maior que 1. Entretanto, como os dois são consistentes, temos que $R$
+ decresce para 1. Portanto, teremos evidências que todas as cadeias atingiram o equilíbrio se $R\approx1$. Na prática, é comum parar a simulação quando $R<1,1$. A função abaixo implementa a estatística R.
+ 
+ 
+<div class='alert alert-success'>
+**Estatística de Gelman-Rubin.**
+
+```{r}
+Rgelman <- function(X, burnin){
+  # aplicando o burn-in
+  X <- X[-(1:burnin),]
+  
+  # tamanho da amostra após o burn-in
+  n <- nrow(X)
+  
+  # média das cadeias
+  Xm <- colMeans(X)
+
+  # média geral
+  Xbar <- mean(Xm)
+
+  # variâncias amostrais
+  S2m <- apply( X, 2, function(x) var(x))
+  
+  # S2
+  S2 <- mean(S2m)
+  
+  # sigma2 chapéu
+  sigma2 <- var(Xm)  + (n-1)*S2/n 
+  
+  # R
+  R <- sqrt( sigma2 / S2)
+  
+  return(R)
+}
+
+```
+
+</div>
+ 
+ 
+:::{#exm- .alert .alert-info}
+Vamos refazer o exemplo anterior adicionando mais trajetórias, começando em -10,-5,0,5 e 10.
+
+
+```{r}
+# simulando 5 tragetórias
+set.seed(6)
+
+
+n <- 600
+trajetorias <- array(NA, c(n,5))
+trajetorias[1,] <- c(-10, -5,0, 5, 10)
+
+for(i in 2:n){
+  trajetorias[i,1] <- k( trajetorias[i-1, 1])
+  trajetorias[i,2] <- k( trajetorias[i-1, 2])
+  trajetorias[i,3] <- k( trajetorias[i-1, 3])
+  trajetorias[i,4] <- k( trajetorias[i-1, 4])
+  trajetorias[i,5] <- k( trajetorias[i-1, 5])
+}
+
+# traceplot
+ts.plot( trajetorias, main = "Traceplot",col=1:5)
+```
+
+Como podemos ver, todas as trajetórias convergiram para a mesma distribuição estacionária. Vamos aplicar um burn-in de 300 e calcular a estatística R. 
+
+```{r}
+Rgelman( trajetorias, burnin = 300)
+```
+Como $R<1,1$, temos que evidências de que a convergência foi obtida.
+```
+:::
+
+
+<div class='alert alert-danger'>
+Cas notas de aula, analisamos a seguinte cadeia de Markov, que é reversível em relação à sua distribuição estacionária:
+
+Núcleo de Transição: $X_n | X_{n-1} = y \sim \text{Uniforme}(1-y, 1)$
+
+Distribuição Estacionária (Alvo): $\pi(x) = 2x$, para $x \in (0, 1)$.
+
+Embora tenhamos simulado uma única trajetória em aula, agora vamos usar esta cadeia como um método de simulação MCMC completo, aplicando todo o nosso ferramental de diagnóstico para gerar uma amostra final que se pareça com i.i.d.
+
+Objetivo: Gerar uma amostra final de tamanho agregado de pelo menos 1.000 que represente a distribuição $\pi(x) = 2x$, seguindo todas as boas práticas de diagnóstico.Tarefas
+
+1. Geração das Cadeias (Simulação)Gere $M=5$ cadeias de Markov independentes usando o núcleo de transição $\text{Uniforme}(1-y, 1)$. Cada cadeia deve ter $n=2000$ iterações. Armazene os resultados em uma matriz trajetorias de dimensão (2000, 5).
+
+2. Análise de Convergência (Burn-in e $\hat{R}$)Análise Visual: Gere um ts.plot() das 5 cadeias (use as primeiras 100 iterações) para inspecionar a convergência. Análise Quantitativa: Use a função Rgelman fornecida em aula. Calcule o $\hat{R}$ para as trajetorias usando um burnin = 0. Calcule o $\hat{R}$ novamente, mas agora com um burnin = 50. O valor é $< 1.1$? Com base nisso, determine um tamanho de burn-in adequado
+
+3. Análise de Dependência (Thinning) Após identificar o burn-in, pegue a primeira cadeia (coluna 1 de trajetorias) após o burn-in.Gere o gráfico da Função de Autocorrelação (acf()) para esta cadeia (pós-burn-in). Determine um intervalo de thinning ($h$) apropriado 
+
+4. Entrega da Amostra Final (Processamento) Crie sua amostra final seguindo todo o processo: Remova o burnin (que você decidiu no passo 2) de todas as 5 cadeias. Aplique o thinning (com o $h$ que você escolheu no passo 3) a todas as 5 cadeias. Junte as amostras restantes das 5 cadeias em um único vetor
+
+Verificação Final: Plote um histograma (hist(..., freq = FALSE)) da sua amostra_final. Sobreponha a curva da distribuição estacionária teórica (use curve(2*x, from=0, to=1, add = T, col = "red", lwd = 2)).  O histograma da sua simulação representa bem a distribuição-alvo $\pi(x) = 2x$?
+</div>
+

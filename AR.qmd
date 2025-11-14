@@ -5,7 +5,7 @@
 
 Considere que desejamos simular amostras da variável aleatória contínua $X$, com função densidade dada por $f(x)$. O método da aceitação/rejeição usa um simulador de uma variável aleatória com densidade $g(.)$. O objetivo é selecionar amostras simuladas de $Y$ que são estocasticamente equivalentes à $X$.Esta é uma das técnicas mais importantes de geração de números aleatórios.
 
-A ideia básica deste método é escolher uma variável $Y$ fácil de simular cuja densidade $g(.)$ satistaz 
+A ideia básica deste método é escolher uma variável $Y$ fácil de simular cuja densidade $g(.)$ satisfaz 
 
 $$f(x)\leq cg(x)$$ 
 para todo $x$, para algum c\>0. A função de densidade $g(.)$ é denominada **proposta** ou **instrumental**, enquanto que $cg(.)$ é denominada função majorante ou **envelope**.
@@ -33,11 +33,11 @@ ou seja, $(Z,Y)\sim\hbox{Uniforme}(S)$ onde
 
 $$S=\{(z,y):y\in D,0<z<cg(y)\}.$$
 
-Agora, como $c>0$ é uma constante que garante que $f(x)\leq cg(x)$ para todo $x$, teremos que $V\subset S$, onde
+Agora, como $c\geq 1$ é uma constante que garante que $f(x)\leq cg(x)$ para todo $x$, teremos que $V\subset S$, onde
 
 $$V=\{(z,y):y\in D,0<z<f(y)\}.$$
 
-Logo, $(Z,Y)|(Z,Y)\in V\sim\hbox{Uniforme}(V)$ e, portanto, $Y|(Z,Y)\sim f(.).$
+Logo, $(Z,Y)|(Z,Y)\in V\sim\hbox{Uniforme}(V)$ e, portanto,  $Y|(Z,Y)\in V\sim f(.).$
 
 Note que o método da aceitação/rejeição é uma aplicação direta do método da uniforme multivariada com marginais não uniformes. Lembremos que a probabilidade de aceitar um par simulado é
 
@@ -66,9 +66,9 @@ curve(1.53*dt(x,1),add = T, col =2, lwd= 2)
 
 Considere o problema de simular de $X\sim$Normal(0,1) através do método da aceitação/rejeição utilizando como proposta a distribuição Laplace($a$), cuja função densidade é dada por
 
-$$g(y)=\frac{a}{2}e^{−a|x|},$$
+$$g(y)=\frac{a}{2}e^{−a|y|},$$
 
-com $x\in\mathbb{R}$ e $a>0$. Note que é fácil simular de $Y$ pois
+com $y\in\mathbb{R}$ e $a>0$. Note que é fácil simular de $Y$ pois
 
 $$G(y)=\left\{\begin{array}{ll}\frac{1}{2}e^{ay},& y\leq 0 \\ 1−\frac{1}{2}e^{−ay},&y>0\end{array}\right.$$
 
@@ -90,8 +90,15 @@ Fazendo $c=1,3155$, teremos que o número médio de tentativas até o primeiro a
 
 r_Laplace <- function(){
   u <- runif(1)
-  ifelse( u< .5, x <- log(2*u), x<- -log(2*(1-u)))    
-}  # simulador da Normal(0,1) usando Laplace(0,1) como proposta  
+  if (u < 0.5) {
+    x <- log(2*u) 
+  } else {
+    x <- -log(2*(1-u))
+  }
+  return(x)
+} 
+
+# simulador da Normal(0,1) usando Laplace(0,1) como proposta  
 
 # simulador da normal via método AR (proposta Laplace)
 
@@ -171,7 +178,7 @@ c. Calcule $c^*$: Qual é o valor da constante $c$ (e a probabilidade de aceita�
 
 ## Construindo a densidade proposta com uma função linear por partes
 
-No método da aceitação/rejeição para simular uma amostra se $f$, devemos encontrar uma função de densidade $g$, fácil de simular, que satisfaça
+No método da aceitação/rejeição para simular uma amostra de $f$, devemos encontrar uma função de densidade $g$, fácil de simular, que satisfaça
 
 $$f(x)\leq cg(x)$$
 
@@ -213,8 +220,8 @@ $$c_j=c_{j-1}+\frac{A_{j-1}}{c}.$$
 
 1. Gere $u\sim\hbox{Uniforme}(0,1)$
 
-2. Determine $j$ tal que $c_{j}<u<c_{j+1}$. O valor de $x$ simulado é a raiz, dentro de $[t_j,t_{j+1}]$, da equação 
-$$\frac{m_j}{2c}x^2+\frac{d_j}{c}x+\left[\frac{t_jd_j}{c}-\frac{m_jt_j^2}{2c}+c_{j-1}-u\right].$$
+2. 
+2. Determine $j$ tal que $c_{j}<u<c_{j+1}$. O valor de $x$ simulado é a raiz, dentro de $[t_j,t_{j+1}]$, da equação $G(x)=u$. Como $G(x)$ é quadrática em $x$ neste intervalo, podemos encontrar $x$ resolvendo a equação $Ax^2+Bx+C=0$.
 
 Após ter $x$ gerado pela proposta, podemos fazer o passo de aceitação rejeição:
 
@@ -429,21 +436,21 @@ com $x\in(-1/4,1/4)$, construa uma função envelope e simule uma amostra de tam
 
 
 <div class='alert alert-danger'>
-**Exercício.** Mostramos como utilizar o método A/R com o envelope linear por partes quando $X$ está limitado a um intervalo $[a,b]$. Quando $X$ está um um intervalo de comprimento finito, realizamos um truncamento. Para ilustrar, considere que desejamos simular de
+**Exercício.** Mostramos como utilizar o método A/R com o envelope linear por partes quando $X$ está limitado a um intervalo $[a,b]$. Quando $X$ está em um intervalo de comprimento infinito, realizamos um truncamento. Para ilustrar, considere que desejamos simular de
 
 $$f(x)=x e^{-x},$$
 com $x\in(0,\infty)$.
 
 a. **Truncamento.** utilizando os métodos computacionais discutidos no Capítulo 1, encontre o valor $b$ tal que
 $$\int_0^b f(x)dx=\tau,$$
-onde $\tau$ é escolhido para ser representativo para a distribuição. Assuma que  $100\tau\%=99,9999\%$, o que implica que estamos ignorando eventuais pontos no intervalo $[b,\infty)$, que ocorrem com probabilidade $1-\tau=0,0000001$.
+onde $\tau$ é escolhido para ser representativo para a distribuição. Assuma que  $100\tau\%=99,9999\%$, o que implica que estamos ignorando eventuais pontos no intervalo $(b,\infty)$, que ocorrem com probabilidade $1-\tau=0,0000001$.
 
 b. **Simulação**.Utilize o método A/R com envelope linear por partes, considerando intervalo $[a,b]$.
 </div>
 
 ## O método da aceitação/rejeição adaptativo
 
-Nessa seção, introduzimos o conceito de função densidade log-côncava. Para essas distribuições, mostramso que é possível construir uma densidade proposta dinamicamente.
+Nessa seção, introduzimos o conceito de função densidade log-côncava. Para essas distribuições, mostramos que é possível construir uma densidade proposta dinamicamente.
 
 
 ### Distribuição log-côncava
@@ -469,26 +476,28 @@ lines( seq(1,2,length = 100),  log(seq(1,2,length = 100)), col = 4, lwd = 2)
 segments( 1,log(1),2,log(2), col = 2, lwd = 2)
 ```
 
-Se $\psi(.)$ é diferenciável duas vezes, então ela é côncava se e somente se sua segunda derivda é não-positiva.
+Se $\psi(.)$ é diferenciável duas vezes, então ela é côncava se e somente se sua segunda derivada é não-positiva.
 
 Dizemos que uma densidade é log-côncava se ela pode ser expressada como
 
 $$f(x)=e^{\psi(x)},$$
-onde $\psi(.)$ é uma função côncava. Existem muitas distribuições com esta propriedade. Por exemplo, distribuição Normal(0,1) é escrita como,
+onde $\psi(.)$ é uma função côncava. Existem muitas distribuições com esta propriedade. Por exemplo, distribuição Normal(0,1) pode ser escrita como,
 
 $$f(x)\propto e^{\psi(x)},$$
 onde $\psi(x)=-\frac{x^2}{2}$. A derivada segunda de $\psi(x)$ é igual a -1, logo a densidade da normal padrão é log-côncava.
 
 
-### Médoto da aceitação/rejeição adaptativo
+### Método da aceitação/rejeição adaptativo
+
 
 Para uma densidade log-côncava qualquer, considere que existe $c$ tal que, para certa densidade proposta $g(x)$,
 
 $$\frac{f(x)}{g(x)}=\frac{e^{\psi(x)}}{g(x)}\leq c$$
 então,
-$$\log\left(\frac{f(x)}{g(x)}\right)\leq \log c\Rightarrow \psi(x)-\log g(x) \leq M \Rightarrow \psi(x)\leq \underbrace{\log g(x)-\log c}_{u(x)}.$$
+$$\log\left(\frac{f(x)}{g(x)}\right)\leq \log c\Rightarrow \psi(x)-\log g(x) \leq \log c \Rightarrow \psi(x)\leq \underbrace{\log g(x)-\log c}_{u(x)}.$$
 
-No método A/R adaptativo, a proposta $g(.)$ é construída através de $u(x)$, tal que $\psi(x)\leq u(x)$  para todo $x$.
+A ideia é construir um envelope $u(x)$ para $\psi(x)$ que seja linear por partes, tal que $\psi(x) \leq u(x)$ para todo $x$. Definimos então o envelope $g^*(x) = e^{u(x)}$. Como $\psi(x) \le u(x)$, temos $e^{\psi(x)} \le e^{u(x)}$, o que implica $f(x) \le g^*(x)$.
+A densidade proposta é então $g(x) = g^*(x) / c$, onde $c = \int g^*(t)dt$.
 
 Para entender o método, seja
 
@@ -566,9 +575,9 @@ Para utilizar a fórmula acima, devemos determinar se $x\in (z_0,z_1]$ ou $x\in(
 
 3. Use a fórmula (1) para encontrar $x$.
 
-Mostramos como criar uma proposta utilizando apenas 2 pontos, dados por $(x_1,x_2)$. Claramente poderíamos ter feito isto com mais pontos, mas podemos ter dificuldade em determinar quais pontos são úteis. O método A/R Adaptativo consiste em rescontruir a proposta para cada novo ponto aceito. 
+Mostramos como criar uma proposta utilizando apenas 2 pontos, dados por $(x_1,x_2)$. Claramente poderíamos ter feito isto com mais pontos, mas podemos ter dificuldade em determinar quais pontos são úteis. O método A/R Adaptativo consiste em reconstruir a proposta para cada novo ponto aceito. 
 
-Considere inicialmente os dois pontos dados acima, $(x_1,x_2)$. Após a construção do envelope, suponha que o ponto $y$ foi aceito. Então, construímos o vetor $(x_1,x_2,y)$, o colocamos em ordem crescente e o denotamos por $(x_1,x_2,x_3)$. Agora teremos 3 retas tangentes a este ponto, gerando o novo *upper hull*, conforme ilustrado nas figuras abaixo.  
+Considere inicialmente os dois pontos dados acima, $(x_1,x_2)$. Após a construção do envelope, suponha que o ponto $y$ foi aceito. Então, construímos o vetor $(x_1,x_2,y)$, o colocamos em ordem crescente e o denotamos por $(x_1,x_2,x_3)$. Agora teremos 3 retas tangentes a estes pontos, gerando o novo *upper hull*, conforme ilustrado nas figuras abaixo.  
 
 
 ```{r, echo = FALSE}
@@ -607,6 +616,53 @@ segments(x01,y01,3,-9/2, lwd = 2, col =2)
 segments(x03,-9/2,x03,y03, lty =2, col=2)
 segments(x01,-9/2,x01,y01, lty =2, col=2)
 ```
-Novamente, teremos a função $u(x)$ linear por partes e um novo simulador da proposta será construído
+
+Novamente, teremos a função $u(x)$ linear por partes e um novo simulador da proposta será construído. Esse procedimento é repetido diversas vezes, de tal modo que a proposta converge para a distribuição alvo $f(x)$.
+
+:::{#exm- .alert .alert-info} 
+**O método A/R adaptativo para a distribuição normal.**
+
+O pacote `ars` foi implementado para realizar simulações baseadas no algoritmo da aceitação/rejeição adaptativo. Vamos ilustrar seu uso na simulação de amostras da
+distribuição Normal(0,1).
+
+Recordemos que a função densidade da Normal(0,1) é
+
+$$f(x)=\frac{1}{\sqrt{2\pi}}e^{-x^2/2}.$$
+A função `ars` (do pacote de mesmo nome) do logaritmo de núcleo da densidade em questão e de sua respectiva derivada. No nosso caso, vamos precisar de
+
+$$\log f(x)=-\frac{1}{2}\log(2\pi) -\frac{x^2}{2}$$
+e
+
+$$\frac{d}{dx}\log f(x)=-x$$
+ Seguem as implementações de  $\logf(x)$ e $d\log f(x)/dx$:
+
+```{r}
+log_normal <- function(x) -.5*log(2*pi) -x^2/2
+derivada_log_normal <- function(x) -x  
+```
+
+Com a função acima implementada, vamos procurar os pontos iniciais para aplicar o método da aceitação/rejeição adaptativo. Fazemos isso escolhendo vários valores arbitrários que devem retornar $d\log f(x)dx$ com sinais opostos. A escolha dos pontos $\{-3,-1,2,3,4\}$ satisfaz esse requisito (evite valores tais que $\psi'(x)\approx 0$, para não ter problemas de arredondamento de ponto flutuante). Podemos então executar o amostrador.
+
+```{r}
+# Instalar o pacote (se ainda não o tiver)
+# install.packages("ars")
+library(ars)
+
+n <- 5000 # número de simulações
+amostras <- ars(n, f = log_normal, fprima = derivada_log_normal,  x = c(-3,-1,2,3,4))
+
+hist(amostras, freq = FALSE, main = "Amostras via 'ars'")
+curve(dnorm(x), add = TRUE, col = "blue", lwd = 2)
+```
+
+:::
 
 
+<div class='alert alert-danger'>
+**Exercício.** Dizemos que $X$ tem distribuição Gama($a,b$) se sua função densidade é dada por
+
+$$f(x)=\frac{b^a}{\Gamma(a)}x^{a-1}e^{-bx}.$$
+Mostre que
+$$f(x)\propto e^{\psi(x)},$$
+onde $\psi(x)=-bx+(a-1)\log(x)$. Em seguida, prove que $\psi(x)$ é côncava, se e somente se $a\geq 1$. Por último, utilize o método da aceitação/rejeição adaptativo para simular uma amostra de tamanho 5000 da distribuição Gama(7/3, 5).
+</div>

@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./provas.html" rel="next">
+<link href="./mcmc.html" rel="next">
 <link href="./uniforme_multivariada.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -227,8 +227,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./mcmc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Método de Monte Carlo via Cadeias de Markov</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./provas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
   </div>
 </li>
     </ul>
@@ -246,7 +252,7 @@ window.Quarto = {
   <li><a href="#o-método-da-aceitaçãorejeição-adaptativo" id="toc-o-método-da-aceitaçãorejeição-adaptativo" class="nav-link" data-scroll-target="#o-método-da-aceitaçãorejeição-adaptativo"><span class="header-section-number">7.3</span> O método da aceitação/rejeição adaptativo</a>
   <ul class="collapse">
   <li><a href="#distribuição-log-côncava" id="toc-distribuição-log-côncava" class="nav-link" data-scroll-target="#distribuição-log-côncava"><span class="header-section-number">7.3.1</span> Distribuição log-côncava</a></li>
-  <li><a href="#médoto-da-aceitaçãorejeição-adaptativo" id="toc-médoto-da-aceitaçãorejeição-adaptativo" class="nav-link" data-scroll-target="#médoto-da-aceitaçãorejeição-adaptativo"><span class="header-section-number">7.3.2</span> Médoto da aceitação/rejeição adaptativo</a></li>
+  <li><a href="#método-da-aceitaçãorejeição-adaptativo" id="toc-método-da-aceitaçãorejeição-adaptativo" class="nav-link" data-scroll-target="#método-da-aceitaçãorejeição-adaptativo"><span class="header-section-number">7.3.2</span> Método da aceitação/rejeição adaptativo</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -276,7 +282,7 @@ window.Quarto = {
 <section id="introdução-ao-método" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="introdução-ao-método"><span class="header-section-number">7.1</span> Introdução ao método</h2>
 <p>Considere que desejamos simular amostras da variável aleatória contínua <span class="math inline">\(X\)</span>, com função densidade dada por <span class="math inline">\(f(x)\)</span>. O método da aceitação/rejeição usa um simulador de uma variável aleatória com densidade <span class="math inline">\(g(.)\)</span>. O objetivo é selecionar amostras simuladas de <span class="math inline">\(Y\)</span> que são estocasticamente equivalentes à <span class="math inline">\(X\)</span>.Esta é uma das técnicas mais importantes de geração de números aleatórios.</p>
-<p>A ideia básica deste método é escolher uma variável <span class="math inline">\(Y\)</span> fácil de simular cuja densidade <span class="math inline">\(g(.)\)</span> satistaz</p>
+<p>A ideia básica deste método é escolher uma variável <span class="math inline">\(Y\)</span> fácil de simular cuja densidade <span class="math inline">\(g(.)\)</span> satisfaz</p>
 <p><span class="math display">\[f(x)\leq cg(x)\]</span> para todo <span class="math inline">\(x\)</span>, para algum c&gt;0. A função de densidade <span class="math inline">\(g(.)\)</span> é denominada <strong>proposta</strong> ou <strong>instrumental</strong>, enquanto que <span class="math inline">\(cg(.)\)</span> é denominada função majorante ou <strong>envelope</strong>.</p>
 <div class="alert alert-success">
 <p><strong>Algoritmo. Método da aceitação/rejeição</strong></p>
@@ -291,9 +297,9 @@ window.Quarto = {
 <p><span class="math display">\[f_{Z,Y}(z,y)=f_{Z|Y}(z)g(y)=\frac{1}{cg(y)}I(0&lt;z&lt;cg(y))g(y)=\frac{1}{c}I_S((z,y))\]</span></p>
 <p>ou seja, <span class="math inline">\((Z,Y)\sim\hbox{Uniforme}(S)\)</span> onde</p>
 <p><span class="math display">\[S=\{(z,y):y\in D,0&lt;z&lt;cg(y)\}.\]</span></p>
-<p>Agora, como <span class="math inline">\(c&gt;0\)</span> é uma constante que garante que <span class="math inline">\(f(x)\leq cg(x)\)</span> para todo <span class="math inline">\(x\)</span>, teremos que <span class="math inline">\(V\subset S\)</span>, onde</p>
+<p>Agora, como <span class="math inline">\(c\geq 1\)</span> é uma constante que garante que <span class="math inline">\(f(x)\leq cg(x)\)</span> para todo <span class="math inline">\(x\)</span>, teremos que <span class="math inline">\(V\subset S\)</span>, onde</p>
 <p><span class="math display">\[V=\{(z,y):y\in D,0&lt;z&lt;f(y)\}.\]</span></p>
-<p>Logo, <span class="math inline">\((Z,Y)|(Z,Y)\in V\sim\hbox{Uniforme}(V)\)</span> e, portanto, <span class="math inline">\(Y|(Z,Y)\sim f(.).\)</span></p>
+<p>Logo, <span class="math inline">\((Z,Y)|(Z,Y)\in V\sim\hbox{Uniforme}(V)\)</span> e, portanto, <span class="math inline">\(Y|(Z,Y)\in V\sim f(.).\)</span></p>
 <p>Note que o método da aceitação/rejeição é uma aplicação direta do método da uniforme multivariada com marginais não uniformes. Lembremos que a probabilidade de aceitar um par simulado é</p>
 <p><span class="math display">\[\frac{Vol(V)}{Vol(S)}=\frac{1}{c},\]</span></p>
 <p>então quanto mais próximo o envelope <span class="math inline">\(cg(.)\)</span> está de <span class="math inline">\(f(.)\)</span>, melhor é o método AR. A figura abaixo ilustra os conceitos vistos até aqui.</p>
@@ -309,8 +315,8 @@ window.Quarto = {
 </div>
 <div id="exm-" class="alert alert-info theorem example">
 <p><span class="theorem-title"><strong>Example 7.1</strong></span> Considere o problema de simular de <span class="math inline">\(X\sim\)</span>Normal(0,1) através do método da aceitação/rejeição utilizando como proposta a distribuição Laplace(<span class="math inline">\(a\)</span>), cuja função densidade é dada por</p>
-<p><span class="math display">\[g(y)=\frac{a}{2}e^{−a|x|},\]</span></p>
-<p>com <span class="math inline">\(x\in\mathbb{R}\)</span> e <span class="math inline">\(a&gt;0\)</span>. Note que é fácil simular de <span class="math inline">\(Y\)</span> pois</p>
+<p><span class="math display">\[g(y)=\frac{a}{2}e^{−a|y|},\]</span></p>
+<p>com <span class="math inline">\(y\in\mathbb{R}\)</span> e <span class="math inline">\(a&gt;0\)</span>. Note que é fácil simular de <span class="math inline">\(Y\)</span> pois</p>
 <p><span class="math display">\[G(y)=\left\{\begin{array}{ll}\frac{1}{2}e^{ay},&amp; y\leq 0 \\ 1−\frac{1}{2}e^{−ay},&amp;y&gt;0\end{array}\right.\]</span></p>
 <p>o que implica em</p>
 <p><span class="math display">\[G^{−1}(u)=\left\{\begin{array}{ll}\frac{\log(2u)}{a},&amp; u\leq \frac{1}{2}\\ -\frac{\log(2(1−u))}{a},&amp; u&gt;\frac{1}{2}\end{array}\right.\]</span></p>
@@ -323,26 +329,33 @@ window.Quarto = {
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>r_Laplace <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>( u<span class="sc">&lt;</span> .<span class="dv">5</span>, x <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>u), x<span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>u)))    </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}  <span class="co"># simulador da Normal(0,1) usando Laplace(0,1) como proposta  </span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># simulador da normal via método AR (proposta Laplace)</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>r_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="cn">NA</span>      </span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>( <span class="fu">is.na</span>(x)){     </span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># gerando um candidato     </span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="fu">r_Laplace</span>()  </span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># razao f/c*g     </span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    razao <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">/</span>pi)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>.<span class="dv">5</span><span class="sc">*</span>y<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">abs</span>(y) )<span class="sc">/</span><span class="fl">1.3155</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># verificando se o candidato é aceito     </span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(  u <span class="sc">&lt;</span> razao){ x <span class="ot">&lt;-</span> y}</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  }  </span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>}  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (u <span class="sc">&lt;</span> <span class="fl">0.5</span>) {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>u) </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>u))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># simulador da Normal(0,1) usando Laplace(0,1) como proposta  </span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># simulador da normal via método AR (proposta Laplace)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>r_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="cn">NA</span>      </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>( <span class="fu">is.na</span>(x)){     </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># gerando um candidato     </span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="fu">r_Laplace</span>()  </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># razao f/c*g     </span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    razao <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">/</span>pi)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>.<span class="dv">5</span><span class="sc">*</span>y<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">abs</span>(y) )<span class="sc">/</span><span class="fl">1.3155</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># verificando se o candidato é aceito     </span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(  u <span class="sc">&lt;</span> razao){ x <span class="ot">&lt;-</span> y}</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  }  </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>}  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Abaixo ilustramos o algoritmo acima com uma amostra simulada de tamanho 1.000.</p>
 <div class="cell">
@@ -392,7 +405,7 @@ window.Quarto = {
 </section>
 <section id="construindo-a-densidade-proposta-com-uma-função-linear-por-partes" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="construindo-a-densidade-proposta-com-uma-função-linear-por-partes"><span class="header-section-number">7.2</span> Construindo a densidade proposta com uma função linear por partes</h2>
-<p>No método da aceitação/rejeição para simular uma amostra se <span class="math inline">\(f\)</span>, devemos encontrar uma função de densidade <span class="math inline">\(g\)</span>, fácil de simular, que satisfaça</p>
+<p>No método da aceitação/rejeição para simular uma amostra de <span class="math inline">\(f\)</span>, devemos encontrar uma função de densidade <span class="math inline">\(g\)</span>, fácil de simular, que satisfaça</p>
 <p><span class="math display">\[f(x)\leq cg(x)\]</span></p>
 <p>para algum <span class="math inline">\(c&gt;0\)</span> e para todo <span class="math inline">\(x\)</span> no suporte de <span class="math inline">\(f\)</span>. Agora, seja <span class="math inline">\(g^∗(.)\)</span> uma função real positiva que satisfaz</p>
 <p><span class="math display">\[f(x)\leq g^*(x),\]</span></p>
@@ -413,7 +426,8 @@ window.Quarto = {
 <p><span class="math display">\[A_j=\int_{t_{j}}^{t_{j+1}}(m_j x +d_j)dx=\frac{1}{2}m_j(t_{j+1}^2-t_{j} ^2)+d_j(t_{j+1}-t_{j})\]</span> e calcule <span class="math inline">\(c=\sum_{i=0}^{n-1}A_i\)</span>. Faça <span class="math inline">\(c_0=0\)</span> e, para <span class="math inline">\(j=1,\ldots,n\)</span>, calcule <span class="math display">\[c_j=c_{j-1}+\frac{A_{j-1}}{c}.\]</span></p>
 <ol type="1">
 <li><p>Gere <span class="math inline">\(u\sim\hbox{Uniforme}(0,1)\)</span></p></li>
-<li><p>Determine <span class="math inline">\(j\)</span> tal que <span class="math inline">\(c_{j}&lt;u&lt;c_{j+1}\)</span>. O valor de <span class="math inline">\(x\)</span> simulado é a raiz, dentro de <span class="math inline">\([t_j,t_{j+1}]\)</span>, da equação <span class="math display">\[\frac{m_j}{2c}x^2+\frac{d_j}{c}x+\left[\frac{t_jd_j}{c}-\frac{m_jt_j^2}{2c}+c_{j-1}-u\right].\]</span></p></li>
+<li></li>
+<li><p>Determine <span class="math inline">\(j\)</span> tal que <span class="math inline">\(c_{j}&lt;u&lt;c_{j+1}\)</span>. O valor de <span class="math inline">\(x\)</span> simulado é a raiz, dentro de <span class="math inline">\([t_j,t_{j+1}]\)</span>, da equação <span class="math inline">\(G(x)=u\)</span>. Como <span class="math inline">\(G(x)\)</span> é quadrática em <span class="math inline">\(x\)</span> neste intervalo, podemos encontrar <span class="math inline">\(x\)</span> resolvendo a equação <span class="math inline">\(Ax^2+Bx+C=0\)</span>.</p></li>
 </ol>
 <p>Após ter <span class="math inline">\(x\)</span> gerado pela proposta, podemos fazer o passo de aceitação rejeição:</p>
 <ol type="1">
@@ -600,7 +614,7 @@ window.Quarto = {
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">#% de aceitação</span></span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>aceitos<span class="sc">/</span>tentativas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.7876497</code></pre>
+<pre><code>[1] 0.7845599</code></pre>
 </div>
 </div>
 <p>Abaixo, segue o histograma das simulações em conjunto com a densidade de <span class="math inline">\(X\)</span>.</p>
@@ -622,17 +636,17 @@ window.Quarto = {
 <p><span class="math display">\[f(x)=\frac{16\pi^3}{\pi^2 - 8}x^2\cos(2\pi x),\]</span> com <span class="math inline">\(x\in(-1/4,1/4)\)</span>, construa uma função envelope e simule uma amostra de tamanho 5.000 de <span class="math inline">\(f(x)\)</span> uitilizando o método da aceitação/rejeição.</p>
 </div>
 <div class="alert alert-danger">
-<p><strong>Exercício.</strong> Mostramos como utilizar o método A/R com o envelope linear por partes quando <span class="math inline">\(X\)</span> está limitado a um intervalo <span class="math inline">\([a,b]\)</span>. Quando <span class="math inline">\(X\)</span> está um um intervalo de comprimento finito, realizamos um truncamento. Para ilustrar, considere que desejamos simular de</p>
+<p><strong>Exercício.</strong> Mostramos como utilizar o método A/R com o envelope linear por partes quando <span class="math inline">\(X\)</span> está limitado a um intervalo <span class="math inline">\([a,b]\)</span>. Quando <span class="math inline">\(X\)</span> está em um intervalo de comprimento infinito, realizamos um truncamento. Para ilustrar, considere que desejamos simular de</p>
 <p><span class="math display">\[f(x)=x e^{-x},\]</span> com <span class="math inline">\(x\in(0,\infty)\)</span>.</p>
 <ol type="a">
-<li><p><strong>Truncamento.</strong> utilizando os métodos computacionais discutidos no Capítulo 1, encontre o valor <span class="math inline">\(b\)</span> tal que <span class="math display">\[\int_0^b f(x)dx=\tau,\]</span> onde <span class="math inline">\(\tau\)</span> é escolhido para ser representativo para a distribuição. Assuma que <span class="math inline">\(100\tau\%=99,9999\%\)</span>, o que implica que estamos ignorando eventuais pontos no intervalo <span class="math inline">\([b,\infty)\)</span>, que ocorrem com probabilidade <span class="math inline">\(1-\tau=0,0000001\)</span>.</p></li>
+<li><p><strong>Truncamento.</strong> utilizando os métodos computacionais discutidos no Capítulo 1, encontre o valor <span class="math inline">\(b\)</span> tal que <span class="math display">\[\int_0^b f(x)dx=\tau,\]</span> onde <span class="math inline">\(\tau\)</span> é escolhido para ser representativo para a distribuição. Assuma que <span class="math inline">\(100\tau\%=99,9999\%\)</span>, o que implica que estamos ignorando eventuais pontos no intervalo <span class="math inline">\((b,\infty)\)</span>, que ocorrem com probabilidade <span class="math inline">\(1-\tau=0,0000001\)</span>.</p></li>
 <li><p><strong>Simulação</strong>.Utilize o método A/R com envelope linear por partes, considerando intervalo <span class="math inline">\([a,b]\)</span>.</p></li>
 </ol>
 </div>
 </section>
 <section id="o-método-da-aceitaçãorejeição-adaptativo" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="o-método-da-aceitaçãorejeição-adaptativo"><span class="header-section-number">7.3</span> O método da aceitação/rejeição adaptativo</h2>
-<p>Nessa seção, introduzimos o conceito de função densidade log-côncava. Para essas distribuições, mostramso que é possível construir uma densidade proposta dinamicamente.</p>
+<p>Nessa seção, introduzimos o conceito de função densidade log-côncava. Para essas distribuições, mostramos que é possível construir uma densidade proposta dinamicamente.</p>
 <section id="distribuição-log-côncava" class="level3" data-number="7.3.1">
 <h3 data-number="7.3.1" class="anchored" data-anchor-id="distribuição-log-côncava"><span class="header-section-number">7.3.1</span> Distribuição log-côncava</h3>
 <p>Dizemos que a função <span class="math inline">\(\psi(x)\)</span> é côncava no domínio <span class="math inline">\(D\)</span> se, para qualquer par <span class="math inline">\((x,y)\in D\)</span> e para qualquer <span class="math inline">\(a\in(0,1)\)</span></p>
@@ -647,16 +661,16 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Se <span class="math inline">\(\psi(.)\)</span> é diferenciável duas vezes, então ela é côncava se e somente se sua segunda derivda é não-positiva.</p>
+<p>Se <span class="math inline">\(\psi(.)\)</span> é diferenciável duas vezes, então ela é côncava se e somente se sua segunda derivada é não-positiva.</p>
 <p>Dizemos que uma densidade é log-côncava se ela pode ser expressada como</p>
-<p><span class="math display">\[f(x)=e^{\psi(x)},\]</span> onde <span class="math inline">\(\psi(.)\)</span> é uma função côncava. Existem muitas distribuições com esta propriedade. Por exemplo, distribuição Normal(0,1) é escrita como,</p>
+<p><span class="math display">\[f(x)=e^{\psi(x)},\]</span> onde <span class="math inline">\(\psi(.)\)</span> é uma função côncava. Existem muitas distribuições com esta propriedade. Por exemplo, distribuição Normal(0,1) pode ser escrita como,</p>
 <p><span class="math display">\[f(x)\propto e^{\psi(x)},\]</span> onde <span class="math inline">\(\psi(x)=-\frac{x^2}{2}\)</span>. A derivada segunda de <span class="math inline">\(\psi(x)\)</span> é igual a -1, logo a densidade da normal padrão é log-côncava.</p>
 </section>
-<section id="médoto-da-aceitaçãorejeição-adaptativo" class="level3" data-number="7.3.2">
-<h3 data-number="7.3.2" class="anchored" data-anchor-id="médoto-da-aceitaçãorejeição-adaptativo"><span class="header-section-number">7.3.2</span> Médoto da aceitação/rejeição adaptativo</h3>
+<section id="método-da-aceitaçãorejeição-adaptativo" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="método-da-aceitaçãorejeição-adaptativo"><span class="header-section-number">7.3.2</span> Método da aceitação/rejeição adaptativo</h3>
 <p>Para uma densidade log-côncava qualquer, considere que existe <span class="math inline">\(c\)</span> tal que, para certa densidade proposta <span class="math inline">\(g(x)\)</span>,</p>
-<p><span class="math display">\[\frac{f(x)}{g(x)}=\frac{e^{\psi(x)}}{g(x)}\leq c\]</span> então, <span class="math display">\[\log\left(\frac{f(x)}{g(x)}\right)\leq \log c\Rightarrow \psi(x)-\log g(x) \leq M \Rightarrow \psi(x)\leq \underbrace{\log g(x)-\log c}_{u(x)}.\]</span></p>
-<p>No método A/R adaptativo, a proposta <span class="math inline">\(g(.)\)</span> é construída através de <span class="math inline">\(u(x)\)</span>, tal que <span class="math inline">\(\psi(x)\leq u(x)\)</span> para todo <span class="math inline">\(x\)</span>.</p>
+<p><span class="math display">\[\frac{f(x)}{g(x)}=\frac{e^{\psi(x)}}{g(x)}\leq c\]</span> então, <span class="math display">\[\log\left(\frac{f(x)}{g(x)}\right)\leq \log c\Rightarrow \psi(x)-\log g(x) \leq \log c \Rightarrow \psi(x)\leq \underbrace{\log g(x)-\log c}_{u(x)}.\]</span></p>
+<p>A ideia é construir um envelope <span class="math inline">\(u(x)\)</span> para <span class="math inline">\(\psi(x)\)</span> que seja linear por partes, tal que <span class="math inline">\(\psi(x) \leq u(x)\)</span> para todo <span class="math inline">\(x\)</span>. Definimos então o envelope <span class="math inline">\(g^*(x) = e^{u(x)}\)</span>. Como <span class="math inline">\(\psi(x) \le u(x)\)</span>, temos <span class="math inline">\(e^{\psi(x)} \le e^{u(x)}\)</span>, o que implica <span class="math inline">\(f(x) \le g^*(x)\)</span>. A densidade proposta é então <span class="math inline">\(g(x) = g^*(x) / c\)</span>, onde <span class="math inline">\(c = \int g^*(t)dt\)</span>.</p>
 <p>Para entender o método, seja</p>
 <p><span class="math display">\[\psi'(x)=\frac{d}{dx}\psi(x).\]</span></p>
 <p>O sinal da derivada primeira dá o sentido da reta que passa tangente ao ponto. Considere os seguintes pontos <span class="math inline">\(x_1,x_2\)</span>, escolhidos de modo harbitrário, mas que satisfazem <span class="math inline">\(\psi'(x_1)&gt;0\)</span> e <span class="math inline">\(\psi'(x_2)&lt;0\)</span>. Em seguida, encontre as duas retas tangentes a estes pontos. Abaixo ilustramos a ideia.</p>
@@ -695,8 +709,8 @@ x=\frac{1}{b_k}\log\left( \frac{N b_k}{e^{a_k}}\left[u-G(z_{k-1})\right] +e^{b_k
 <li><p>Se <span class="math inline">\(u&lt;G(z_1)\)</span>, faça <span class="math inline">\(k=1\)</span>. Em caso contrário faça <span class="math inline">\(z=2\)</span></p></li>
 <li><p>Use a fórmula (1) para encontrar <span class="math inline">\(x\)</span>.</p></li>
 </ol>
-<p>Mostramos como criar uma proposta utilizando apenas 2 pontos, dados por <span class="math inline">\((x_1,x_2)\)</span>. Claramente poderíamos ter feito isto com mais pontos, mas podemos ter dificuldade em determinar quais pontos são úteis. O método A/R Adaptativo consiste em rescontruir a proposta para cada novo ponto aceito.</p>
-<p>Considere inicialmente os dois pontos dados acima, <span class="math inline">\((x_1,x_2)\)</span>. Após a construção do envelope, suponha que o ponto <span class="math inline">\(y\)</span> foi aceito. Então, construímos o vetor <span class="math inline">\((x_1,x_2,y)\)</span>, o colocamos em ordem crescente e o denotamos por <span class="math inline">\((x_1,x_2,x_3)\)</span>. Agora teremos 3 retas tangentes a este ponto, gerando o novo <em>upper hull</em>, conforme ilustrado nas figuras abaixo.</p>
+<p>Mostramos como criar uma proposta utilizando apenas 2 pontos, dados por <span class="math inline">\((x_1,x_2)\)</span>. Claramente poderíamos ter feito isto com mais pontos, mas podemos ter dificuldade em determinar quais pontos são úteis. O método A/R Adaptativo consiste em reconstruir a proposta para cada novo ponto aceito.</p>
+<p>Considere inicialmente os dois pontos dados acima, <span class="math inline">\((x_1,x_2)\)</span>. Após a construção do envelope, suponha que o ponto <span class="math inline">\(y\)</span> foi aceito. Então, construímos o vetor <span class="math inline">\((x_1,x_2,y)\)</span>, o colocamos em ordem crescente e o denotamos por <span class="math inline">\((x_1,x_2,x_3)\)</span>. Agora teremos 3 retas tangentes a estes pontos, gerando o novo <em>upper hull</em>, conforme ilustrado nas figuras abaixo.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -706,7 +720,44 @@ x=\frac{1}{b_k}\log\left( \frac{N b_k}{e^{a_k}}\left[u-G(z_{k-1})\right] +e^{b_k
 </div>
 </div>
 </div>
-<p>Novamente, teremos a função <span class="math inline">\(u(x)\)</span> linear por partes e um novo simulador da proposta será construído</p>
+<p>Novamente, teremos a função <span class="math inline">\(u(x)\)</span> linear por partes e um novo simulador da proposta será construído. Esse procedimento é repetido diversas vezes, de tal modo que a proposta converge para a distribuição alvo <span class="math inline">\(f(x)\)</span>.</p>
+<div id="exm-" class="alert alert-info theorem example">
+<p><span class="theorem-title"><strong>Example 7.3</strong></span> <strong>O método A/R adaptativo para a distribuição normal.</strong></p>
+<p>O pacote <code>ars</code> foi implementado para realizar simulações baseadas no algoritmo da aceitação/rejeição adaptativo. Vamos ilustrar seu uso na simulação de amostras da distribuição Normal(0,1).</p>
+<p>Recordemos que a função densidade da Normal(0,1) é</p>
+<p><span class="math display">\[f(x)=\frac{1}{\sqrt{2\pi}}e^{-x^2/2}.\]</span> A função <code>ars</code> (do pacote de mesmo nome) do logaritmo de núcleo da densidade em questão e de sua respectiva derivada. No nosso caso, vamos precisar de</p>
+<p><span class="math display">\[\log f(x)=-\frac{1}{2}\log(2\pi) -\frac{x^2}{2}\]</span> e</p>
+<p><span class="math display">\[\frac{d}{dx}\log f(x)=-x\]</span> Seguem as implementações de <span class="math inline">\(\logf(x)\)</span> e <span class="math inline">\(d\log f(x)/dx\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>log_normal <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="sc">-</span>.<span class="dv">5</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>pi) <span class="sc">-</span>x<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>derivada_log_normal <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="sc">-</span>x  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Com a função acima implementada, vamos procurar os pontos iniciais para aplicar o método da aceitação/rejeição adaptativo. Fazemos isso escolhendo vários valores arbitrários que devem retornar <span class="math inline">\(d\log f(x)dx\)</span> com sinais opostos. A escolha dos pontos <span class="math inline">\(\{-3,-1,2,3,4\}\)</span> satisfaz esse requisito (evite valores tais que <span class="math inline">\(\psi'(x)\approx 0\)</span>, para não ter problemas de arredondamento de ponto flutuante). Podemos então executar o amostrador.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar o pacote (se ainda não o tiver)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ars")</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: pacote 'ars' foi compilado no R versão 4.5.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5000</span> <span class="co"># número de simulações</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>amostras <span class="ot">&lt;-</span> <span class="fu">ars</span>(n, <span class="at">f =</span> log_normal, <span class="at">fprima =</span> derivada_log_normal,  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(amostras, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">main =</span> <span class="st">"Amostras via 'ars'"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dnorm</span>(x), <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="AR_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="alert alert-danger">
+<p><strong>Exercício.</strong> Dizemos que <span class="math inline">\(X\)</span> tem distribuição Gama(<span class="math inline">\(a,b\)</span>) se sua função densidade é dada por</p>
+<p><span class="math display">\[f(x)=\frac{b^a}{\Gamma(a)}x^{a-1}e^{-bx}.\]</span> Mostre que <span class="math display">\[f(x)\propto e^{\psi(x)},\]</span> onde <span class="math inline">\(\psi(x)=-bx+(a-1)\log(x)\)</span>. Em seguida, prove que <span class="math inline">\(\psi(x)\)</span> é côncava, se e somente se <span class="math inline">\(a\geq 1\)</span>. Por último, utilize o método da aceitação/rejeição adaptativo para simular uma amostra de tamanho 5000 da distribuição Gama(7/3, 5).</p>
+</div>
 
 
 </section>
@@ -1119,8 +1170,8 @@ x=\frac{1}{b_k}\log\left( \frac{N b_k}{e^{a_k}}\left[u-G(z_{k-1})\right] +e^{b_k
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./provas.html" class="pagination-link" aria-label="Provas">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Provas</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./mcmc.html" class="pagination-link" aria-label="Método de Monte Carlo via Cadeias de Markov">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Método de Monte Carlo via Cadeias de Markov</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
