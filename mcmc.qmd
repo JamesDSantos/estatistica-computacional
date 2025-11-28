@@ -2,23 +2,19 @@
 
 ## Introdução à Cadeias de Markov
 
-A coleção $\{X(t),t\in T\}$ é um processo estocástico se $X(t)$  é uma variável aleatória para cada $t\inT$. A variável $X(t)$ é denominada estado. O processo é dito ser a tempo discreto se $T\subseteq \mathbb{Z}$.
+A coleção $\{X(t),t\in T\}$ é um processo estocástico se $X(t)$ é uma variável aleatória para cada $t\inT$. A variável $X(t)$ é denominada estado. O processo é dito ser a tempo discreto se $T\subseteq \mathbb{Z}$.
 
 Em um processo a tempo discreto, é usual utilizar a notação $X(t)\equiv X_t$.
-
 
 O processo estocástico $\{\ldots,X_1,X_0,X_1,X_2,\ldots\}$ é uma cadeia de Markov de ordem $d$ se
 
 $$P(X_n\in A|X_{n−1}=x_{n−1},\ldots,X_0=x_0)=P(X_n\in A|X_{n−1}=x_{n−1},…,X_{n−d}=x_{n−d}).$$
 
-Uma cadeia de Markov é dita ser homogênea se, para qualquer $m>0$
- natural,
+Uma cadeia de Markov é dita ser homogênea se, para qualquer $m>0$ natural,
 
-$$P(X_n\in A|X_{n−1}=x_{n−1},…,X_{n−d}=x_{n−d})=P(X_{n+m}\in A|X_{n+m−1}=x_{n−1},…,X_{n+m−d}=x_{n−d}).$$
-Estamos interessados nas cadeias homogêneas de ordem $d=1$, que doravante serão denominadas simplesmente por cadeias de Markov.
+$$P(X_n\in A|X_{n−1}=x_{n−1},…,X_{n−d}=x_{n−d})=P(X_{n+m}\in A|X_{n+m−1}=x_{n−1},…,X_{n+m−d}=x_{n−d}).$$ Estamos interessados nas cadeias homogêneas de ordem $d=1$, que doravante serão denominadas simplesmente por cadeias de Markov.
 
-
-:::{#exm- .alert .alert-info}
+::: {#exm- .alert .alert-info}
 Considere a seguinte cadeia de Markov:
 
 $$X_{n}|X_{n−1}=y∼\hbox{Uniforme}(1−y,1).$$
@@ -42,86 +38,68 @@ plot(x_2, type='l', ylim=c(0,1))
 plot(x_1,x_2, type = "l", col =1)
 points(x_1[1] , x_2[1] , pch=16) # ponto inicial
 ```
-
 :::
 
-A evolução da cadeia de $X_n$ até $X_{n+1}$ é denominada transição 1
--passos à frente. A densidade $k(.|y)$ que satisfaz
+A evolução da cadeia de $X_n$ até $X_{n+1}$ é denominada transição 1 -passos à frente. A densidade $k(.|y)$ que satisfaz
 
 $$P(X_{n+1}\in A|X_n=y)=\int_A k(x|y)dx$$
 
-é denominada núcleo de transição (ou núcleo de transição 1
--passo à frente). De maneira análoga, a densidade $k^{(d)}(.|y)$ que
- que satisfaz
+é denominada núcleo de transição (ou núcleo de transição 1 -passo à frente). De maneira análoga, a densidade $k^{(d)}(.|y)$ que que satisfaz
 
-$$P(X_{n+d}\in A|X_{n}=y)=\int_A k^{(d)}(x|y)dx$$
-é denominada núcleo de transição $d$-passos à frente.
+$$P(X_{n+d}\in A|X_{n}=y)=\int_A k^{(d)}(x|y)dx$$ é denominada núcleo de transição $d$-passos à frente.
 
-<div class='alert alert-success'>
-**Equações de Chapman-Kolmogorov**
-Para qualquer $0<m<n$ tem-se que
+::: {.alert .alert-success}
+**Equações de Chapman-Kolmogorov** Para qualquer $0<m<n$ tem-se que
 
 $$k^{(n)}(x|y)=\int_{\mathbb{R}} k^{(m)}(x|u)k^{(n−m)}(u|y)du.$$
-</div>
+:::
 
-Dizemos que $\pi(.)$ é a densidade da distribuição estacionária de uma cadeia de Markov se 
+Dizemos que $\pi(.)$ é a densidade da distribuição estacionária de uma cadeia de Markov se
 
-$$\pi(y)=\int_{\mathbb{R}} \pi(x)k(y|x)dx,$$
-ou seja a distribuição estacionária é a distribuição marginal do processo. Como
+$$\pi(y)=\int_{\mathbb{R}} \pi(x)k(y|x)dx,$$ ou seja a distribuição estacionária é a distribuição marginal do processo. Como
 
-$$\begin{align}\int_{\mathbb{R}}\pi(x)k^{(2)}(y|x)dx&=\int_{\mathbb{R}}\pi(x)\int_{\mathbb{R}}k(y|u)k(u|x)dudx\\&=\int_{\mathbb{R}}k(y|u)[\int_{\mathbb{R}}\pi(x)k(u|x)dx]du\\&=\int_{\mathbb{R}}k(y|u)\pi(u)du=\pi(y)\end{align}$$
-é simples mostrar por indução que $\pi(.)$ satisfaz
+$$\begin{align}\int_{\mathbb{R}}\pi(x)k^{(2)}(y|x)dx&=\int_{\mathbb{R}}\pi(x)\int_{\mathbb{R}}k(y|u)k(u|x)dudx\\&=\int_{\mathbb{R}}k(y|u)[\int_{\mathbb{R}}\pi(x)k(u|x)dx]du\\&=\int_{\mathbb{R}}k(y|u)\pi(u)du=\pi(y)\end{align}$$ é simples mostrar por indução que $\pi(.)$ satisfaz
 
 $$\pi(y)=\int_{\mathbb{R}}\pi(x)k^{(n)}(y|x)dx.$$
 
 Suponha que valem as seguintes afirmações:
 
-1. Existe $n>0$ tal que $P(X_n\in A|X_0=x_0)$ para quaisquer $A$
- e $x_0$. Além disso, o número médio de passos para realizar a transição é finito.
+1.  Existe $n>0$ tal que $P(X_n\in A|X_0=x_0)$ para quaisquer $A$ e $x_0$. Além disso, o número médio de passos para realizar a transição é finito.
 
-2. $P(X_n\in A|X_0=x_0)$ não é uma função periódica em $n$.
+2.  $P(X_n\in A|X_0=x_0)$ não é uma função periódica em $n$.
 
 Então, faz sentido em falar sobre
 
 $$\lim_{n\rightarrow \infty}k^{(n)}(x|y).$$
 
-Sob as condições acima, a única densidade que satifaz esse limite é  distribuição estacionária, isto é,
+Sob as condições acima, a única densidade que satifaz esse limite é distribuição estacionária, isto é,
 
 $$\lim_{n\rightarrow \infty}k^{(n)}(x|y)=\pi(x).$$
 
 A seguinte definição será útil adiante.
 
-:::{#def- .alert .alert-success}
-Dizemos que uma cadeia de Markov com núcleo de transição $k(x|y)$
- é reversível com relação à $\pi(x)$ se
+::: {#def- .alert .alert-success}
+Dizemos que uma cadeia de Markov com núcleo de transição $k(x|y)$ é reversível com relação à $\pi(x)$ se
 
-$$\pi(x)k(y|x)=\pi(y)k(x|y)$$
-para todo $x$ e $y$ no espaço dos estados. A equação acima é conhecida como balanço detalhado.
-
+$$\pi(x)k(y|x)=\pi(y)k(x|y)$$ para todo $x$ e $y$ no espaço dos estados. A equação acima é conhecida como balanço detalhado.
 :::
-
 
 Nem toda cadeia de Markov seja reversível em relação à sua distribuição estacionária. Contudo, se vale equação de balanço detalalhado para alguma função densidade $\pi(.)$ qualquer, então esta é a distribuição estacionária, pois
 
 $$\int_{\mathbb{R}}\pi(x)k(y|x)dx=\int_{\mathbb{R}}\pi(y)k(x|y)dx=\pi(y)$$.
 
-
-:::{#exm- .alert .alert-info}
+::: {#exm- .alert .alert-info}
 Considere novamente a seguinte cadeia de Markov:
 
-$$X_n|X_{n−1}=y∼Uniforme(1−y,1),$$
-ou seja
-$$k(x|y)=\frac{1}{y}I(1-y<x<1).$$
+$$X_n|X_{n−1}=y∼Uniforme(1−y,1),$$ ou seja $$k(x|y)=\frac{1}{y}I(1-y<x<1).$$
 
 Vamos mostrar que sua distribuição estacionária é $\pi(x)=2x$, com $x\in(0,1)$. Observe que
 
 $$\begin{align}
-\pi(y)k(x|y)&=2yI(0<y<1)\frac{1}{y}I(1-y<x<1)=I(0<y<1)I(1-y<x<1)\\&=I(0<y<1)I(1-x<y<1+y-x)=I(1-x<y<1),\end{align}$$
-e que
-$$\begin{align}
+\pi(y)k(x|y)&=2yI(0<y<1)\frac{1}{y}I(1-y<x<1)=I(0<y<1)I(1-y<x<1)\\&=I(0<y<1)I(1-x<y<1+y-x)=I(1-x<y<1),\end{align}$$ e que $$\begin{align}
 \pi(x)k(y|x)&=2x\frac{1}{x}I(0<x<1)I(1-x<y<1)=I(1-x<y<1),\end{align}$$
 
-logo, a equações de balanço detalhado estão satisfeitas. 
+logo, a equações de balanço detalhado estão satisfeitas.
 
 Portanto, o comportamento marginal de uma trajetória simulada deve se comportar como a distribuição estacionária. Abaixo simulammos uma trajetória de tamanho 5000 e mostramos o seu histograma em conjunto com a densidade da distribuição estacionária,
 
@@ -136,17 +114,15 @@ curve(d_estacionaria(x), add = T , lwd = 2)
 ```
 :::
 
+## Introdução aos Métodos de Monte Carlo via Cadeias de Markov (MCMC)
 
-##  Introdução aos Métodos de Monte Carlo via Cadeias de Markov (MCMC)
-
-Os métodos para simular a distribuição $f(x)$  gerando variáveis aleatórias utilizando uma cadeia de Markov são denominados métodos de Monte Carlo via Cadeias de Markov (MCMC).
+Os métodos para simular a distribuição $f(x)$ gerando variáveis aleatórias utilizando uma cadeia de Markov são denominados métodos de Monte Carlo via Cadeias de Markov (MCMC).
 
 Diferente dos outros métodos de simulação, os MCMCs exigem alguns cuidados adicionais para garantir que estamos simulando variáveis independentes e identicamente distribuídas.
 
 Ao longo desta seção, vamos utilizar a cadeia do exemplo abaixo.
 
-
-:::{#exm- .alert .alert-info}
+::: {#exm- .alert .alert-info}
 Considere uma cadeia de Markov com o seguinte núcleo de transição,
 
 $$X_t|X_{t−1}=y∼N(\alpha y,1)$$
@@ -154,42 +130,33 @@ $$X_t|X_{t−1}=y∼N(\alpha y,1)$$
 com $\alpha\in(−1,1)$. Pode-se provar que sua distribuição estacionária é a distribuição Normal(0,$1/(1-\alpha)$). Ao longo desta seção, utilizaremos $\alpha=0,7$.
 :::
 
-
-
-O objetivo dos métodos do tipo MCMC é desenvolver uma cadeia de Markov, com certo núcleo de transição $k(x_{i}|x_{i−1})$ que tenha como distribuição estacionária a distribuição de interesse, doravante denotada por $f(x)$. 
+O objetivo dos métodos do tipo MCMC é desenvolver uma cadeia de Markov, com certo núcleo de transição $k(x_{i}|x_{i−1})$ que tenha como distribuição estacionária a distribuição de interesse, doravante denotada por $f(x)$.
 
 Em tese, bastaria gerar uma trajetória da cadeia utilizando o núcleo de transição para obter amostras de $f(x)$. Como a trajetória deve começar em um ponto $x_0$, existem duas situações:
 
-* $x_0$ é escolhida na região de alta densidade de $f(x)$: nesse caso, os pontos simulados pelo processo terão distribuição marginal igual à $f(x)$
+-   $x_0$ é escolhida na região de alta densidade de $f(x)$: nesse caso, os pontos simulados pelo processo terão distribuição marginal igual à $f(x)$
 
-* $x_0$ é escolhida fora da região de alta densidade de $f(x)$: nesse caso, a trajetória inicial não deve corresponder à distribuição de $f(x)$. Entretanto, como 
+-   $x_0$ é escolhida fora da região de alta densidade de $f(x)$: nesse caso, a trajetória inicial não deve corresponder à distribuição de $f(x)$. Entretanto, como
 
-$$f(x)=\lim_{n\rightarrow\infty} k^{(n)}(x|x_0)$$
-existe um momento no qual a patir dele, a trajetória vai começar a simular pontos de $f(x)$.
+$$f(x)=\lim_{n\rightarrow\infty} k^{(n)}(x|x_0)$$ existe um momento no qual a patir dele, a trajetória vai começar a simular pontos de $f(x)$.
 
 Quando das características de $f(x)$ são desconhecidas, é boa prática comelcar a simular diversas cadeias començando em pontos distintos. O gráfico de linha (*traceplot*), que é um gráfico do tempo do processo contra os valores simulados, é útil para verificar a convergência, uma vez que todas as trajetórias devem se encontrar em algum momento.
 
-
 O traceplot de um processo estacionário com variância finita tem um comportamento típico de pontos em torno da média da distribuição estacionária. Deste modo, ele é uma ferramenta exploratória que nos auxilia a detectar se a cadeia não está em equilíbrio ao perceber um padrão fora do que se esperaria de uma distribuição estacionária.
 
-
-:::{#exm-}
+::: {#exm-}
 Abaixo, ilustramos o traceplot de duas cadeias simuladas, sendo que a única diferença entre elas é o valor de $x_0$. A distribuição estacionária está representada ao longo do eixo das ordenadas com as linhas tracejadas em azul representando os quantis 99,5% e 0,05%. Mostramos dois traceplots (linhas pretas) com valores distintos de $x_0$. No primeiro, escolhemos $x_0=0$ que é a média da distribuição estacionária e na segunda $x_0=−10$, um valor extremo.
-
 
 ![Trajetória começando na média de $f(x)$](traceplot1_intro.png)
 
 ![Trajetória começando distante da região de alta densidade de $f(x)$](traceplot2_intro.png)
 
-
-Com $x_0=0$, o traceplot não dá evidências contra a hipótese de equilíbrio, pois os pontos simulados condizem com o que é esperado para a distribuição estacionária. Já com $x_0=−10$, temos que o traceplot dá evidências de que a convergência ocorreu após 3 ou 4 iterações. 
+Com $x_0=0$, o traceplot não dá evidências contra a hipótese de equilíbrio, pois os pontos simulados condizem com o que é esperado para a distribuição estacionária. Já com $x_0=−10$, temos que o traceplot dá evidências de que a convergência ocorreu após 3 ou 4 iterações.
 :::
-
 
 O exemplo acima nos mostra que os métodos do tipo MCMC são sensíveis aos valores iniciais. Note que no exemplo dado foi trivial decidir que $x_0=0$ era uma escolha adequada, mas para distribuições multivariadas isso pode ser um desafio. Portanto, é usual considerar que as primeiras simulações sempre estão erradas e as descartamos. Esse processo é denominado *burn-in*. Não há uma proporção recomendada para o *burn-in* embora em geral uma inspeção visual ao *traceplot* de trajetórias realizadas com valores iniciais distintos seja o suficiente. Em termos de teoria da decisão, é sempre melhor aumentar o tamanho das trajetórias para descartar mais observações no *burn-in* do que evitar o custo computacional e fazer inferências com uma amostra que não represente $f(x)$.
 
-
-:::{#exm- .alert .alert-info}
+::: {#exm- .alert .alert-info}
 Voltando ao nosso exemplo, vamos simular 5 cadeias, com os valores iniciais $\{-10,-5,0,5,10\}$. Abaixo seguem as trajetórias simuladas e seus respectivos *traceplots* (por didática, vamos colocar apenas as 100 primeiras iterações).
 
 ```{r}
@@ -204,11 +171,9 @@ for(i in 2:n){
 
 ts.plot(trajetorias[1:100,], col =1:5, xlab = 'Iterações')
 ```
+
 Observe que as trajetórias já estão em equilíbrio após poucas iterações. Como é uma simulação barata, podemos fazer um *burn-in* das primeiras 20 simulações sem prejuízos.
-
-
 :::
-
 
 Lembremos que o objetivo da simulação estocástica sob a ótica deste curso é simular variáveis independentes e identicamente distribuídas de uma distribuição alvo. Já o objetivo de um método MCMC é gerar variáveis dependentes e identicamente distribuídas segundo a distribuição alvo. É importante ressaltar que o uso moderno dos métodos do tipo MCMC consideram a dependência como uma característica natural e as inferências utilizam esse aspecto (veremos mais sobre isso no capítulo sobre Integração de Monte Carlo). Contudo, como nosso objetivo nesta seção é a obtenção de amostras iid, essa dependência deve ser minimizada.
 
@@ -216,27 +181,23 @@ Considerando as variáveis simuladas (após o burn-in) $x_1,x_2\ldots,x_n$, a de
 
 $$r(h)=\frac{\sum_{i=1}^{n-h}(x_i−\bar{x})(x_{i+h}−\bar{x})}{\sum_{i=1}^n (x_i−\bar{x})^2.$$
 
-Para termos uma amostra de variáveis aproximadamente independentes, podemos remover o efeito da autocorrelação encontrando o valor $h′$
- tal que $r(h′)\approx 0$  e tormar ficar somente com as variáveis $x_1,x_{1+h′},x_{1+2h′},\ldots$. Esse processo é conhecido como *thinning*. O *traceplot* desta subamostra deve apresentar os pontos em torno da média mas sem um padrão.
+Para termos uma amostra de variáveis aproximadamente independentes, podemos remover o efeito da autocorrelação encontrando o valor $h′$ tal que $r(h′)\approx 0$ e tormar ficar somente com as variáveis $x_1,x_{1+h′},x_{1+2h′},\ldots$. Esse processo é conhecido como *thinning*. O *traceplot* desta subamostra deve apresentar os pontos em torno da média mas sem um padrão.
 
-:::{#exm- .alert .alert-info}
-
-Voltemos ao exemplo anterior. Após um *burn-in* de vinte observações, temos os seguintes *traceplots* 
-
+::: {#exm- .alert .alert-info}
+Voltemos ao exemplo anterior. Após um *burn-in* de vinte observações, temos os seguintes *traceplots*
 
 ```{r}
 ts.plot(trajetorias[-(1:20),], col =1:5)
 ```
 
-A figura abaixo apresenta as autocorrelações da trajetória 1. Note que após a defasagem(lag) 15, as autorrelações podem ser consideradas nulas.  
+A figura abaixo apresenta as autocorrelações da trajetória 1. Note que após a defasagem(lag) 15, as autorrelações podem ser consideradas nulas.
 
 ```{r}
 (acf(trajetorias[-(1:20),1]))
 
 ```
 
-Portanto, podemos eliminar essa autocorrelação com um *thinning* de tamanho 15 (ou seja, guardamos uma em cada 15 pontos da simulação). As figuras abaixo apresentam os *traceplots* das simulações finais após o burn-in e o thinning. A autocorrelação para a simulação baseada na trajetória 1 também é apresentada. 
-
+Portanto, podemos eliminar essa autocorrelação com um *thinning* de tamanho 15 (ou seja, guardamos uma em cada 15 pontos da simulação). As figuras abaixo apresentam os *traceplots* das simulações finais após o burn-in e o thinning. A autocorrelação para a simulação baseada na trajetória 1 também é apresentada.
 
 ```{r}
 amostra_final <- trajetorias[ seq(21,n, 15), ]
@@ -253,18 +214,16 @@ curve( dnorm(x,0,sqrt(1/(1-.3^2))), add = T)
 ```
 :::
 
-
 É comum que a convergência seja checada através do comportamento do *traceplot*. Entretanto, é possível que este se comporte como o esperado sem que a convergência tenha sido atingida.
 
-:::{#exm- .alert .alert-info}
+::: {#exm- .alert .alert-info}
 Considere o núcleo de transição
 
-$$k(x|y)=\phi(x|\frac{y}{2}+5,1)I_{(7,\infty)}(y)+\phi(x|\frac{y}{2},1)I_{(−\infty,7]}(y),$$
-onde $\phi(.|\mu,\sigma^2)$ é a função densidade da distribuição Normal$(\mu,\sigma^2)$. Esta cadeia exibe dois comportamentos distintos, dependendo do valor de $x_0$
+$$k(x|y)=\phi(x|\frac{y}{2}+5,1)I_{(7,\infty)}(y)+\phi(x|\frac{y}{2},1)I_{(−\infty,7]}(y),$$ onde $\phi(.|\mu,\sigma^2)$ é a função densidade da distribuição Normal$(\mu,\sigma^2)$. Esta cadeia exibe dois comportamentos distintos, dependendo do valor de $x_0$
 
-* Se $x_0$  está próximo de 0, a cadeia deve ser comportar como uma distribuição Normal(0,1). Neste caso, a probabilidade da cadeia gerar um valor superior a 7 é de $1,2×10^{−12}$, o que implica que, ela deve permanecer nesta distribuição para fins práticos de simulação.
+-   Se $x_0$ está próximo de 0, a cadeia deve ser comportar como uma distribuição Normal(0,1). Neste caso, a probabilidade da cadeia gerar um valor superior a 7 é de $1,2×10^{−12}$, o que implica que, ela deve permanecer nesta distribuição para fins práticos de simulação.
 
-* se $x_0$ está proximo ( ou é superior a ) de 10, é possível que a cadeia se comporte como uma Normal(10,1) por um período de tempo, como se estivesse atingido o equilíbrio. Entretanto, como há uma probabilidade de 0,13% da cadeia gerar um valor inferior a 7, eventualmente a cadeia vai abandonar este comportamento e vai convergir para a Normal(0,1).
+-   se $x_0$ está proximo ( ou é superior a ) de 10, é possível que a cadeia se comporte como uma Normal(10,1) por um período de tempo, como se estivesse atingido o equilíbrio. Entretanto, como há uma probabilidade de 0,13% da cadeia gerar um valor inferior a 7, eventualmente a cadeia vai abandonar este comportamento e vai convergir para a Normal(0,1).
 
 Abaixo segue um exemplo com $x_0=10$.
 
@@ -291,26 +250,17 @@ for(i in 2:n){
 # traceplot
 ts.plot(x, main = "Traceplot")
 ```
+
 Portanto, se considerarmos um traceplot com as primeiras 200 iterações, podemos acreditar que estamos simulando da distribuição estacionária, quando na verdade esta ainda não foi atingida.
-
 :::
-
 
 O exemplo acima ilustra a necessidade prática de gerar diversas cadeias com valores iniciais distintos. Quando todas as trajetórias estiverem na mesma região, teremos evidências de que a distribuição estacionária foi atingida. Contudo, a análise gráfica é subjetiva e métodos mais robustos são necessários. Para tanto, é comum o uso da estatística $R$ de Gelman-Rubin. Seja $M$ o número de cadeias utilizadas, todas de tamanbho $n$. Então, a estatística $R$ é dada por
 
-$$R=\sqrt{\frac{\hat{\sigma}^2}{s^2}},$$
-onde $s_j^2$ é a variância amostral da $j$-ésima trajetória, 
-$$s^2= \frac{1}{M}\sum_{j=1}^M s_j^2$$
-é a média das variâncias, $B/n$ é a variância entre as médias amostrais das trajetórias, ou seja
-$$\frac{B}{n}=\frac{1}{M-1}\sum_{j=1}^M(\bar{x}_j-\bar{x})^2,$$
-onde $\bar{x}_j$ é a média da $j$-ésima trajetória e $\bar{x}$ é a média geral, considerando todas as cadeias. Por último,
-$$\hat{\sigma}^2=\frac{n-1}{n}s^2+\frac{B}{n}.$$
+$$R=\sqrt{\frac{\hat{\sigma}^2}{s^2}},$$ onde $s_j^2$ é a variância amostral da $j$-ésima trajetória, $$s^2= \frac{1}{M}\sum_{j=1}^M s_j^2$$ é a média das variâncias, $B/n$ é a variância entre as médias amostrais das trajetórias, ou seja $$\frac{B}{n}=\frac{1}{M-1}\sum_{j=1}^M(\bar{x}_j-\bar{x})^2,$$ onde $\bar{x}_j$ é a média da $j$-ésima trajetória e $\bar{x}$ é a média geral, considerando todas as cadeias. Por último, $$\hat{\sigma}^2=\frac{n-1}{n}s^2+\frac{B}{n}.$$
 
-Como $s^2$ subestima $σ^2$, o valor de $R$ deve ser, em geral, maior que 1. Entretanto, como os dois são consistentes, temos que $R$
- decresce para 1. Portanto, teremos evidências que todas as cadeias atingiram o equilíbrio se $R\approx1$. Na prática, é comum parar a simulação quando $R<1,1$. A função abaixo implementa a estatística R.
- 
- 
-<div class='alert alert-success'>
+Como $s^2$ subestima $σ^2$, o valor de $R$ deve ser, em geral, maior que 1. Entretanto, como os dois são consistentes, temos que $R$ decresce para 1. Portanto, teremos evidências que todas as cadeias atingiram o equilíbrio se $R\approx1$. Na prática, é comum parar a simulação quando $R<1,1$. A função abaixo implementa a estatística R.
+
+::: {.alert .alert-success}
 **Estatística de Gelman-Rubin.**
 
 ```{r}
@@ -343,13 +293,10 @@ Rgelman <- function(X, burnin){
 }
 
 ```
+:::
 
-</div>
- 
- 
-:::{#exm- .alert .alert-info}
+::: {#exm- .alert .alert-info}
 Vamos refazer o exemplo anterior adicionando mais trajetórias, começando em -10,-5,0,5 e 10.
-
 
 ```{r}
 # simulando 5 tragetórias
@@ -372,18 +319,17 @@ for(i in 2:n){
 ts.plot( trajetorias, main = "Traceplot",col=1:5)
 ```
 
-Como podemos ver, todas as trajetórias convergiram para a mesma distribuição estacionária. Vamos aplicar um burn-in de 300 e calcular a estatística R. 
+Como podemos ver, todas as trajetórias convergiram para a mesma distribuição estacionária. Vamos aplicar um burn-in de 300 e calcular a estatística R.
 
 ```{r}
 Rgelman( trajetorias, burnin = 300)
 ```
+
 Como $R<1,1$, temos que evidências de que a convergência foi obtida.
-```
 :::
 
-
-<div class='alert alert-danger'>
-Cas notas de aula, analisamos a seguinte cadeia de Markov, que é reversível em relação à sua distribuição estacionária:
+::: {.alert .alert-danger}
+Nas notas de aula, analisamos a seguinte cadeia de Markov, que é reversível em relação à sua distribuição estacionária:
 
 Núcleo de Transição: $X_n | X_{n-1} = y \sim \text{Uniforme}(1-y, 1)$
 
@@ -393,14 +339,721 @@ Embora tenhamos simulado uma única trajetória em aula, agora vamos usar esta c
 
 Objetivo: Gerar uma amostra final de tamanho agregado de pelo menos 1.000 que represente a distribuição $\pi(x) = 2x$, seguindo todas as boas práticas de diagnóstico.Tarefas
 
-1. Geração das Cadeias (Simulação)Gere $M=5$ cadeias de Markov independentes usando o núcleo de transição $\text{Uniforme}(1-y, 1)$. Cada cadeia deve ter $n=2000$ iterações. Armazene os resultados em uma matriz trajetorias de dimensão (2000, 5).
+1.  Geração das Cadeias (Simulação)Gere $M=5$ cadeias de Markov independentes usando o núcleo de transição $\text{Uniforme}(1-y, 1)$. Cada cadeia deve ter $n=2000$ iterações. Armazene os resultados em uma matriz trajetorias de dimensão (2000, 5).
 
-2. Análise de Convergência (Burn-in e $\hat{R}$)Análise Visual: Gere um ts.plot() das 5 cadeias (use as primeiras 100 iterações) para inspecionar a convergência. Análise Quantitativa: Use a função Rgelman fornecida em aula. Calcule o $\hat{R}$ para as trajetorias usando um burnin = 0. Calcule o $\hat{R}$ novamente, mas agora com um burnin = 50. O valor é $< 1.1$? Com base nisso, determine um tamanho de burn-in adequado
+2.  Análise de Convergência (Burn-in e $\hat{R}$)Análise Visual: Gere um ts.plot() das 5 cadeias (use as primeiras 100 iterações) para inspecionar a convergência. Análise Quantitativa: Use a função Rgelman fornecida em aula. Calcule o $\hat{R}$ para as trajetorias usando um burnin = 0. Calcule o $\hat{R}$ novamente, mas agora com um burnin = 50. O valor é $< 1.1$? Com base nisso, determine um tamanho de burn-in adequado
 
-3. Análise de Dependência (Thinning) Após identificar o burn-in, pegue a primeira cadeia (coluna 1 de trajetorias) após o burn-in.Gere o gráfico da Função de Autocorrelação (acf()) para esta cadeia (pós-burn-in). Determine um intervalo de thinning ($h$) apropriado 
+3.  Análise de Dependência (Thinning) Após identificar o burn-in, pegue a primeira cadeia (coluna 1 de trajetorias) após o burn-in.Gere o gráfico da Função de Autocorrelação (acf()) para esta cadeia (pós-burn-in). Determine um intervalo de thinning ($h$) apropriado
 
-4. Entrega da Amostra Final (Processamento) Crie sua amostra final seguindo todo o processo: Remova o burnin (que você decidiu no passo 2) de todas as 5 cadeias. Aplique o thinning (com o $h$ que você escolheu no passo 3) a todas as 5 cadeias. Junte as amostras restantes das 5 cadeias em um único vetor
+4.  Entrega da Amostra Final (Processamento) Crie sua amostra final seguindo todo o processo: Remova o burnin (que você decidiu no passo 2) de todas as 5 cadeias. Aplique o thinning (com o $h$ que você escolheu no passo 3) a todas as 5 cadeias. Junte as amostras restantes das 5 cadeias em um único vetor
 
-Verificação Final: Plote um histograma (hist(..., freq = FALSE)) da sua amostra_final. Sobreponha a curva da distribuição estacionária teórica (use curve(2*x, from=0, to=1, add = T, col = "red", lwd = 2)).  O histograma da sua simulação representa bem a distribuição-alvo $\pi(x) = 2x$?
+Verificação Final: Plote um histograma (hist(..., freq = FALSE)) da sua amostra_final. Sobreponha a curva da distribuição estacionária teórica (use curve(2\*x, from=0, to=1, add = T, col = "red", lwd = 2)). O histograma da sua simulação representa bem a distribuição-alvo $\pi(x) = 2x$?
+:::
+
+## O método Metropolis-Hastings
+
+Seja $f(x)$ a função densidade alvo. O algoritmo Metropolis-Hastings é definido abaixo.
+
+::: {.alert .alert-success}
+**Algoritmo Metropolis-Hastings**
+
+Comece com $x_0$ arbitrário. Na $i$-ésima iteração:
+
+1.  Gere $y\sim q(.|x_{i−1})$ e $u$∼Uniforme(0,1)
+
+2.  Encontre
+
+$$\rho(x_{i−1},y)=\min\left\{1,\frac{f(y)}{f(x_{i−1})}\frac{q(x_{i−1}|y)}{q(y|x_{i−1})}\right\}.$$
+
+Se $u<\rho(x_{i−1},y)$ então $x_i=y$. Senão, $x_i=x_{i−1}$.
+:::
+
+O Metropolis-Hastings é um método do tipo MCMC que se utiliza da densidade $q(.|.)$, denominada proposta, para gerar estados para a cadeia de Markov. Os valores gerados pela proposta são denominados candidatos. Em cada iteração a cadeia pode permanecer no estado atual, ou fazer um movimento para o candidto gerado.
+
+Vamos provar que o Metropolis-Hastings é um MCMC. Notemos que a probabilidade de transição é dada por
+
+$$P(X_i\in A|X_{i−1}=x_{i−1})=\int_\mathbb{R^d}P(X_i\in A|X_{i−1}=x_{i−1},Y=y)q(y|x_{i−1})dy$$ Agora, dados $x_{i−1}$ e $y$, sabemos que
+
+$$xi=\left\{\begin{array}{ll}y,& \hbox{ com probabilidade } \rho(x_{i−1},y)\\ x_{i−1},&  \hbox{ com probabilidade } 1−\rho(x_{i−1},y)\end{array}\right.$$ logo $$P(X_i\in A|X_{i−1}=x_{i−1},Y=y)=I_A(y)\rho(x_{i−1},y)+I_A(x_{i−1})(1−\rho(x_{i−1},y))$$
+
+Assim, a probabilidade de transição pode ser expressada por
+
+$$\begin{align}P(X_i\in A|X_{i−1}=x_{i−1})&=\int_{\mathbb{R}^d}I_A(y)\rho(x_{i−1},y)q(y|x_{i−1})dy\\&+\int_{\mathbb{R}^d}I_A(x_{i−1})(1−\rho(x_{i−1},y))q(y|x_{i−1})dy\\&=\int_A \rho(x_{i−1},y)q(y|x_{i−1})dy+I_A(x_{i−1})r(x_{i−1})\end{align}$$ onde $$r(x_{i−1})=\int_{\mathbb{R}^d}(1−\rho(x_{i−1},y))q(y|x_{i−1})dy.$$ Se $f(y)q(x_{i−1}|y)>f(x_{i−1})q(y|x_{i−1})$, então $\rho(x_{i−1},y)=1$ e $r(x_{i−1})=0$. Então, $r(x_{i−1})$ pode ser reescrito como
+
+$$r(x_{i−1})=\int_{y:f(y)q(x_{i−1}|y)<f(x_{i−1})q(y|x_{i−1})}(1−\rho(x_{i−1},y))q(y|x_{i−1})dy.$$
+
+Vamos mostrar que a cadeia de Markov definida com essa probabilidade de transição tem distribuição estacionária $f(x)$. A demonstração será dividida em duas partes.
+
+**Parte 1.**
+
+Primeiro, note que esta probabilidade é uma variável aleatória mista, com a parte contínua dada por $$k(y|x_{i−1})=\rho(x_{i−1},y)q(y|x_{i−1}).$$ 
+
+Em relação à $y$ e $x_{i−1}$ há duas possibilidades: ou $f(x_{i−1})q(y|x_{i−1})<f(y)q(x_{i−1}|y)$ ou $f(x_{i−1})q(y|x_{i−1})>f(y)q(x_{i−1}|y)$. Sem perda de generalidade, assuma que $f(x_{i−1})q(y|x_{i−1})>f(y)q(x_{i−1}|y)$. Então,
+
+$$\rho(x_{i−1},y)=\frac{f(y)}{f(x_{i−1})}\frac{q(x_{i−1}|y)}{q(y|x_{i−1})}$$ 
+e 
+$$\rho(y,x_{i−1})=1.$$ 
+Da definição de $k(.|.)$, teremos
+
+$$\begin{align}k(y|x_{i−1})&=\rho(x_{i−1},y)q(y|x_{i−1})=\frac{f(y)}{f(x_{i−1})}\frac{q(x_{i−1}|y)}{q(y|x_{i−1})}q(y|x_{i−1})\\&=\frac{f(y)}{f(x_{i−1})}{q(x_{i−1}|y)}\Rightarrow(x_{i−1})k(y|x_{i−1})=f(y)q(x_{i−1}|y)\end{align}$$ 
+
+Além disso, $k(x_{i−1}|y)=\rho(y,x_{i−1})q(x_{i−1}|y)=q(x_{i−1}|y)$. Disto, temos 
+
+$$f(x_{i−1})k(y|x_{i−1})=f(y)q(x_{i−1}|y)⇒f(x_{i−1})k(y|x_{i−1})=f(y)k(x_{i−1}|y)$$ logo, como estão satisfeitas as equações de balanço detalhado, uma cadeia com núcleo de transição $k(.|.)$ tem distribuição estacionária $f(.)$
+
+**Parte 2**
+
+Agora vamos concluir a demonstração. Anteriormente, vimos as equações de balanço para uma cadeia com distribuição um passo à frente estritamente contínua. Para uma cadeia de Markov com distribuição mista, as equações de balanço detalhado são dadas por
+
+$$\int_A P(X_i\in B|x_{i−1}=y)f(y)dy=\int_B P(X_i\in A|x_{i−1}=x)f(x)dx$$ 
+
+Para a nossa cadeia, temos que
+
+$$\begin{align}\int_AP(X_i\in B|x_{i−1}=x_{i−1})f(x_{i−1})dx_{i−1}&=\int_A\int_ B\rho(x_{i−1},w)q(y|x_{i−1})f(x_{i−1})dwdx_{i−1}\\&+\int_AI_B(x_{i−1})r(x_{i−1})f(x_{i−1})dx_{i−1}\\&=\int_A\int_B k(w|x_{i−1})f(x_{i−1})dwdx_{i−1}+\int_BI_A(x_{i−1})r(x_{i−1})f(x_{i−1})dx_{i−1}\\&=\int_B\int_A k(x_{i−1}|w)f(w)dx_{i−1}dw+\int_BI_A(w)r(w)f(w)dw=\int_B\left[\int_Ak(x_{i−1}|w)dx_{i−1}+I_A(w)r(w)\right]f(w)dw=\int_B\int_A\rho(w,x_{i−1})q(x_{i−1}|w)f(w)dx_{i−1}dw+\int_BI_A(w)r(w)f(w)dw=\int_BP(X_i\in A|x_{i−1}=w)f(w)dw\end{align}$$
+
+### A escolha da proposta e o parâmetro *tunning*
+
+Para que a cadeia de Markov de um Metropolis-Hastings tenha uma distribuição estacionária é suficiente que
+
+1. $q(y|x)>0$ para todo $(x,y)\in S^2$ , onde $S$ é o suporte de $f(.)$
+
+2. A probabilidade do evento ${X_t=X_{t−1}}$ é maior que zero.
+
+A primeira condição garante que a cadeia é irredutível (ou seja, que é possível partir de qualquer subconjunto $B\subset S$ e chegar em qualquer $A\subset S$ em um número finito de iterações). A segunda condição acima garante que a cadeia é aperiódica.
+
+A segunda condição está associada com o passo de aceitação da cadeia. Por isso, não é desejável que todos os candidatos gerados pela proposta sejam aceitos.
+
+As duas condições parecem ser facilmente satisfeitas, mas a primeira condição merece atenção. Considere que desejamos criar um gerador para a seguinte função densidade:
+
+$$f(x)=\frac{625}{1896}\sin(x)^2x^3e^{−x},$$ 
+com $x>0$. O gráfico dessa função é dado abaixo. Note que a densidade alvo possui várias modas (infinitas, na verdade). Destacamos as quatro modas mais relevantes.
+
+```{r}
+# densidade alvo
+f <- function(x) sin(x)^2 * x^3 * exp(-x)*625/1896
+
+# gráfico
+curve(f(x), 0, 15 , lwd = 2)
+
+# modas
+moda <- c(1.865,4.544,7.561,10.65)
+f_moda <- f(moda)
+points( moda, f_moda, pch = 16) 
+xx <- cbind(moda,0,moda, f_moda) 
+segments( xx[,1], xx[,2], xx[,3], xx[,4], lty = 2)
+```
+
+Vamos considerar como proposta a função densidade da distribuição $Y|X=x\sim$Gama($x^2/\sigma^2,x/\sigma^2$) . Notemos que
+
+$$E(Y|x)=x,\;\;Var(Y|x)=σ^2$$
+logo, a variância da proposta é controlada por $\sigma^2$ (reparametrizar a proposta em termos de média e variância é uma estratégia muito comum em um Metropolis-Hastings).
+
+A variância $\sigma^2$ tem como objetivo controlar a probabilidade de aceitação e, em alguns contextos, recebe o nome de *tunning parameter* (parâmetro de afinação). Esse nome se deve ao fato de que:
+
+* Se $\sigma^2$ é muito alto, então valores em regiões de baixa probabilidade serão gerados com mais frequência, fazendo com que o algoritmo demore para aceitar um ponto.
+
+* Se $\sigma^2$ é muito baixo, os valores simulados podem ficar presos em uma moda, sem conseguir explorar outras regiões com alta densidade.
+
+Portanto, $\sigma^2$ deve ser escolhido de tal sorte que a cadeia consiga explorar todas as partes relevantes da distribuição com uma taxa de aceitação razoável.
+
+Para ilustrar os conceitos discutidos até este momento, considere a seguinte implementação de um Metropolis-Hastings, em função de $\sigma^2$ . Nesta função, aplicamos um *burn-in* removendo a metade das simulações. Depois, detectamos a menor defasagem (lag) que retorna uma autocorrelação menor que 0,01 e utilizamos esse valor para amostrar sistematicamente os pontos restantes (*thinning*). Vamos iniciar no valor $x0=1,8$ que está bem próximo da moda com maior densidade. Por último, esta função gera 4 gráficos, organizados em duas linhas e duas colunas. Na primeira linha temos o *traceplot* e a função de autocorrelação, ambos após o *burn-in*. Na segunda linha temos o histograma a função de autocorrelação após a amostragem sistemática.
+
+```{r}
+rmetro <- function(n,sigma2){ 
+  # vamos começar próximo da moda 1 
+  x <- 1.8
+
+  # contador de aceitações 
+  contador <- 0
+
+ # Metropolis Hastings 
+  for(i in 2:n){ 
+    # gerando um candidato 
+    y <- rgamma(1, x[i-1]^2/sigma2, x[i-1]/sigma2)
+
+ # verificando se a cadeia se move
+  alpha <- f(y) * dgamma(x[i-1],y^2/sigma2,y/sigma2) /( f(x[i-1]) * dgamma(y,x[i-1]^2/sigma2,x[i-1]/sigma2) )
+
+  rho <- min (1, alpha)
+
+  ifelse( runif(1) < rho, {x[i] <- y ; contador <- contador +1 }, x[i] <- x[i-1])
+  
+}
+
+
+
+# trajetória simulada após o bur-in 
+  xb <- x[ - (1 :(n/2) )]
+
+# detectando o lag de interesse 
+  aa <- as.numeric(unlist(acf(xb,lag = (n/2), plot = FALSE))[1:(n/2)]) 
+  l <- which( aa < .01 )
+
+ # amostra final 
+  x <- xb[seq(1,length(xb),l[1])]
+
+  cat("% aceitação ", 100*contador/n,"\n")
+  cat("Tamanho final da amostra ", length(x),"\n")
+
+ layout( matrix( c(1,3,2,4),2,2)) 
+ # trajetória simulada após o burn-in 
+ par(mar = c(1,1,1,1)) 
+ ts.plot(x, lwd = 2)
+
+# função de autocorrelação estimada
+par(mar = c(1,1,1,1)) 
+acf(xb)
+
+# histograma
+par(mar = c(1,1,1,1)) 
+hist(x, freq = F, ylim = c(0,.35), xlim = c(0,15), sub= expression(sigma^2==1), main = "")
+curve( f(x), add = T, lwd = 2)
+
+# função de autocorrelação estimada
+par(mar = c(1,1,1,1)) 
+acf(x)
+
+
+}
+```
+
+Vamos simular uma amostra aleatória de $X$ utilizando o algoritmo Metropolis-Hastings com a proposta acima, utilizando $\sigma^2\in\{0,1\;\;,\;\;16\;\;,\;\;200\}$ , criando os cenários abaixo. Em todos os cenários foram geradas trajetórias de tamanho 100.000
+
+<div class='alert alert-info'>
+**Cenário 1**: $\sigma^2=16$. Neste cenário a função de autocorrelação após o *burn-in* decai exponencialmente. Deste modo, grande parte dos 50.000 valores simulados farão parte da amostra final, que tem tamanho superior a 1.000.
+
+```{r}
+rmetro(100000, 16)
+```
 </div>
 
+<div class='alert alert-info'>
+**Cenário 2**: $\sigma^2=0,1$. Neste cenário a função de autocorrelação após o *burn-in* decai de modo quase linear, como em um processo não estacionário (com tendência). Isto faz com que a amostra final tenha um tamanho pouco maior que 20. Além disso, a proposta tem dificuldades em explorar todo o suporte, conforme podemos ver no histograma.
+
+```{r}
+rmetro(100000, .1)
+```
+</div>
+
+<div class='alert alert-info'>
+**Cenário 3**: $\sigma^2=200$. Neste cenário a função de autocorrelação após o *burn-in* decai hiperbolicamente, lembrando um processo estacionário de longa dependência.Esse comportamento faz com que poucas amostras sejam retidas, nos levando a um elevado custo computacional se comparado com o cenário 1.
+
+```{r}
+rmetro(100000, 200)
+```
+
+</div>
+
+Diversos estudos sugerem que a variância da proposta deve ser ajustada para ter uma aceitação de aproximadamente 1/4. Fica como sugestão de leitura o trabalho pioneiro:
+
+Roberts, G.O., Gelman, A., Gilks, W.R. (1997). Weak Convergence and Optimal Scaling of Random Walk Metropolis Algorithms. Ann. Appl. Probab. 7, 110-20.
+
+
+<div class='alert alert-danger'>
+**Exercício**
+Considere a densidade
+
+$$f(x)=k\sin(x^2)^2e^{-x^2/2},$$
+onde $x\in\mathbb{R}$ e $k$ é a constante de normalização. Considerando a proposta $Y|x\sim\hbox{Normal}(x,\tau)$, onde $\tau$ é o *tunning parameter*, construa um algoritmo do tipo Metropolis-Hastings para obter amostras de $f(x)$.
+</div>
+
+<!-- ### O método Metropolis  -->
+
+<!-- O método Metropolis é um caso particular do Metropolis-Hastings com $q(x|y)=q(y|x). Com esta variação o algoritmo se torna: -->
+
+<!-- <div class='alert alert-success'> -->
+<!-- **Algoritmo Metropolis** -->
+
+<!-- Inicie a cadeia com $x_0$ . Na $k$-ésima iteração: -->
+
+<!-- 1. Gere $y\sim q(.|x_{k−1})$ e $u\sim$Uniforme(0,1) . -->
+
+<!-- 2. Calcule $\rho(x_{k−1},y)=\min\{1,\frac{f(y)}{f(x_{k−1})}\}$ -->
+
+<!-- 3. Faça -->
+
+<!-- $$x_k=\left\{\begin{array}{ll}y,& \hbox{ se } u\leq \rho(x_{k−1},y)\\ x_{k−1}, \hbox{ se } u\>\rho(x_{k−1},y)\\ \end{array}$$ -->
+
+<!-- Uma das vantagens deste método é o uso da distribuição normal multivariada como proposta para a geração de vetores aleatórios. Abaixo seguem algumas dicas para melhorar a convergência desse método: -->
+
+<!-- Determine as modas da distribuição alvo. Utilize-as como valores iniciais -->
+
+<!-- Calcule a matriz Hessiana de $−\logf(x)$ , aplicada nas modas. Denotando-a por $\mathcal{H}$ , utilize-a na seguinte proposta: -->
+
+<!-- $$y\sim N(x_{k−1},\tau\mathcal{H}^{−1}),$$ -->
+
+<!-- onde $\tau$ é o *tunning parameter*. -->
+
+<!-- Suponha que desejamos simular um vetor de dimensão $d$. Se o suporte de $d$ não for o $\mathbb{R}^d$ , considere uma transformação monótona $g(.)$ com imagem em $\mathbb{R}^d$ . Faça $z=g(x)$ e simule primeiramente os valores de $z$ , cuja densidade é $f_Z(z)=f(g^{−1}(x))|\mathcal{J}|$, onde $|\mathcal{J}|$ é o módulo do determinante do jacobiano da transformação. Em seguida, utilize $g^−{1}(.)$ para obter amostras de $X$. -->
+
+<!-- Exemplo 12.1 -->
+
+<!-- Considere a função densidade f(x)=23(1+cos(x))e−x com x\>0 . Abaixo segue um esboço dessa função. -->
+
+<!-- fx \<- function(x) (2/3) \* (1+cos(x)) \* exp(-x) curve( fx(x), 0,5, lwd = 2) -->
+
+<!-- Vamos simular uma amostra aleatória desta distribuição utilizando o método Metropolis. Note que o suporte de f(.) não está na reta. Considere a variável transformada Z=log(X) , cuja densidade fZ(z)=f(ez)ez, com z∈R . Abaixo segue um esboço dessa densidade -->
+
+<!-- fz \<- function(z) exp(z) \* fx( exp(z)) curve( fz(x), -4,4 , lwd = 2) -->
+
+<!-- Vamos simular primeiro valores de fZ(.) através do método Metropolis. -->
+
+<!-- Vamos determinar a moda principal de fZ(.) para utilizar como valor inicial e a hessiana de −logfZ(z) para construir a variância da proposta. Para encontrar as modas de uma função e sua respectiva matriz hessiana, o R conta com a função optim. Trata-se de um minimizador local com vários métodos implementados. Ela possui diversos parâmetros, sendo os principais: -->
+
+<!-- par: valores iniciais, de preferência próximos dos mínimos locais. -->
+
+<!-- fn: função objetivo. -->
+
+<!-- method: é o algoritmo de otimização. -->
+
+<!-- hessian: lógico. Se igual a TRUE a matriz hessiana é computada aplicada no mínimo local. -->
+
+<!-- É importante reforçar que a optim serve para encontrar mínimos locais (não é como a função optimize que possui um argumento para mudar o problema para maximização). Isso é um detalhe simples de ser resolvido, uma vez que maximar h(x) é equivalente a minimizar −h(x) . Vamos definir nossa função objetivo como sendo −logfZ(z) . Como nosso problema é univariado, devemos utilizar o método Brent e, com isso, definir dois parâmetros adicionais, lower e upper que juntos formam um intervalo que contém o mínimo local -->
+
+<!-- fun_objetivo \<- function(z) -log( fz(z) ) -z -->
+
+<!-- op\<- optim( par = 0, fn = fun_objetivo, method = "Brent" , lower = -4, upper = 4, hessian = T) O objeto op contém diversas informações. As mais relevantes são par, que contém a moda; convergence, que retorna o valor 0 se o algoritmo convergiu; hessian que retorna a matriz hessiana da função objetivo. Esses três argumentos são apresentados abaixo. -->
+
+<!-- #valor 0 indica convergência op$convergence -->
+<!-- ## [1] 0 -->
+<!-- # moda encontrada -->
+<!-- op$par \## \[1\] 0.1754645 \# hessiana. Seu inverso será a variância da proposta op\$hessian \## \[,1\] \## \[1,\] 3.036793 Abaixo, construímos um algoritmo Metropolis para simular de fZ(.) . -->
+
+<!-- # valor inicial -->
+
+<!-- z \<- op\$par -->
+
+<!-- # variância da proposta -->
+
+<!-- s2 \<- 1/op\$hessian -->
+
+<!-- # tunning -->
+
+<!-- tau \<- 50 -->
+
+<!-- # tamanho da trajetória -->
+
+<!-- B \<- 50000 -->
+
+<!-- # contador (para verificar a taxa de aceitação) -->
+
+<!-- contador \<- 0 -->
+
+<!-- # Metropolis -->
+
+<!-- for(i in 2:B){ -->
+
+<!-- \# gerndo y e u y \<- rnorm(1,z\[i-1\],sqrt(tau\*s2)) u \<- runif(1) -->
+
+<!-- rho \<- min( 1, fz(y)/fz(z\[i-1\])) -->
+
+<!-- \# movimento da cadeia ifelse( u \< rho, {z\[i\]\<- y ; contador \<- contador +1}, z\[i\] \<- z\[i-1\]) } -->
+
+<!-- # taxa de aceitaçãp -->
+
+<!-- contador/B \## \[1\] 0.30244 \# burn-in e autocorrelações z_burn \<- z\[-(1:(B/2))\] acf(z_burn, main ="") -->
+
+<!-- # amostra final -->
+
+<!-- z_sim \<- z_burn\[seq(1,length(z_burn),15)\] -->
+
+<!-- # histograma dos valores finais -->
+
+<!-- hist(z_sim, freq=F, ylim=c(0,.4), main ="") curve(fz(x),add=T, lwd = 2) -->
+
+<!-- Agora que simulamos pontos de fZ(.) , podemos simular pontos de f(.) : -->
+
+<!-- # amostra simulada de x -->
+
+<!-- x \<- exp(z_sim) -->
+
+<!-- # histograma da amostra simulada -->
+
+<!-- hist(x, freq=F, main = "") curve(fx(x),add=T) -->
+
+<!-- Exemplo 12.2 -->
+
+<!-- Considere a função densidade f(x,t)=tx62(1+x)e−x(1+t) com x\>0 e t\>0 . Abaixo segue um esboço dessa função. -->
+
+<!-- # densidade alvo. -->
+
+<!-- fxt \<- function(x) x\[1\]\^6 *x\[2\]* ( 1 + x\[1\] ) \* exp( -x\[1\] \* ( 1 + x\[2\] ) ) /2 -->
+
+<!-- # gráfico de contorno -->
+
+<!-- x1 \<- seq(.5,12,.01) x2 \<- seq(0,5,.1) imx \<- outer( x1, x2, function(x1,x2) apply( cbind(x1,x2),1,fxt) ) contour( x1, x2, imx, ylim=c(-3,5)) -->
+
+<!-- Vamos simular uma amostra aleatória desta distribuição utilizando o método Metropolis. O suporte de f(.) não está em R2 . Considere o vetor transformado Z1=log(X1) e Z2=log(X2) , cuja densidade -->
+
+<!-- fZ(z)=f(ez1,ez2)ez1+z2, com z∈R2 . Abaixo segue um esboço dessa densidade -->
+
+<!-- # densidade de Z = log(X) -->
+
+<!-- fz \<- function(z) exp( z\[1\]+z\[2\] ) \* fxt( c(exp(z\[1\]),exp(z\[2\])) ) -->
+
+<!-- # gráfico de contorno -->
+
+<!-- z1 \<- seq(-1,3,.1) z2 \<- seq(-3,2,.1) imz \<- outer( z1, z2, function(z1,z2) apply( cbind(z1,z2),1,fz) ) contour( z1, z2, imz) -->
+
+<!-- Vamos simular primeiro valores de fZ(.) através do método Metropolis. Primeiro, encontraremos a moda da densidade e a matriz hessiana que será utilizada para construir a matriz de covariâncias da proposta. -->
+
+<!-- fun_objetivo \<- function(z) -log( fz(z) ) -->
+
+<!-- op\<- optim( par = c(0,0), fn = fun_objetivo, hessian = T) Os argumentos relevantes contidos em op para este exemplo são apresentados abaixo. -->
+
+<!-- #valor 0 indica convergência op$convergence -->
+<!-- ## [1] 0 -->
+<!-- # moda encontrada -->
+<!-- op$par \## \[1\] 1.767102 -1.074004 \# hessiana. Seu inverso irá compor a variância da proposta op\$hessian \## \[,1\] \[,2\] \## \[1,\] 7.729151 1.999902 \## \[2,\] 1.999902 1.999902 Abaixo, construímos um algoritmo Metropolis para simular de fZ(.) . -->
+
+<!-- # carregango o pacote MASS, para simular normais multivariadas -->
+
+<!-- require(MASS) -->
+
+<!-- # tamanho da trajetória -->
+
+<!-- B \<- 500000 -->
+
+<!-- # valor inicial -->
+
+<!-- z \<- array( NA_real\_, c( B , 2 )) z\[1, \] \<- op\$par -->
+
+<!-- # variância da proposta -->
+
+<!-- s2 \<- solve(op\$hessian) -->
+
+<!-- # tunning -->
+
+<!-- tau \<- 10 -->
+
+<!-- # contador (para verificar a taxa de aceitação) -->
+
+<!-- contador \<- 0 -->
+
+<!-- # Metropolis -->
+
+<!-- for(i in 2:B){ -->
+
+<!-- \# gerando y e u y \<- mvrnorm(1, z\[i-1,\], tau \* s2 ) u \<- runif(1) -->
+
+<!-- \# log da razao rho \<- min( 1, fz(y)/fz(z\[i-1,\]) ) -->
+
+<!-- \# movimento da cadeia ifelse( u \< rho, {z\[i,\]\<- y ; contador \<- contador +1}, z\[i,\] \<- z\[i-1,\]) } -->
+
+<!-- # taxa de aceitação -->
+
+<!-- contador/B \## \[1\] 0.166738 \# burn-in e autocorrelações z_burn \<- z\[-(1:(B/2)),\] acf(z_burn, main ="") -->
+
+<!-- # amostra final -->
+
+<!-- z_sim \<- z_burn\[ seq(1,nrow(z_burn),30) , \] -->
+
+<!-- # densidade estimada via valores simulados -->
+
+<!-- contour(kde2d(z_sim\[,1\], z_sim\[,2\])) contour(z1,z2, imz, add = T ,col =4, lty = 2) legend("bottomleft",c("simulação","alvo"), col = c(1,4), lty=c(1,2), bty = "n") -->
+
+<!-- Agora que simulamos pontos de fZ(.) , podemos simular pontos de f(.) : -->
+
+<!-- # amostra simulada de x -->
+
+<!-- x \<- exp(z_sim) -->
+
+<!-- # densidade estimada da amostra simulada -->
+
+<!-- contour(kde2d(x\[,1\], x\[,2\]), ylim = c(0,3) ) contour(x1, x2, imx, add = T, col = 4, lty = 2) legend("topright",c("simulação","alvo"), col = c(1,4), lty=c(1,2), bty = "n") -->
+
+
+
+<!-- Exercícios Exercício 1 Simule, via o método Metropolis-Hastings, uma amostra aleatória de tamanho 200 da distribuição cuja função densidade é dada por f(x)=1+x222π−−√exp{−x22}, com −∞\<x\<∞ . -->
+
+
+<!-- Exercícios Exercício 1 Considere as seguintes máximas anuais do Rio Negro, obtidas no Porto de Manaus -->
+
+<!-- Ano199219931994199519961997199819992000200120022003Máxima25.4228.7629.0527.1628.5428.9627.5829.3028.6228.2128.9128.27Ano20042005200620072008200920102011201220132014Máxima27.1328.1028.8428.1828.6229.7727.9628.6229.9729.3329.50 -->
+
+<!-- Considere que estes dados são provenientes de uma amostra aleatória do modelo Weibull, dado por f(x\|α,β)=αβ(xβ)α−1e−(xβ)α, com x,α,β\>0 . Considere a transformação θ1=log(α),θ2=log(β) e faça (θ1,θ2)∼N(02,100I2) . Sob o ponto de vista bayesiano, as inferências devem ser realizadas segundo a densidade a posteriori, dada por -->
+
+<!-- f(θ1,θ2\|x1,…,xn)∝f(x1,…,xn\|θ1,θ2)f(θ1,θ2) 1. Construa um simulador para a posteriori acima utilizando o método Metropolis. Gere 5.000 amostras. -->
+
+<!-- Neste ano (2021) o Rio Negro atingiu a sua máxima histórica, de 29,98 metros. Utilize as amostras geradas acima para estimar a probabilidade P(X\>29,98\|x1,…,xn) utilizando o seguinte algoritmo: -->
+
+<!-- Para cada (θ1,θ2) gerado, simule x∗∼Weibull(eθ1,eθ2) -->
+
+<!-- Para a amostra x∗1,\ldotos,x∗5.000 , estime a probabilidade desejada por -->
+
+<!-- 15.000∑i=15.000I(29.98,∞)(x∗i) 3. Com base na estimativa acima, podemos dizer que a máxima de 2021 era esperada? -->
+
+<!-- Aula 13 - O amostrador de Gibbs Considere que desejamos simular amostras aleatórias do vetor X , de comprimento d , com função densidade (ou de probabilidade) dada por fX(.) . Seja X(1),…,X(s) uma partição do vetor X , escolhida de tal sorte que sabemos simular X(j)\|X(−j)=x(−j), para j=1,…,s , onde (−j)={1,…,s}/{j} . As distribuições acima são denominadas condicionais completas. -->
+
+<!-- Nesta situação, podemos utilizar o amostrador de Gibbs, definido a seguir. -->
+
+<!-- Amostrador de Gibbs -->
+
+<!-- Comece fixando o valor inicial x(−1)0 , escolhido no suporte de X(−1) . Na k -ésima iteração do algoritmo: -->
+
+<!-- Simule x(1)k∼fX(1)\|X(−1)(.\|x(−1)k−1) -->
+
+<!-- Simule x2(k)∼fX(2)\|X(−2)(.\|x(1)k,x(−1,−2)k−1) -->
+
+<!-- Simule x(3)k∼fX3\|X(−3)(.\|x(1,2)k,x(−1,−2,−3)k−1) -->
+
+<!-- \*. (…) -->
+
+<!-- Simule x(s)k∼fX(s)\|X(−s)(.\|x(−s)k) Quando s=d , temos a formulação original do amostrador de Gibbs. Em caso contrário, dizemos temos um amostrador de Gibbs em blocos (blocked Gibbs sampler). -->
+
+<!-- O algoritmo acima gera uma trajetória do processo {X(k),k=0,1,…} . Como X(k) é gerado a partir de X(k−1)=x(k−1) , temos que esse processo é uma Cadeia de Markov. -->
+
+<!-- Para mostrar que o amostrador de Gibbs é um MCMC, devemos verificar que a distribuição estacionária do processo é fX(.) . Para não carregar a notação e, sem perda de generalidade, assuma que estamos interessados em simular fX,Y(.) . Na j -ésima iteração do algoritmo, teremos xtyt∼fX\|Y(.\|yt−1)∼fY\|X(.\|xt) -->
+
+<!-- Note que o núcleo de transição desta cadeia é -->
+
+<!-- k(xt,yt\|xt−1,yt−1)=fY\|X(yt\|xt)fX\|Y(xt\|yt−1) Como fX,Y(xt,yt)=fY\|X(yt\|xt)fX(xt)=fY\|X(yt\|xt)∫fX\|Y(xt\|yt−1)fY(yt−1)dyt−1=∫fY\|X(yt\|xt)fX\|Y(xt\|yt−1)k(xt,yt\|xt−1,yt−1)fY(yt−1)dyt−1=∫k(xt,yt\|xt−1,yt−1)fY(yt−1)dyt−1=∫k(xt,yt\|xt−1,yt−1)∫fX,Y(xt−1,yt−1)dxt−1dyt−1=∫∫k(xt,yt\|xt−1,yt−1)fX,Y(xt−1,yt−1)dxt−1dyt−1 temos que fX,Y(.,.) é, de fato, a distribuição estacionária desta cadeia. -->
+
+<!-- Exemplo 1 -->
+
+<!-- Considere a seguinte função densidade -->
+
+<!-- f(x)∝exp⎧⎩⎨⎪⎪−14x′⎛⎝⎜3−1−1−13−1−1−13⎞⎠⎟x⎫⎭⎬⎪⎪∏j=13I(−2,2)(xj) ou seja X tem distribuição normal multivariada restrita ao cubo (−2,2)3 . É fácil mostrar que f(xi\|xj,xk)∝exp{−43(xi−xj+xk3)}I(−2,2)(xi) ou seja, xi\|xj,xk tem distribuição normal truncada, restrita ao intervalo (−2,2) . O amostrador de Gibbs correspondente é dado abaixo: -->
+
+<!-- # tamanho da trajetória -->
+
+<!-- B \<- 5000 -->
+
+<!-- # array para guardar a trajetória -->
+
+<!-- x \<- array(NA_real\_,c(B,3)) -->
+
+<!-- # valor inicial (nas modas de f) -->
+
+<!-- x\[1,\] \<- c(0,0,0) -->
+
+<!-- # amostrador de Gibbs -->
+
+<!-- for(i in 2:B){ -->
+
+<!-- \# x1 dado o resto while( is.na(x\[i,1\]) == T){ y \<- rnorm(1, ( x\[i-1,2\]+x\[i-1,3\] ) /3, sqrt(2/3) ) if( {y\<2} & {y\>-2}){ x\[i,1\] \<- y } } -->
+
+<!-- \# x2 dado o resto while( is.na(x\[i,2\]) == T){ y \<- rnorm(1, ( x\[i,1\]+x\[i-1,3\] ) /3, sqrt(2/3) ) if( {y\<2} & {y\>-2}){ x\[i,2\] \<- y } } -->
+
+<!-- \# x3 dado o resto while( is.na(x\[i,3\]) == T){ y \<- rnorm(1, ( x\[i,1\]+x\[i,2\] ) /3, sqrt(2/3) ) if( {y\<2} & {y\>-2}){ x\[i,3\] \<- y } } -->
+
+<!-- } -->
+
+<!-- # amostra após o burn-in -->
+
+<!-- burn \<- 1:(.5\*B) x_burn \<- x\[ -burn , \] -->
+
+<!-- # autocorrelações -->
+
+<!-- acf(x_burn) -->
+
+<!-- # amostra final -->
+
+<!-- m \<- nrow(x_burn) x_sim \<- x_burn\[ seq(1, m, 5) , \] -->
+
+<!-- # traceplot e autocorrelação da amostra final -->
+
+<!-- ts.plot(x_sim\[,1\]) -->
+
+<!-- acf(x_sim\[,1\]) -->
+
+<!-- É interessante notar que as distribuições marginais de X distribuição normal padrão truncada em (-2,2). Abaixo, mostramos o histograma da primeira componente simulada e sua respectiva função densidade. -->
+
+<!-- hist(x_sim\[,1\] , freq = FALSE, main ="", xlab = expression(x\[1\])) curve( dnorm(x)/( 2\*pnorm(2)-1) , add = T, lwd = 2) -->
+
+<!-- Exercícios Exercício 15.1 -->
+
+<!-- Considere o modelo bivariado: -->
+
+<!-- P(X=x\|Y=y)f(y)=(nx)yx(1−y)n−x, com x∈{0,1,…,n} e y∈(0,1) . Construa um amostrador de Gibbs para simular amostras de (X,Y) . -->
+
+<!-- Aula 14 - Amostrador de Gibbs em blocos e colapsado Nesta aula vamos discutir algumas estratégias que podem acelerar a convergência do amostrador de Gibbs. -->
+
+<!-- Considere o vetor aleatório (X,Y,Z) . O amostrador de Gibbs tradicional (aquele em que todas as condicionais completas são univariadas) necessita das seguintes condicionais completas: -->
+
+<!-- Estretégia 1: amostrador de Gibbs “tradicional” xyz∼f(x\|y,z)∼f(y\|x,z)∼f(z\|x,y) Suponha que é simples simular (Y,Z) . Então, podemos propor um amostrador de Gibbs em blocos (com condicionais completas multivariadas) com as seguintes condicionais completas: -->
+
+<!-- Estratégia 2: amostrador de Gibbs em blocos x(y,z)∼f(x\|y,z)∼f(y,z\|x) Podemos ainda inverter a ordem da simulação, criando a estratégia 3 -->
+
+<!-- Estratégia 3: amostrador de Gibbs em blocos (trocando a ordem dos blocos) x(y,z)∼f(x\|y,z)∼f(y,z\|x) Considere agora que o problema de simular (X,Y) pode ser tratável via um amostrador de Gibbs. Especificamente, considere que fX,Y(x,y)=∫fX,Y,Z(x,y,z)dz é uma distribuição tratável via um amostrador de Gibbs. Então, podemos simular a amostra (x1,y1),…,(xm,ym) e, posteriormente, simular zi∼fZ\|X,Y(\|xi,yi) . Este método, no qual o amostrador de Gibbs é aplicado apenas a um subconjunto da partição do vetor aleatório em questão, é denominado colapsado. No exemplo acima, dizemos que o amostrador foi colapsado na variável Z . -->
+
+<!-- Abaixo, segue a nossa estratégia 4. -->
+
+<!-- Estretégia 4: amostrador de Gibbs colapsado xxy∼f(x\|y,z)∼f(x\|y)∼f(y\|x). Após a convergência, utilize os valores simulados para simular valores de z∼f(z\|x,y). Exemplo 14.1 -->
+
+<!-- Seja (X,Y,Z) um vetor aleatório com distribuição normal variada com vetor de médias nulo e matriz de covariâncias dada por -->
+
+<!-- ⎛⎝⎜⎜10,1−−−√0,8−−−√0,1−−−√100,8−−−√01⎞⎠⎟⎟. -->
+
+<!-- É fácil simular vetores aleatórios com esta distribuição, sem a necessidade de um MCMC. Contudo, este exemplo simples nos permite verificar a eficiência da simulação utilizando as quatro estratégias acima. -->
+
+<!-- Estratégia 1 -->
+
+<!-- Primeiro, notemos que x\|y,zy\|x,zz\|x,y∼N(0,1−−−√y+0,8−−−√z,110)∼N(50,1−−−√x−8–√2z,12)∼N(1090,8−−−√x−8–√9z,19) -->
+
+<!-- Abaixo simulamos uma trajetória de tamanho 50000 e guardamos os valores de sua função de autocorrelação após o burn-in: -->
+
+<!-- # tamanho da trajetória -->
+
+<!-- B \<- 50000 -->
+
+<!-- # array para guardar as simulações -->
+
+<!-- a \<- array(NA_real\_, c(B,3)) -->
+
+<!-- # valores iniciais -->
+
+<!-- a\[1,\] \<- c(0,0,0) -->
+
+<!-- # amostrador de Gibbs -->
+
+<!-- for(i in 2 : B){ \# x dado o resto muXdadoResto \<- sqrt(0.1) \* a\[i-1,2\] + sqrt(.8) \* a\[i-1,3\] a\[i,1\] \<- rnorm(1, muXdadoResto, sqrt(.1) ) -->
+
+<!-- \# y dado o resto muYdadoResto \<- 5*sqrt(0.1)* a\[i,1\] - .5*sqrt(8)* a\[i-1,3\] a\[i,2\] \<- rnorm(1, muYdadoResto, sqrt(.5) ) -->
+
+<!-- \# z dado o resto muZdadoResto \<- ( 10*sqrt(0.8)* a\[i,1\] - sqrt(8) \* a\[i,2\] )/9 a\[i,3\] \<- rnorm(1, muZdadoResto, sqrt( 1/9 ) ) -->
+
+<!-- } -->
+
+<!-- # trajetória após o burn-in -->
+
+<!-- a_burn \<- a\[ -( 1 : (.5\*B)),\] -->
+
+<!-- # autocorrelção de x -->
+
+<!-- acf1 \<- acf(a_burn\[,1\], main ="", plot = F) Estratégias 2 e 3 -->
+
+<!-- Agora, note que podemos utilizar as seguintes condicionais completas para amostrar em blocos: -->
+
+<!-- (y,z)\|xx\|(y,z)∼N⎛⎝(0,1−−−√0,8−−−√)x,⎛⎝0,9−8√10−8√100,2⎞⎠⎞⎠∼N(0,1−−−√y+0,8−−−√z,110) -->
+
+<!-- Abaixo simulamos uma trajetória de tamanho 5000 utilizando o amostrador de Gibbs em blocos com a Estratégia 2: -->
+
+<!-- # pacote para simulação de normais multivariadas (entre outras funções) -->
+
+<!-- library(MASS) -->
+
+<!-- # tamanho da trajetória -->
+
+<!-- B \<- 50000 -->
+
+<!-- # array para guardar as simulações -->
+
+<!-- a \<- array(NA_real\_, c(B,3)) -->
+
+<!-- # valores iniciais -->
+
+<!-- a\[1,\] \<- c(0,0,0) -->
+
+<!-- # amostrador de Gibbs -->
+
+<!-- for(i in 2 : B){ \# x dado o (x,z) muXdadoResto \<- sqrt(0.1) \* a\[i-1,2\] + sqrt(.8) \* a\[i-1,3\] a\[i,1\] \<- rnorm(1, muXdadoResto, sqrt(.1) ) -->
+
+<!-- \# (y,z) dado x muYZ \<- matrix( c( sqrt(0.1), sqrt(.8) ) , ncol = 1 )\* a\[i,1\] SigmaYZ \<- matrix( c(.9, - .1*sqrt(8), -.1*sqrt(8), .2), 2,2) a\[i,2:3\] \<- mvrnorm(1, muYZ, SigmaYZ) -->
+
+<!-- } -->
+
+<!-- # trajetória após o burn-in -->
+
+<!-- a_burn \<- a\[ -( 1 : (.5\*B)),\] -->
+
+<!-- # autocorrelção de x -->
+
+<!-- acf2 \<- acf(a_burn\[,1\], main ="", plot = FALSE) E aqui para a Estatégia 3: -->
+
+<!-- # pacote para simulação de normais multivariadas (entre outras funções) -->
+
+<!-- library(MASS) -->
+
+<!-- # tamanho da trajetória -->
+
+<!-- B \<- 50000 -->
+
+<!-- # array para guardar as simulações -->
+
+<!-- a \<- array(NA_real\_, c(B,3)) -->
+
+<!-- # valores iniciais -->
+
+<!-- a\[1,\] \<- c(0,0,0) -->
+
+<!-- # amostrador de Gibbs -->
+
+<!-- for(i in 2 : B){ \# (y,z) dado x muYZ \<- matrix( c( sqrt(0.1), sqrt(.8) ) , ncol = 1 )\* a\[i-1,1\] SigmaYZ \<- matrix( c(.9, - .1*sqrt(8), -.1*sqrt(8), .2), 2,2) a\[i,2:3\] \<- mvrnorm(1, muYZ, SigmaYZ) -->
+
+<!-- \# x dado o (x,z) muXdadoResto \<- sqrt(0.1) \* a\[i,2\] + sqrt(.8) \* a\[i,3\] a\[i,1\] \<- rnorm(1, muXdadoResto, sqrt(.1) ) -->
+
+<!-- } -->
+
+<!-- # trajetória após o burn-in -->
+
+<!-- a_burn \<- a\[ -( 1 : (.5\*B)),\] -->
+
+<!-- # autocorrelção de x -->
+
+<!-- acf3 \<- acf(a_burn\[,1\], main ="", plot = FALSE) Estratégia 4 Ao colapsar o vetor (X,Y,Z) em Z teremos que (X,Y) tem distribuição normal multivariada com vetor de médias nulo e matriz de covariâncias dada por -->
+
+<!-- (10,1−−−√0,1−−−√1) e as condicionais completas do amostrador de Gibbs são: x\|yy\|x∼N(0,1−−−√y,910)∼N(0,1−−−√x,910) Após simular a amostra (x,y) vamos simular z através da seguinte condicional: -->
+
+<!-- z\|x,y∼N(1090,8−−−√x−8–√9z,19) -->
+
+<!-- Aqui mostramos a implementação da Estatégia 4 (não vamos simular Z porque nosso objetivo é comparar as funções de autocorrelação): -->
+
+<!-- # pacote para simulação de normais multivariadas (entre outras funções) -->
+
+<!-- library(MASS) -->
+
+<!-- # tamanho da trajetória -->
+
+<!-- B \<- 50000 -->
+
+<!-- # array para guardar as simulações -->
+
+<!-- a \<- array(NA_real\_, c(B,3)) -->
+
+<!-- # valores iniciais -->
+
+<!-- a\[1,\] \<- c(0,0,0) -->
+
+<!-- # amostrador de Gibbs -->
+
+<!-- for(i in 2 : B){ \# x dado y muX \<- sqrt(.1) \* a\[i-1,2\] SigmaX \<- .9 a\[i,1\] \<- rnorm(1, muX, sqrt( SigmaX ) ) -->
+
+<!-- \# x dado y muY \<- sqrt(.1) \* a\[i,1\] SigmaY \<- .9 a\[i,2\] \<- rnorm(1, muY, sqrt( SigmaY ) ) -->
+
+<!-- } -->
+
+<!-- # trajetória após o burn-in -->
+
+<!-- a_burn \<- a\[ -( 1 : (.5\*B)),\] -->
+
+<!-- # autocorrelção de x -->
+
+<!-- acf4 \<- acf(a_burn\[,1\], main ="", plot = FALSE) Comparando as 4 estratégias -->
+
+<!-- O gráfico abaixo mostra a performance das estratégias. Podemos notar que o amostrador de Gibbs colapsado tem as menores autocorrelações. Também podemos perceber que permutar a ordem das simulações dentro do amostrador (como na comparação entre as estratégias 2 e 3) podem trazer melhorias. -->
+
+<!-- plot(acf1$acf,main="", type="l" ,col = 1 ,ylab = "Autocorrelações", -->
+<!--      xlab= "Defasagem (lag)") -->
+<!-- lines(acf2$acf, col =2) lines(acf3$acf, col = 3) -->
+<!-- lines(acf4$acf, col =4) legend("topright", c("Estratégia 1", "Estratégia 2", "Estratégia 3", "Estratégia 4"), col = 1:4, bty = "n", lty = 1) -->
+
+<!-- Exercícios Exercício 14.1 -->
+
+<!-- Considere o modelo f(x,y,z,w)=(wx)(wy)zx+y(1−z)2w−x−y, com x∈{0,…,w} , y∈{0,…,w} , w∈{1,…,10} e z∈(0,1) . -->
+
+<!-- Mostre que as condicionais completas são z\|x,y,wx\|y,z,wy\|x,z,wf(w\|x,y,z)∼Beta(x+y+1,2w−x−y+1)∼Binomial(w,z)∼Binomial(w,z)∝(wx)(wy)(1−z)2w−x−yI{max{1,x,y},…,10}(w) -->
+
+<!-- Construa um simulador para f(w\|x,y,z) e utilize esse resultado para construir um amostrador de Gibbs. -->
+
+<!-- Mostre que -->
+
+<!-- f(w\|x,y)∝(wx)(wy)B(x+y+1,2w−x−y+1)I{max1,x,y,…,10}. Utilize este resultado para construir um simulador para f(z,w\|x,y)=f(z\|x,y,w)f(w\|x,y) . -->
+
+<!-- Com o simulador acima, construa um amostrador de Gibbs em blocos, simulando de (x,y\|z,w) e (z,w\|x,y) . -->
+
+<!-- Compare as funções de autocovariância das amostras de Z obtidas nos dois amostradores de Gibbs e outro com a ordem -->
+
+<!-- zwxy\|x,y,w\|x,z,w\|y,z,w\|x,w,z -->
+
+<!-- Gere 500 trajetórias de tamanho 1000 de cada amostrador. Para cada trajetória, guarde os valores da função de autocorrelação até o lag 40. Conclua que a segunda -->

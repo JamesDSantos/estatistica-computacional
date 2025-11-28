@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./provas.html" rel="next">
+<link href="./monte_carlo.html" rel="next">
 <link href="./AR.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -233,8 +233,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./monte_carlo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">O método de integração de Monte Carlo</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./provas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Provas</span></span></a>
   </div>
 </li>
     </ul>
@@ -249,6 +255,10 @@ window.Quarto = {
   <ul>
   <li><a href="#introdução-à-cadeias-de-markov" id="toc-introdução-à-cadeias-de-markov" class="nav-link active" data-scroll-target="#introdução-à-cadeias-de-markov"><span class="header-section-number">8.1</span> Introdução à Cadeias de Markov</a></li>
   <li><a href="#introdução-aos-métodos-de-monte-carlo-via-cadeias-de-markov-mcmc" id="toc-introdução-aos-métodos-de-monte-carlo-via-cadeias-de-markov-mcmc" class="nav-link" data-scroll-target="#introdução-aos-métodos-de-monte-carlo-via-cadeias-de-markov-mcmc"><span class="header-section-number">8.2</span> Introdução aos Métodos de Monte Carlo via Cadeias de Markov (MCMC)</a></li>
+  <li><a href="#o-método-metropolis-hastings" id="toc-o-método-metropolis-hastings" class="nav-link" data-scroll-target="#o-método-metropolis-hastings"><span class="header-section-number">8.3</span> O método Metropolis-Hastings</a>
+  <ul class="collapse">
+  <li><a href="#a-escolha-da-proposta-e-o-parâmetro-tunning" id="toc-a-escolha-da-proposta-e-o-parâmetro-tunning" class="nav-link" data-scroll-target="#a-escolha-da-proposta-e-o-parâmetro-tunning"><span class="header-section-number">8.3.1</span> A escolha da proposta e o parâmetro <em>tunning</em></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -624,10 +634,10 @@ Autocorrelations of series 'trajetorias[-(1:20), 1]', by lag
 <pre><code>[1] 0.9999378</code></pre>
 </div>
 </div>
-<p>Como <span class="math inline">\(R&lt;1,1\)</span>, temos que evidências de que a convergência foi obtida. ```</p>
+<p>Como <span class="math inline">\(R&lt;1,1\)</span>, temos que evidências de que a convergência foi obtida.</p>
 </div>
 <div class="alert alert-danger">
-<p>Cas notas de aula, analisamos a seguinte cadeia de Markov, que é reversível em relação à sua distribuição estacionária:</p>
+<p>Nas notas de aula, analisamos a seguinte cadeia de Markov, que é reversível em relação à sua distribuição estacionária:</p>
 <p>Núcleo de Transição: <span class="math inline">\(X_n | X_{n-1} = y \sim \text{Uniforme}(1-y, 1)\)</span></p>
 <p>Distribuição Estacionária (Alvo): <span class="math inline">\(\pi(x) = 2x\)</span>, para <span class="math inline">\(x \in (0, 1)\)</span>.</p>
 <p>Embora tenhamos simulado uma única trajetória em aula, agora vamos usar esta cadeia como um método de simulação MCMC completo, aplicando todo o nosso ferramental de diagnóstico para gerar uma amostra final que se pareça com i.i.d.</p>
@@ -640,8 +650,454 @@ Autocorrelations of series 'trajetorias[-(1:20), 1]', by lag
 </ol>
 <p>Verificação Final: Plote um histograma (hist(…, freq = FALSE)) da sua amostra_final. Sobreponha a curva da distribuição estacionária teórica (use curve(2*x, from=0, to=1, add = T, col = “red”, lwd = 2)). O histograma da sua simulação representa bem a distribuição-alvo <span class="math inline">\(\pi(x) = 2x\)</span>?</p>
 </div>
+</section>
+<section id="o-método-metropolis-hastings" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="o-método-metropolis-hastings"><span class="header-section-number">8.3</span> O método Metropolis-Hastings</h2>
+<p>Seja <span class="math inline">\(f(x)\)</span> a função densidade alvo. O algoritmo Metropolis-Hastings é definido abaixo.</p>
+<div class="alert alert-success">
+<p><strong>Algoritmo Metropolis-Hastings</strong></p>
+<p>Comece com <span class="math inline">\(x_0\)</span> arbitrário. Na <span class="math inline">\(i\)</span>-ésima iteração:</p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(y\sim q(.|x_{i−1})\)</span> e <span class="math inline">\(u\)</span>∼Uniforme(0,1)</p></li>
+<li><p>Encontre</p></li>
+</ol>
+<p><span class="math display">\[\rho(x_{i−1},y)=\min\left\{1,\frac{f(y)}{f(x_{i−1})}\frac{q(x_{i−1}|y)}{q(y|x_{i−1})}\right\}.\]</span></p>
+<p>Se <span class="math inline">\(u&lt;\rho(x_{i−1},y)\)</span> então <span class="math inline">\(x_i=y\)</span>. Senão, <span class="math inline">\(x_i=x_{i−1}\)</span>.</p>
+</div>
+<p>O Metropolis-Hastings é um método do tipo MCMC que se utiliza da densidade <span class="math inline">\(q(.|.)\)</span>, denominada proposta, para gerar estados para a cadeia de Markov. Os valores gerados pela proposta são denominados candidatos. Em cada iteração a cadeia pode permanecer no estado atual, ou fazer um movimento para o candidto gerado.</p>
+<p>Vamos provar que o Metropolis-Hastings é um MCMC. Notemos que a probabilidade de transição é dada por</p>
+<p><span class="math display">\[P(X_i\in A|X_{i−1}=x_{i−1})=\int_\mathbb{R^d}P(X_i\in A|X_{i−1}=x_{i−1},Y=y)q(y|x_{i−1})dy\]</span> Agora, dados <span class="math inline">\(x_{i−1}\)</span> e <span class="math inline">\(y\)</span>, sabemos que</p>
+<p><span class="math display">\[xi=\left\{\begin{array}{ll}y,&amp; \hbox{ com probabilidade } \rho(x_{i−1},y)\\ x_{i−1},&amp;  \hbox{ com probabilidade } 1−\rho(x_{i−1},y)\end{array}\right.\]</span> logo <span class="math display">\[P(X_i\in A|X_{i−1}=x_{i−1},Y=y)=I_A(y)\rho(x_{i−1},y)+I_A(x_{i−1})(1−\rho(x_{i−1},y))\]</span></p>
+<p>Assim, a probabilidade de transição pode ser expressada por</p>
+<p><span class="math display">\[\begin{align}P(X_i\in A|X_{i−1}=x_{i−1})&amp;=\int_{\mathbb{R}^d}I_A(y)\rho(x_{i−1},y)q(y|x_{i−1})dy\\&amp;+\int_{\mathbb{R}^d}I_A(x_{i−1})(1−\rho(x_{i−1},y))q(y|x_{i−1})dy\\&amp;=\int_A \rho(x_{i−1},y)q(y|x_{i−1})dy+I_A(x_{i−1})r(x_{i−1})\end{align}\]</span> onde <span class="math display">\[r(x_{i−1})=\int_{\mathbb{R}^d}(1−\rho(x_{i−1},y))q(y|x_{i−1})dy.\]</span> Se <span class="math inline">\(f(y)q(x_{i−1}|y)&gt;f(x_{i−1})q(y|x_{i−1})\)</span>, então <span class="math inline">\(\rho(x_{i−1},y)=1\)</span> e <span class="math inline">\(r(x_{i−1})=0\)</span>. Então, <span class="math inline">\(r(x_{i−1})\)</span> pode ser reescrito como</p>
+<p><span class="math display">\[r(x_{i−1})=\int_{y:f(y)q(x_{i−1}|y)&lt;f(x_{i−1})q(y|x_{i−1})}(1−\rho(x_{i−1},y))q(y|x_{i−1})dy.\]</span></p>
+<p>Vamos mostrar que a cadeia de Markov definida com essa probabilidade de transição tem distribuição estacionária <span class="math inline">\(f(x)\)</span>. A demonstração será dividida em duas partes.</p>
+<p><strong>Parte 1.</strong></p>
+<p>Primeiro, note que esta probabilidade é uma variável aleatória mista, com a parte contínua dada por <span class="math display">\[k(y|x_{i−1})=\rho(x_{i−1},y)q(y|x_{i−1}).\]</span></p>
+<p>Em relação à <span class="math inline">\(y\)</span> e <span class="math inline">\(x_{i−1}\)</span> há duas possibilidades: ou <span class="math inline">\(f(x_{i−1})q(y|x_{i−1})&lt;f(y)q(x_{i−1}|y)\)</span> ou <span class="math inline">\(f(x_{i−1})q(y|x_{i−1})&gt;f(y)q(x_{i−1}|y)\)</span>. Sem perda de generalidade, assuma que <span class="math inline">\(f(x_{i−1})q(y|x_{i−1})&gt;f(y)q(x_{i−1}|y)\)</span>. Então,</p>
+<p><span class="math display">\[\rho(x_{i−1},y)=\frac{f(y)}{f(x_{i−1})}\frac{q(x_{i−1}|y)}{q(y|x_{i−1})}\]</span> e <span class="math display">\[\rho(y,x_{i−1})=1.\]</span> Da definição de <span class="math inline">\(k(.|.)\)</span>, teremos</p>
+<p><span class="math display">\[\begin{align}k(y|x_{i−1})&amp;=\rho(x_{i−1},y)q(y|x_{i−1})=\frac{f(y)}{f(x_{i−1})}\frac{q(x_{i−1}|y)}{q(y|x_{i−1})}q(y|x_{i−1})\\&amp;=\frac{f(y)}{f(x_{i−1})}{q(x_{i−1}|y)}\Rightarrow(x_{i−1})k(y|x_{i−1})=f(y)q(x_{i−1}|y)\end{align}\]</span></p>
+<p>Além disso, <span class="math inline">\(k(x_{i−1}|y)=\rho(y,x_{i−1})q(x_{i−1}|y)=q(x_{i−1}|y)\)</span>. Disto, temos</p>
+<p><span class="math display">\[f(x_{i−1})k(y|x_{i−1})=f(y)q(x_{i−1}|y)⇒f(x_{i−1})k(y|x_{i−1})=f(y)k(x_{i−1}|y)\]</span> logo, como estão satisfeitas as equações de balanço detalhado, uma cadeia com núcleo de transição <span class="math inline">\(k(.|.)\)</span> tem distribuição estacionária <span class="math inline">\(f(.)\)</span></p>
+<p><strong>Parte 2</strong></p>
+<p>Agora vamos concluir a demonstração. Anteriormente, vimos as equações de balanço para uma cadeia com distribuição um passo à frente estritamente contínua. Para uma cadeia de Markov com distribuição mista, as equações de balanço detalhado são dadas por</p>
+<p><span class="math display">\[\int_A P(X_i\in B|x_{i−1}=y)f(y)dy=\int_B P(X_i\in A|x_{i−1}=x)f(x)dx\]</span></p>
+<p>Para a nossa cadeia, temos que</p>
+<p><span class="math display">\[\begin{align}\int_AP(X_i\in B|x_{i−1}=x_{i−1})f(x_{i−1})dx_{i−1}&amp;=\int_A\int_ B\rho(x_{i−1},w)q(y|x_{i−1})f(x_{i−1})dwdx_{i−1}\\&amp;+\int_AI_B(x_{i−1})r(x_{i−1})f(x_{i−1})dx_{i−1}\\&amp;=\int_A\int_B k(w|x_{i−1})f(x_{i−1})dwdx_{i−1}+\int_BI_A(x_{i−1})r(x_{i−1})f(x_{i−1})dx_{i−1}\\&amp;=\int_B\int_A k(x_{i−1}|w)f(w)dx_{i−1}dw+\int_BI_A(w)r(w)f(w)dw=\int_B\left[\int_Ak(x_{i−1}|w)dx_{i−1}+I_A(w)r(w)\right]f(w)dw=\int_B\int_A\rho(w,x_{i−1})q(x_{i−1}|w)f(w)dx_{i−1}dw+\int_BI_A(w)r(w)f(w)dw=\int_BP(X_i\in A|x_{i−1}=w)f(w)dw\end{align}\]</span></p>
+<section id="a-escolha-da-proposta-e-o-parâmetro-tunning" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="a-escolha-da-proposta-e-o-parâmetro-tunning"><span class="header-section-number">8.3.1</span> A escolha da proposta e o parâmetro <em>tunning</em></h3>
+<p>Para que a cadeia de Markov de um Metropolis-Hastings tenha uma distribuição estacionária é suficiente que</p>
+<ol type="1">
+<li><p><span class="math inline">\(q(y|x)&gt;0\)</span> para todo <span class="math inline">\((x,y)\in S^2\)</span> , onde <span class="math inline">\(S\)</span> é o suporte de <span class="math inline">\(f(.)\)</span></p></li>
+<li><p>A probabilidade do evento <span class="math inline">\({X_t=X_{t−1}}\)</span> é maior que zero.</p></li>
+</ol>
+<p>A primeira condição garante que a cadeia é irredutível (ou seja, que é possível partir de qualquer subconjunto <span class="math inline">\(B\subset S\)</span> e chegar em qualquer <span class="math inline">\(A\subset S\)</span> em um número finito de iterações). A segunda condição acima garante que a cadeia é aperiódica.</p>
+<p>A segunda condição está associada com o passo de aceitação da cadeia. Por isso, não é desejável que todos os candidatos gerados pela proposta sejam aceitos.</p>
+<p>As duas condições parecem ser facilmente satisfeitas, mas a primeira condição merece atenção. Considere que desejamos criar um gerador para a seguinte função densidade:</p>
+<p><span class="math display">\[f(x)=\frac{625}{1896}\sin(x)^2x^3e^{−x},\]</span> com <span class="math inline">\(x&gt;0\)</span>. O gráfico dessa função é dado abaixo. Note que a densidade alvo possui várias modas (infinitas, na verdade). Destacamos as quatro modas mais relevantes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># densidade alvo</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sin</span>(x)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> x<span class="sc">^</span><span class="dv">3</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>x)<span class="sc">*</span><span class="dv">625</span><span class="sc">/</span><span class="dv">1896</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># gráfico</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">f</span>(x), <span class="dv">0</span>, <span class="dv">15</span> , <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># modas</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>moda <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.865</span>,<span class="fl">4.544</span>,<span class="fl">7.561</span>,<span class="fl">10.65</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>f_moda <span class="ot">&lt;-</span> <span class="fu">f</span>(moda)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>( moda, f_moda, <span class="at">pch =</span> <span class="dv">16</span>) </span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>xx <span class="ot">&lt;-</span> <span class="fu">cbind</span>(moda,<span class="dv">0</span>,moda, f_moda) </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>( xx[,<span class="dv">1</span>], xx[,<span class="dv">2</span>], xx[,<span class="dv">3</span>], xx[,<span class="dv">4</span>], <span class="at">lty =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mcmc_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Vamos considerar como proposta a função densidade da distribuição <span class="math inline">\(Y|X=x\sim\)</span>Gama(<span class="math inline">\(x^2/\sigma^2,x/\sigma^2\)</span>) . Notemos que</p>
+<p><span class="math display">\[E(Y|x)=x,\;\;Var(Y|x)=σ^2\]</span> logo, a variância da proposta é controlada por <span class="math inline">\(\sigma^2\)</span> (reparametrizar a proposta em termos de média e variância é uma estratégia muito comum em um Metropolis-Hastings).</p>
+<p>A variância <span class="math inline">\(\sigma^2\)</span> tem como objetivo controlar a probabilidade de aceitação e, em alguns contextos, recebe o nome de <em>tunning parameter</em> (parâmetro de afinação). Esse nome se deve ao fato de que:</p>
+<ul>
+<li><p>Se <span class="math inline">\(\sigma^2\)</span> é muito alto, então valores em regiões de baixa probabilidade serão gerados com mais frequência, fazendo com que o algoritmo demore para aceitar um ponto.</p></li>
+<li><p>Se <span class="math inline">\(\sigma^2\)</span> é muito baixo, os valores simulados podem ficar presos em uma moda, sem conseguir explorar outras regiões com alta densidade.</p></li>
+</ul>
+<p>Portanto, <span class="math inline">\(\sigma^2\)</span> deve ser escolhido de tal sorte que a cadeia consiga explorar todas as partes relevantes da distribuição com uma taxa de aceitação razoável.</p>
+<p>Para ilustrar os conceitos discutidos até este momento, considere a seguinte implementação de um Metropolis-Hastings, em função de <span class="math inline">\(\sigma^2\)</span> . Nesta função, aplicamos um <em>burn-in</em> removendo a metade das simulações. Depois, detectamos a menor defasagem (lag) que retorna uma autocorrelação menor que 0,01 e utilizamos esse valor para amostrar sistematicamente os pontos restantes (<em>thinning</em>). Vamos iniciar no valor <span class="math inline">\(x0=1,8\)</span> que está bem próximo da moda com maior densidade. Por último, esta função gera 4 gráficos, organizados em duas linhas e duas colunas. Na primeira linha temos o <em>traceplot</em> e a função de autocorrelação, ambos após o <em>burn-in</em>. Na segunda linha temos o histograma a função de autocorrelação após a amostragem sistemática.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rmetro <span class="ot">&lt;-</span> <span class="cf">function</span>(n,sigma2){ </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># vamos começar próximo da moda 1 </span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fl">1.8</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># contador de aceitações </span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  contador <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a> <span class="co"># Metropolis Hastings </span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n){ </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># gerando um candidato </span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, x[i<span class="dv">-1</span>]<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>sigma2, x[i<span class="dv">-1</span>]<span class="sc">/</span>sigma2)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a> <span class="co"># verificando se a cadeia se move</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  alpha <span class="ot">&lt;-</span> <span class="fu">f</span>(y) <span class="sc">*</span> <span class="fu">dgamma</span>(x[i<span class="dv">-1</span>],y<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>sigma2,y<span class="sc">/</span>sigma2) <span class="sc">/</span>( <span class="fu">f</span>(x[i<span class="dv">-1</span>]) <span class="sc">*</span> <span class="fu">dgamma</span>(y,x[i<span class="dv">-1</span>]<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>sigma2,x[i<span class="dv">-1</span>]<span class="sc">/</span>sigma2) )</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  rho <span class="ot">&lt;-</span> <span class="fu">min</span> (<span class="dv">1</span>, alpha)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>( <span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> rho, {x[i] <span class="ot">&lt;-</span> y ; contador <span class="ot">&lt;-</span> contador <span class="sc">+</span><span class="dv">1</span> }, x[i] <span class="ot">&lt;-</span> x[i<span class="dv">-1</span>])</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co"># trajetória simulada após o bur-in </span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>  xb <span class="ot">&lt;-</span> x[ <span class="sc">-</span> (<span class="dv">1</span> <span class="sc">:</span>(n<span class="sc">/</span><span class="dv">2</span>) )]</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="co"># detectando o lag de interesse </span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>  aa <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(<span class="fu">acf</span>(xb,<span class="at">lag =</span> (n<span class="sc">/</span><span class="dv">2</span>), <span class="at">plot =</span> <span class="cn">FALSE</span>))[<span class="dv">1</span><span class="sc">:</span>(n<span class="sc">/</span><span class="dv">2</span>)]) </span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>  l <span class="ot">&lt;-</span> <span class="fu">which</span>( aa <span class="sc">&lt;</span> .<span class="dv">01</span> )</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a> <span class="co"># amostra final </span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> xb[<span class="fu">seq</span>(<span class="dv">1</span>,<span class="fu">length</span>(xb),l[<span class="dv">1</span>])]</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"% aceitação "</span>, <span class="dv">100</span><span class="sc">*</span>contador<span class="sc">/</span>n,<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Tamanho final da amostra "</span>, <span class="fu">length</span>(x),<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a> <span class="fu">layout</span>( <span class="fu">matrix</span>( <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>),<span class="dv">2</span>,<span class="dv">2</span>)) </span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a> <span class="co"># trajetória simulada após o burn-in </span></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a> <span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)) </span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a> <span class="fu">ts.plot</span>(x, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a><span class="co"># função de autocorrelação estimada</span></span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)) </span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(xb)</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a><span class="co"># histograma</span></span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)) </span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x, <span class="at">freq =</span> F, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">35</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">15</span>), <span class="at">sub=</span> <span class="fu">expression</span>(sigma<span class="sc">^</span><span class="dv">2</span><span class="sc">==</span><span class="dv">1</span>), <span class="at">main =</span> <span class="st">""</span>)</span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>( <span class="fu">f</span>(x), <span class="at">add =</span> T, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a><span class="co"># função de autocorrelação estimada</span></span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)) </span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(x)</span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Vamos simular uma amostra aleatória de <span class="math inline">\(X\)</span> utilizando o algoritmo Metropolis-Hastings com a proposta acima, utilizando <span class="math inline">\(\sigma^2\in\{0,1\;\;,\;\;16\;\;,\;\;200\}\)</span> , criando os cenários abaixo. Em todos os cenários foram geradas trajetórias de tamanho 100.000</p>
+<div class="alert alert-info">
+<p><strong>Cenário 1</strong>: <span class="math inline">\(\sigma^2=16\)</span>. Neste cenário a função de autocorrelação após o <em>burn-in</em> decai exponencialmente. Deste modo, grande parte dos 50.000 valores simulados farão parte da amostra final, que tem tamanho superior a 1.000.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rmetro</span>(<span class="dv">100000</span>, <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>% aceitação  26.447 
+Tamanho final da amostra  1220 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mcmc_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="alert alert-info">
+<p><strong>Cenário 2</strong>: <span class="math inline">\(\sigma^2=0,1\)</span>. Neste cenário a função de autocorrelação após o <em>burn-in</em> decai de modo quase linear, como em um processo não estacionário (com tendência). Isto faz com que a amostra final tenha um tamanho pouco maior que 20. Além disso, a proposta tem dificuldades em explorar todo o suporte, conforme podemos ver no histograma.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rmetro</span>(<span class="dv">100000</span>, .<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>% aceitação  81.159 
+Tamanho final da amostra  35 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mcmc_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="alert alert-info">
+<p><strong>Cenário 3</strong>: <span class="math inline">\(\sigma^2=200\)</span>. Neste cenário a função de autocorrelação após o <em>burn-in</em> decai hiperbolicamente, lembrando um processo estacionário de longa dependência.Esse comportamento faz com que poucas amostras sejam retidas, nos levando a um elevado custo computacional se comparado com o cenário 1.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rmetro</span>(<span class="dv">100000</span>, <span class="dv">200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>% aceitação  5.785 
+Tamanho final da amostra  107 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mcmc_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Diversos estudos sugerem que a variância da proposta deve ser ajustada para ter uma aceitação de aproximadamente 1/4. Fica como sugestão de leitura o trabalho pioneiro:</p>
+<p>Roberts, G.O., Gelman, A., Gilks, W.R. (1997). Weak Convergence and Optimal Scaling of Random Walk Metropolis Algorithms. Ann. Appl. Probab. 7, 110-20.</p>
+<div class="alert alert-danger">
+<p><strong>Exercício</strong> Considere a densidade</p>
+<p><span class="math display">\[f(x)=k\sin(x^2)^2e^{-x^2/2},\]</span> onde <span class="math inline">\(x\in\mathbb{R}\)</span> e <span class="math inline">\(k\)</span> é a constante de normalização. Considerando a proposta <span class="math inline">\(Y|x\sim\hbox{Normal}(x,\tau)\)</span>, onde <span class="math inline">\(\tau\)</span> é o <em>tunning parameter</em>, construa um algoritmo do tipo Metropolis-Hastings para obter amostras de <span class="math inline">\(f(x)\)</span>.</p>
+</div>
+<!-- ### O método Metropolis  -->
+<!-- O método Metropolis é um caso particular do Metropolis-Hastings com $q(x|y)=q(y|x). Com esta variação o algoritmo se torna: -->
+<!-- <div class='alert alert-success'> -->
+<!-- **Algoritmo Metropolis** -->
+<!-- Inicie a cadeia com $x_0$ . Na $k$-ésima iteração: -->
+<!-- 1. Gere $y\sim q(.|x_{k−1})$ e $u\sim$Uniforme(0,1) . -->
+<!-- 2. Calcule $\rho(x_{k−1},y)=\min\{1,\frac{f(y)}{f(x_{k−1})}\}$ -->
+<!-- 3. Faça -->
+<!-- $$x_k=\left\{\begin{array}{ll}y,& \hbox{ se } u\leq \rho(x_{k−1},y)\\ x_{k−1}, \hbox{ se } u\>\rho(x_{k−1},y)\\ \end{array}$$ -->
+<!-- Uma das vantagens deste método é o uso da distribuição normal multivariada como proposta para a geração de vetores aleatórios. Abaixo seguem algumas dicas para melhorar a convergência desse método: -->
+<!-- Determine as modas da distribuição alvo. Utilize-as como valores iniciais -->
+<!-- Calcule a matriz Hessiana de $−\logf(x)$ , aplicada nas modas. Denotando-a por $\mathcal{H}$ , utilize-a na seguinte proposta: -->
+<!-- $$y\sim N(x_{k−1},\tau\mathcal{H}^{−1}),$$ -->
+<!-- onde $\tau$ é o *tunning parameter*. -->
+<!-- Suponha que desejamos simular um vetor de dimensão $d$. Se o suporte de $d$ não for o $\mathbb{R}^d$ , considere uma transformação monótona $g(.)$ com imagem em $\mathbb{R}^d$ . Faça $z=g(x)$ e simule primeiramente os valores de $z$ , cuja densidade é $f_Z(z)=f(g^{−1}(x))|\mathcal{J}|$, onde $|\mathcal{J}|$ é o módulo do determinante do jacobiano da transformação. Em seguida, utilize $g^−{1}(.)$ para obter amostras de $X$. -->
+<!-- Exemplo 12.1 -->
+<!-- Considere a função densidade f(x)=23(1+cos(x))e−x com x\>0 . Abaixo segue um esboço dessa função. -->
+<!-- fx \<- function(x) (2/3) \* (1+cos(x)) \* exp(-x) curve( fx(x), 0,5, lwd = 2) -->
+<!-- Vamos simular uma amostra aleatória desta distribuição utilizando o método Metropolis. Note que o suporte de f(.) não está na reta. Considere a variável transformada Z=log(X) , cuja densidade fZ(z)=f(ez)ez, com z∈R . Abaixo segue um esboço dessa densidade -->
+<!-- fz \<- function(z) exp(z) \* fx( exp(z)) curve( fz(x), -4,4 , lwd = 2) -->
+<!-- Vamos simular primeiro valores de fZ(.) através do método Metropolis. -->
+<!-- Vamos determinar a moda principal de fZ(.) para utilizar como valor inicial e a hessiana de −logfZ(z) para construir a variância da proposta. Para encontrar as modas de uma função e sua respectiva matriz hessiana, o R conta com a função optim. Trata-se de um minimizador local com vários métodos implementados. Ela possui diversos parâmetros, sendo os principais: -->
+<!-- par: valores iniciais, de preferência próximos dos mínimos locais. -->
+<!-- fn: função objetivo. -->
+<!-- method: é o algoritmo de otimização. -->
+<!-- hessian: lógico. Se igual a TRUE a matriz hessiana é computada aplicada no mínimo local. -->
+<!-- É importante reforçar que a optim serve para encontrar mínimos locais (não é como a função optimize que possui um argumento para mudar o problema para maximização). Isso é um detalhe simples de ser resolvido, uma vez que maximar h(x) é equivalente a minimizar −h(x) . Vamos definir nossa função objetivo como sendo −logfZ(z) . Como nosso problema é univariado, devemos utilizar o método Brent e, com isso, definir dois parâmetros adicionais, lower e upper que juntos formam um intervalo que contém o mínimo local -->
+<!-- fun_objetivo \<- function(z) -log( fz(z) ) -z -->
+<!-- op\<- optim( par = 0, fn = fun_objetivo, method = "Brent" , lower = -4, upper = 4, hessian = T) O objeto op contém diversas informações. As mais relevantes são par, que contém a moda; convergence, que retorna o valor 0 se o algoritmo convergiu; hessian que retorna a matriz hessiana da função objetivo. Esses três argumentos são apresentados abaixo. -->
+<!-- #valor 0 indica convergência op$convergence -->
+<!-- ## [1] 0 -->
+<!-- # moda encontrada -->
+<!-- op$par \## \[1\] 0.1754645 \# hessiana. Seu inverso será a variância da proposta op\$hessian \## \[,1\] \## \[1,\] 3.036793 Abaixo, construímos um algoritmo Metropolis para simular de fZ(.) . -->
+<!-- # valor inicial -->
+<!-- z \<- op\$par -->
+<!-- # variância da proposta -->
+<!-- s2 \<- 1/op\$hessian -->
+<!-- # tunning -->
+<!-- tau \<- 50 -->
+<!-- # tamanho da trajetória -->
+<!-- B \<- 50000 -->
+<!-- # contador (para verificar a taxa de aceitação) -->
+<!-- contador \<- 0 -->
+<!-- # Metropolis -->
+<!-- for(i in 2:B){ -->
+<!-- \# gerndo y e u y \<- rnorm(1,z\[i-1\],sqrt(tau\*s2)) u \<- runif(1) -->
+<!-- rho \<- min( 1, fz(y)/fz(z\[i-1\])) -->
+<!-- \# movimento da cadeia ifelse( u \< rho, {z\[i\]\<- y ; contador \<- contador +1}, z\[i\] \<- z\[i-1\]) } -->
+<!-- # taxa de aceitaçãp -->
+<!-- contador/B \## \[1\] 0.30244 \# burn-in e autocorrelações z_burn \<- z\[-(1:(B/2))\] acf(z_burn, main ="") -->
+<!-- # amostra final -->
+<!-- z_sim \<- z_burn\[seq(1,length(z_burn),15)\] -->
+<!-- # histograma dos valores finais -->
+<!-- hist(z_sim, freq=F, ylim=c(0,.4), main ="") curve(fz(x),add=T, lwd = 2) -->
+<!-- Agora que simulamos pontos de fZ(.) , podemos simular pontos de f(.) : -->
+<!-- # amostra simulada de x -->
+<!-- x \<- exp(z_sim) -->
+<!-- # histograma da amostra simulada -->
+<!-- hist(x, freq=F, main = "") curve(fx(x),add=T) -->
+<!-- Exemplo 12.2 -->
+<!-- Considere a função densidade f(x,t)=tx62(1+x)e−x(1+t) com x\>0 e t\>0 . Abaixo segue um esboço dessa função. -->
+<!-- # densidade alvo. -->
+<!-- fxt \<- function(x) x\[1\]\^6 *x\[2\]* ( 1 + x\[1\] ) \* exp( -x\[1\] \* ( 1 + x\[2\] ) ) /2 -->
+<!-- # gráfico de contorno -->
+<!-- x1 \<- seq(.5,12,.01) x2 \<- seq(0,5,.1) imx \<- outer( x1, x2, function(x1,x2) apply( cbind(x1,x2),1,fxt) ) contour( x1, x2, imx, ylim=c(-3,5)) -->
+<!-- Vamos simular uma amostra aleatória desta distribuição utilizando o método Metropolis. O suporte de f(.) não está em R2 . Considere o vetor transformado Z1=log(X1) e Z2=log(X2) , cuja densidade -->
+<!-- fZ(z)=f(ez1,ez2)ez1+z2, com z∈R2 . Abaixo segue um esboço dessa densidade -->
+<!-- # densidade de Z = log(X) -->
+<!-- fz \<- function(z) exp( z\[1\]+z\[2\] ) \* fxt( c(exp(z\[1\]),exp(z\[2\])) ) -->
+<!-- # gráfico de contorno -->
+<!-- z1 \<- seq(-1,3,.1) z2 \<- seq(-3,2,.1) imz \<- outer( z1, z2, function(z1,z2) apply( cbind(z1,z2),1,fz) ) contour( z1, z2, imz) -->
+<!-- Vamos simular primeiro valores de fZ(.) através do método Metropolis. Primeiro, encontraremos a moda da densidade e a matriz hessiana que será utilizada para construir a matriz de covariâncias da proposta. -->
+<!-- fun_objetivo \<- function(z) -log( fz(z) ) -->
+<!-- op\<- optim( par = c(0,0), fn = fun_objetivo, hessian = T) Os argumentos relevantes contidos em op para este exemplo são apresentados abaixo. -->
+<!-- #valor 0 indica convergência op$convergence -->
+<!-- ## [1] 0 -->
+<!-- # moda encontrada -->
+<!-- op$par \## \[1\] 1.767102 -1.074004 \# hessiana. Seu inverso irá compor a variância da proposta op\$hessian \## \[,1\] \[,2\] \## \[1,\] 7.729151 1.999902 \## \[2,\] 1.999902 1.999902 Abaixo, construímos um algoritmo Metropolis para simular de fZ(.) . -->
+<!-- # carregango o pacote MASS, para simular normais multivariadas -->
+<!-- require(MASS) -->
+<!-- # tamanho da trajetória -->
+<!-- B \<- 500000 -->
+<!-- # valor inicial -->
+<!-- z \<- array( NA_real\_, c( B , 2 )) z\[1, \] \<- op\$par -->
+<!-- # variância da proposta -->
+<!-- s2 \<- solve(op\$hessian) -->
+<!-- # tunning -->
+<!-- tau \<- 10 -->
+<!-- # contador (para verificar a taxa de aceitação) -->
+<!-- contador \<- 0 -->
+<!-- # Metropolis -->
+<!-- for(i in 2:B){ -->
+<!-- \# gerando y e u y \<- mvrnorm(1, z\[i-1,\], tau \* s2 ) u \<- runif(1) -->
+<!-- \# log da razao rho \<- min( 1, fz(y)/fz(z\[i-1,\]) ) -->
+<!-- \# movimento da cadeia ifelse( u \< rho, {z\[i,\]\<- y ; contador \<- contador +1}, z\[i,\] \<- z\[i-1,\]) } -->
+<!-- # taxa de aceitação -->
+<!-- contador/B \## \[1\] 0.166738 \# burn-in e autocorrelações z_burn \<- z\[-(1:(B/2)),\] acf(z_burn, main ="") -->
+<!-- # amostra final -->
+<!-- z_sim \<- z_burn\[ seq(1,nrow(z_burn),30) , \] -->
+<!-- # densidade estimada via valores simulados -->
+<!-- contour(kde2d(z_sim\[,1\], z_sim\[,2\])) contour(z1,z2, imz, add = T ,col =4, lty = 2) legend("bottomleft",c("simulação","alvo"), col = c(1,4), lty=c(1,2), bty = "n") -->
+<!-- Agora que simulamos pontos de fZ(.) , podemos simular pontos de f(.) : -->
+<!-- # amostra simulada de x -->
+<!-- x \<- exp(z_sim) -->
+<!-- # densidade estimada da amostra simulada -->
+<!-- contour(kde2d(x\[,1\], x\[,2\]), ylim = c(0,3) ) contour(x1, x2, imx, add = T, col = 4, lty = 2) legend("topright",c("simulação","alvo"), col = c(1,4), lty=c(1,2), bty = "n") -->
+<!-- Exercícios Exercício 1 Simule, via o método Metropolis-Hastings, uma amostra aleatória de tamanho 200 da distribuição cuja função densidade é dada por f(x)=1+x222π−−√exp{−x22}, com −∞\<x\<∞ . -->
+<!-- Exercícios Exercício 1 Considere as seguintes máximas anuais do Rio Negro, obtidas no Porto de Manaus -->
+<!-- Ano199219931994199519961997199819992000200120022003Máxima25.4228.7629.0527.1628.5428.9627.5829.3028.6228.2128.9128.27Ano20042005200620072008200920102011201220132014Máxima27.1328.1028.8428.1828.6229.7727.9628.6229.9729.3329.50 -->
+<!-- Considere que estes dados são provenientes de uma amostra aleatória do modelo Weibull, dado por f(x\|α,β)=αβ(xβ)α−1e−(xβ)α, com x,α,β\>0 . Considere a transformação θ1=log(α),θ2=log(β) e faça (θ1,θ2)∼N(02,100I2) . Sob o ponto de vista bayesiano, as inferências devem ser realizadas segundo a densidade a posteriori, dada por -->
+<!-- f(θ1,θ2\|x1,…,xn)∝f(x1,…,xn\|θ1,θ2)f(θ1,θ2) 1. Construa um simulador para a posteriori acima utilizando o método Metropolis. Gere 5.000 amostras. -->
+<!-- Neste ano (2021) o Rio Negro atingiu a sua máxima histórica, de 29,98 metros. Utilize as amostras geradas acima para estimar a probabilidade P(X\>29,98\|x1,…,xn) utilizando o seguinte algoritmo: -->
+<!-- Para cada (θ1,θ2) gerado, simule x∗∼Weibull(eθ1,eθ2) -->
+<!-- Para a amostra x∗1,\ldotos,x∗5.000 , estime a probabilidade desejada por -->
+<!-- 15.000∑i=15.000I(29.98,∞)(x∗i) 3. Com base na estimativa acima, podemos dizer que a máxima de 2021 era esperada? -->
+<!-- Aula 13 - O amostrador de Gibbs Considere que desejamos simular amostras aleatórias do vetor X , de comprimento d , com função densidade (ou de probabilidade) dada por fX(.) . Seja X(1),…,X(s) uma partição do vetor X , escolhida de tal sorte que sabemos simular X(j)\|X(−j)=x(−j), para j=1,…,s , onde (−j)={1,…,s}/{j} . As distribuições acima são denominadas condicionais completas. -->
+<!-- Nesta situação, podemos utilizar o amostrador de Gibbs, definido a seguir. -->
+<!-- Amostrador de Gibbs -->
+<!-- Comece fixando o valor inicial x(−1)0 , escolhido no suporte de X(−1) . Na k -ésima iteração do algoritmo: -->
+<!-- Simule x(1)k∼fX(1)\|X(−1)(.\|x(−1)k−1) -->
+<!-- Simule x2(k)∼fX(2)\|X(−2)(.\|x(1)k,x(−1,−2)k−1) -->
+<!-- Simule x(3)k∼fX3\|X(−3)(.\|x(1,2)k,x(−1,−2,−3)k−1) -->
+<!-- \*. (…) -->
+<!-- Simule x(s)k∼fX(s)\|X(−s)(.\|x(−s)k) Quando s=d , temos a formulação original do amostrador de Gibbs. Em caso contrário, dizemos temos um amostrador de Gibbs em blocos (blocked Gibbs sampler). -->
+<!-- O algoritmo acima gera uma trajetória do processo {X(k),k=0,1,…} . Como X(k) é gerado a partir de X(k−1)=x(k−1) , temos que esse processo é uma Cadeia de Markov. -->
+<!-- Para mostrar que o amostrador de Gibbs é um MCMC, devemos verificar que a distribuição estacionária do processo é fX(.) . Para não carregar a notação e, sem perda de generalidade, assuma que estamos interessados em simular fX,Y(.) . Na j -ésima iteração do algoritmo, teremos xtyt∼fX\|Y(.\|yt−1)∼fY\|X(.\|xt) -->
+<!-- Note que o núcleo de transição desta cadeia é -->
+<!-- k(xt,yt\|xt−1,yt−1)=fY\|X(yt\|xt)fX\|Y(xt\|yt−1) Como fX,Y(xt,yt)=fY\|X(yt\|xt)fX(xt)=fY\|X(yt\|xt)∫fX\|Y(xt\|yt−1)fY(yt−1)dyt−1=∫fY\|X(yt\|xt)fX\|Y(xt\|yt−1)k(xt,yt\|xt−1,yt−1)fY(yt−1)dyt−1=∫k(xt,yt\|xt−1,yt−1)fY(yt−1)dyt−1=∫k(xt,yt\|xt−1,yt−1)∫fX,Y(xt−1,yt−1)dxt−1dyt−1=∫∫k(xt,yt\|xt−1,yt−1)fX,Y(xt−1,yt−1)dxt−1dyt−1 temos que fX,Y(.,.) é, de fato, a distribuição estacionária desta cadeia. -->
+<!-- Exemplo 1 -->
+<!-- Considere a seguinte função densidade -->
+<!-- f(x)∝exp⎧⎩⎨⎪⎪−14x′⎛⎝⎜3−1−1−13−1−1−13⎞⎠⎟x⎫⎭⎬⎪⎪∏j=13I(−2,2)(xj) ou seja X tem distribuição normal multivariada restrita ao cubo (−2,2)3 . É fácil mostrar que f(xi\|xj,xk)∝exp{−43(xi−xj+xk3)}I(−2,2)(xi) ou seja, xi\|xj,xk tem distribuição normal truncada, restrita ao intervalo (−2,2) . O amostrador de Gibbs correspondente é dado abaixo: -->
+<!-- # tamanho da trajetória -->
+<!-- B \<- 5000 -->
+<!-- # array para guardar a trajetória -->
+<!-- x \<- array(NA_real\_,c(B,3)) -->
+<!-- # valor inicial (nas modas de f) -->
+<!-- x\[1,\] \<- c(0,0,0) -->
+<!-- # amostrador de Gibbs -->
+<!-- for(i in 2:B){ -->
+<!-- \# x1 dado o resto while( is.na(x\[i,1\]) == T){ y \<- rnorm(1, ( x\[i-1,2\]+x\[i-1,3\] ) /3, sqrt(2/3) ) if( {y\<2} & {y\>-2}){ x\[i,1\] \<- y } } -->
+<!-- \# x2 dado o resto while( is.na(x\[i,2\]) == T){ y \<- rnorm(1, ( x\[i,1\]+x\[i-1,3\] ) /3, sqrt(2/3) ) if( {y\<2} & {y\>-2}){ x\[i,2\] \<- y } } -->
+<!-- \# x3 dado o resto while( is.na(x\[i,3\]) == T){ y \<- rnorm(1, ( x\[i,1\]+x\[i,2\] ) /3, sqrt(2/3) ) if( {y\<2} & {y\>-2}){ x\[i,3\] \<- y } } -->
+<!-- } -->
+<!-- # amostra após o burn-in -->
+<!-- burn \<- 1:(.5\*B) x_burn \<- x\[ -burn , \] -->
+<!-- # autocorrelações -->
+<!-- acf(x_burn) -->
+<!-- # amostra final -->
+<!-- m \<- nrow(x_burn) x_sim \<- x_burn\[ seq(1, m, 5) , \] -->
+<!-- # traceplot e autocorrelação da amostra final -->
+<!-- ts.plot(x_sim\[,1\]) -->
+<!-- acf(x_sim\[,1\]) -->
+<!-- É interessante notar que as distribuições marginais de X distribuição normal padrão truncada em (-2,2). Abaixo, mostramos o histograma da primeira componente simulada e sua respectiva função densidade. -->
+<!-- hist(x_sim\[,1\] , freq = FALSE, main ="", xlab = expression(x\[1\])) curve( dnorm(x)/( 2\*pnorm(2)-1) , add = T, lwd = 2) -->
+<!-- Exercícios Exercício 15.1 -->
+<!-- Considere o modelo bivariado: -->
+<!-- P(X=x\|Y=y)f(y)=(nx)yx(1−y)n−x, com x∈{0,1,…,n} e y∈(0,1) . Construa um amostrador de Gibbs para simular amostras de (X,Y) . -->
+<!-- Aula 14 - Amostrador de Gibbs em blocos e colapsado Nesta aula vamos discutir algumas estratégias que podem acelerar a convergência do amostrador de Gibbs. -->
+<!-- Considere o vetor aleatório (X,Y,Z) . O amostrador de Gibbs tradicional (aquele em que todas as condicionais completas são univariadas) necessita das seguintes condicionais completas: -->
+<!-- Estretégia 1: amostrador de Gibbs “tradicional” xyz∼f(x\|y,z)∼f(y\|x,z)∼f(z\|x,y) Suponha que é simples simular (Y,Z) . Então, podemos propor um amostrador de Gibbs em blocos (com condicionais completas multivariadas) com as seguintes condicionais completas: -->
+<!-- Estratégia 2: amostrador de Gibbs em blocos x(y,z)∼f(x\|y,z)∼f(y,z\|x) Podemos ainda inverter a ordem da simulação, criando a estratégia 3 -->
+<!-- Estratégia 3: amostrador de Gibbs em blocos (trocando a ordem dos blocos) x(y,z)∼f(x\|y,z)∼f(y,z\|x) Considere agora que o problema de simular (X,Y) pode ser tratável via um amostrador de Gibbs. Especificamente, considere que fX,Y(x,y)=∫fX,Y,Z(x,y,z)dz é uma distribuição tratável via um amostrador de Gibbs. Então, podemos simular a amostra (x1,y1),…,(xm,ym) e, posteriormente, simular zi∼fZ\|X,Y(\|xi,yi) . Este método, no qual o amostrador de Gibbs é aplicado apenas a um subconjunto da partição do vetor aleatório em questão, é denominado colapsado. No exemplo acima, dizemos que o amostrador foi colapsado na variável Z . -->
+<!-- Abaixo, segue a nossa estratégia 4. -->
+<!-- Estretégia 4: amostrador de Gibbs colapsado xxy∼f(x\|y,z)∼f(x\|y)∼f(y\|x). Após a convergência, utilize os valores simulados para simular valores de z∼f(z\|x,y). Exemplo 14.1 -->
+<!-- Seja (X,Y,Z) um vetor aleatório com distribuição normal variada com vetor de médias nulo e matriz de covariâncias dada por -->
+<!-- ⎛⎝⎜⎜10,1−−−√0,8−−−√0,1−−−√100,8−−−√01⎞⎠⎟⎟. -->
+<!-- É fácil simular vetores aleatórios com esta distribuição, sem a necessidade de um MCMC. Contudo, este exemplo simples nos permite verificar a eficiência da simulação utilizando as quatro estratégias acima. -->
+<!-- Estratégia 1 -->
+<!-- Primeiro, notemos que x\|y,zy\|x,zz\|x,y∼N(0,1−−−√y+0,8−−−√z,110)∼N(50,1−−−√x−8–√2z,12)∼N(1090,8−−−√x−8–√9z,19) -->
+<!-- Abaixo simulamos uma trajetória de tamanho 50000 e guardamos os valores de sua função de autocorrelação após o burn-in: -->
+<!-- # tamanho da trajetória -->
+<!-- B \<- 50000 -->
+<!-- # array para guardar as simulações -->
+<!-- a \<- array(NA_real\_, c(B,3)) -->
+<!-- # valores iniciais -->
+<!-- a\[1,\] \<- c(0,0,0) -->
+<!-- # amostrador de Gibbs -->
+<!-- for(i in 2 : B){ \# x dado o resto muXdadoResto \<- sqrt(0.1) \* a\[i-1,2\] + sqrt(.8) \* a\[i-1,3\] a\[i,1\] \<- rnorm(1, muXdadoResto, sqrt(.1) ) -->
+<!-- \# y dado o resto muYdadoResto \<- 5*sqrt(0.1)* a\[i,1\] - .5*sqrt(8)* a\[i-1,3\] a\[i,2\] \<- rnorm(1, muYdadoResto, sqrt(.5) ) -->
+<!-- \# z dado o resto muZdadoResto \<- ( 10*sqrt(0.8)* a\[i,1\] - sqrt(8) \* a\[i,2\] )/9 a\[i,3\] \<- rnorm(1, muZdadoResto, sqrt( 1/9 ) ) -->
+<!-- } -->
+<!-- # trajetória após o burn-in -->
+<!-- a_burn \<- a\[ -( 1 : (.5\*B)),\] -->
+<!-- # autocorrelção de x -->
+<!-- acf1 \<- acf(a_burn\[,1\], main ="", plot = F) Estratégias 2 e 3 -->
+<!-- Agora, note que podemos utilizar as seguintes condicionais completas para amostrar em blocos: -->
+<!-- (y,z)\|xx\|(y,z)∼N⎛⎝(0,1−−−√0,8−−−√)x,⎛⎝0,9−8√10−8√100,2⎞⎠⎞⎠∼N(0,1−−−√y+0,8−−−√z,110) -->
+<!-- Abaixo simulamos uma trajetória de tamanho 5000 utilizando o amostrador de Gibbs em blocos com a Estratégia 2: -->
+<!-- # pacote para simulação de normais multivariadas (entre outras funções) -->
+<!-- library(MASS) -->
+<!-- # tamanho da trajetória -->
+<!-- B \<- 50000 -->
+<!-- # array para guardar as simulações -->
+<!-- a \<- array(NA_real\_, c(B,3)) -->
+<!-- # valores iniciais -->
+<!-- a\[1,\] \<- c(0,0,0) -->
+<!-- # amostrador de Gibbs -->
+<!-- for(i in 2 : B){ \# x dado o (x,z) muXdadoResto \<- sqrt(0.1) \* a\[i-1,2\] + sqrt(.8) \* a\[i-1,3\] a\[i,1\] \<- rnorm(1, muXdadoResto, sqrt(.1) ) -->
+<!-- \# (y,z) dado x muYZ \<- matrix( c( sqrt(0.1), sqrt(.8) ) , ncol = 1 )\* a\[i,1\] SigmaYZ \<- matrix( c(.9, - .1*sqrt(8), -.1*sqrt(8), .2), 2,2) a\[i,2:3\] \<- mvrnorm(1, muYZ, SigmaYZ) -->
+<!-- } -->
+<!-- # trajetória após o burn-in -->
+<!-- a_burn \<- a\[ -( 1 : (.5\*B)),\] -->
+<!-- # autocorrelção de x -->
+<!-- acf2 \<- acf(a_burn\[,1\], main ="", plot = FALSE) E aqui para a Estatégia 3: -->
+<!-- # pacote para simulação de normais multivariadas (entre outras funções) -->
+<!-- library(MASS) -->
+<!-- # tamanho da trajetória -->
+<!-- B \<- 50000 -->
+<!-- # array para guardar as simulações -->
+<!-- a \<- array(NA_real\_, c(B,3)) -->
+<!-- # valores iniciais -->
+<!-- a\[1,\] \<- c(0,0,0) -->
+<!-- # amostrador de Gibbs -->
+<!-- for(i in 2 : B){ \# (y,z) dado x muYZ \<- matrix( c( sqrt(0.1), sqrt(.8) ) , ncol = 1 )\* a\[i-1,1\] SigmaYZ \<- matrix( c(.9, - .1*sqrt(8), -.1*sqrt(8), .2), 2,2) a\[i,2:3\] \<- mvrnorm(1, muYZ, SigmaYZ) -->
+<!-- \# x dado o (x,z) muXdadoResto \<- sqrt(0.1) \* a\[i,2\] + sqrt(.8) \* a\[i,3\] a\[i,1\] \<- rnorm(1, muXdadoResto, sqrt(.1) ) -->
+<!-- } -->
+<!-- # trajetória após o burn-in -->
+<!-- a_burn \<- a\[ -( 1 : (.5\*B)),\] -->
+<!-- # autocorrelção de x -->
+<!-- acf3 \<- acf(a_burn\[,1\], main ="", plot = FALSE) Estratégia 4 Ao colapsar o vetor (X,Y,Z) em Z teremos que (X,Y) tem distribuição normal multivariada com vetor de médias nulo e matriz de covariâncias dada por -->
+<!-- (10,1−−−√0,1−−−√1) e as condicionais completas do amostrador de Gibbs são: x\|yy\|x∼N(0,1−−−√y,910)∼N(0,1−−−√x,910) Após simular a amostra (x,y) vamos simular z através da seguinte condicional: -->
+<!-- z\|x,y∼N(1090,8−−−√x−8–√9z,19) -->
+<!-- Aqui mostramos a implementação da Estatégia 4 (não vamos simular Z porque nosso objetivo é comparar as funções de autocorrelação): -->
+<!-- # pacote para simulação de normais multivariadas (entre outras funções) -->
+<!-- library(MASS) -->
+<!-- # tamanho da trajetória -->
+<!-- B \<- 50000 -->
+<!-- # array para guardar as simulações -->
+<!-- a \<- array(NA_real\_, c(B,3)) -->
+<!-- # valores iniciais -->
+<!-- a\[1,\] \<- c(0,0,0) -->
+<!-- # amostrador de Gibbs -->
+<!-- for(i in 2 : B){ \# x dado y muX \<- sqrt(.1) \* a\[i-1,2\] SigmaX \<- .9 a\[i,1\] \<- rnorm(1, muX, sqrt( SigmaX ) ) -->
+<!-- \# x dado y muY \<- sqrt(.1) \* a\[i,1\] SigmaY \<- .9 a\[i,2\] \<- rnorm(1, muY, sqrt( SigmaY ) ) -->
+<!-- } -->
+<!-- # trajetória após o burn-in -->
+<!-- a_burn \<- a\[ -( 1 : (.5\*B)),\] -->
+<!-- # autocorrelção de x -->
+<!-- acf4 \<- acf(a_burn\[,1\], main ="", plot = FALSE) Comparando as 4 estratégias -->
+<!-- O gráfico abaixo mostra a performance das estratégias. Podemos notar que o amostrador de Gibbs colapsado tem as menores autocorrelações. Também podemos perceber que permutar a ordem das simulações dentro do amostrador (como na comparação entre as estratégias 2 e 3) podem trazer melhorias. -->
+<!-- plot(acf1$acf,main="", type="l" ,col = 1 ,ylab = "Autocorrelações", -->
+<!--      xlab= "Defasagem (lag)") -->
+<!-- lines(acf2$acf, col =2) lines(acf3$acf, col = 3) -->
+<!-- lines(acf4$acf, col =4) legend("topright", c("Estratégia 1", "Estratégia 2", "Estratégia 3", "Estratégia 4"), col = 1:4, bty = "n", lty = 1) -->
+<!-- Exercícios Exercício 14.1 -->
+<!-- Considere o modelo f(x,y,z,w)=(wx)(wy)zx+y(1−z)2w−x−y, com x∈{0,…,w} , y∈{0,…,w} , w∈{1,…,10} e z∈(0,1) . -->
+<!-- Mostre que as condicionais completas são z\|x,y,wx\|y,z,wy\|x,z,wf(w\|x,y,z)∼Beta(x+y+1,2w−x−y+1)∼Binomial(w,z)∼Binomial(w,z)∝(wx)(wy)(1−z)2w−x−yI{max{1,x,y},…,10}(w) -->
+<!-- Construa um simulador para f(w\|x,y,z) e utilize esse resultado para construir um amostrador de Gibbs. -->
+<!-- Mostre que -->
+<!-- f(w\|x,y)∝(wx)(wy)B(x+y+1,2w−x−y+1)I{max1,x,y,…,10}. Utilize este resultado para construir um simulador para f(z,w\|x,y)=f(z\|x,y,w)f(w\|x,y) . -->
+<!-- Com o simulador acima, construa um amostrador de Gibbs em blocos, simulando de (x,y\|z,w) e (z,w\|x,y) . -->
+<!-- Compare as funções de autocovariância das amostras de Z obtidas nos dois amostradores de Gibbs e outro com a ordem -->
+<!-- zwxy\|x,y,w\|x,z,w\|y,z,w\|x,w,z -->
+<!-- Gere 500 trajetórias de tamanho 1000 de cada amostrador. Para cada trajetória, guarde os valores da função de autocorrelação até o lag 40. Conclua que a segunda -->
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1051,8 +1507,8 @@ Autocorrelations of series 'trajetorias[-(1:20), 1]', by lag
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./provas.html" class="pagination-link" aria-label="Provas">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Provas</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./monte_carlo.html" class="pagination-link" aria-label="O método de integração de Monte Carlo">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">O método de integração de Monte Carlo</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

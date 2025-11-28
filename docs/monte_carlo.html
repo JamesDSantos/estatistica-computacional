@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="James D Santos">
-<meta name="dcterms.date" content="2027-06-07">
 
-<title>Estatística Computacional I</title>
+<title>9&nbsp; O método de integração de Monte Carlo – Estatística Computacional I</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -32,7 +65,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./solucoes_caso_real.html" rel="next">
+<link href="./provas.html" rel="next">
+<link href="./mcmc.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -71,6 +105,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -83,7 +146,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./monte_carlo.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">O método de integração de Monte Carlo</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -110,7 +173,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -170,7 +233,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./monte_carlo.html" class="sidebar-item-text sidebar-link">
+  <a href="./monte_carlo.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">O método de integração de Monte Carlo</span></span></a>
   </div>
 </li>
@@ -190,7 +253,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#método-de-monte-carlo" id="toc-método-de-monte-carlo" class="nav-link active" data-scroll-target="#método-de-monte-carlo"><span class="header-section-number">9.1</span> Método de Monte Carlo</a></li>
+  <li><a href="#amostragem-por-importância" id="toc-amostragem-por-importância" class="nav-link" data-scroll-target="#amostragem-por-importância"><span class="header-section-number">9.2</span> Amostragem por importância</a></li>
   </ul>
 </nav>
     </div>
@@ -199,26 +263,14 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Estatística Computacional I</h1>
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">O método de integração de Monte Carlo</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>James D Santos </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">June 7, 2027</p>
-    </div>
-  </div>
   
     
   </div>
@@ -228,9 +280,129 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>Este material foi criado para a disciplina Estatística Computacional I, do Curso de Bacharelado em Estatística, da Universidade Federal do Amazonas.</p>
+<section id="método-de-monte-carlo" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="método-de-monte-carlo"><span class="header-section-number">9.1</span> Método de Monte Carlo</h2>
+<p>Considere inicialmente o problema de calcular <span class="math display">\[\int_0^1 f(x)dx.\]</span></p>
+<p>Note que a integral acima pode ser reescrita como <span class="math display">\[\int_0^1 f(x)I_{(0,1)}(x)dx.\]</span></p>
+<p>Como <span class="math inline">\(I_{(0,1)}(x)\)</span> é a função densidade da distribuição Uniforme(0,1), tem-se que</p>
+<p><span class="math display">\[\int_0^1 f(x)dx=E(f(U)),\]</span> onde <span class="math inline">\(U\sim\)</span>Uniforme(0,1). Se <span class="math inline">\(U_1,U_2,\ldots,\)</span> são variáveis aleatórias independentes da distribuição Uniforme(0,1), pela <strong>Lei Forte dos Grandes Números</strong>, teremos que</p>
+<p><span class="math display">\[\sum_{i=1}^n\frac{U_i}{n}\rightarrow E(f(U))=\int_0^1 f(x)dx,\]</span> quando <span class="math inline">\(n\rightarrow\infty\)</span>. Portanto, podemos estimar o valor da integral através da simulação de uma amostra aleatória.</p>
+<div class="alert alert-success">
+<p><strong>Método de Monte Carlo básico</strong></p>
+<ol type="1">
+<li><p>Gere <span class="math inline">\(u_1,\ldots,u_n\)</span> independentes com distribuição U(0,1).</p></li>
+<li><p>Estime a integral de <span class="math inline">\(f(x)\)</span> no intervalo (0,1) por</p></li>
+</ol>
+<p><span class="math display">\[\hat{I}_n=\sum_{i=1}^n \frac{f(u_i)}{n}.\]</span></p>
+</div>
+<p>Considere que a integral de <span class="math inline">\(f(x)\)</span> no intervalo <span class="math inline">\((a,b)\)</span> pode ser reescrita do seguinte modo:</p>
+<p><span class="math display">\[\int_a^b f(x)dx=\int_a^b f(x)I_{(a,b)}(x)dx=(b-a)\int_a^b f(x)\frac{I_{(a,b)}(x)}{b-a}dx.\]</span></p>
+<p>Portanto, a distribuição Uniforme(<span class="math inline">\(a,b\)</span>), cuja função densidade <span class="math inline">\(I_{(a,b)}(x)/(b-a)\)</span> surge naturalmente em qualquer integral no intervalo (<span class="math inline">\(a,b\)</span>), o que implica em</p>
+<p><span class="math display">\[\int_a^b f(x)dx=E( (b-a)f(U)),\]</span> onde <span class="math inline">\(U\sim\hbox{Uniforme}(a,b)\)</span>. Para a amostra <span class="math inline">\(U_1,\ldots,U_n\)</span> de valores simulados desta distribuição, o estimador para a integral em questão será</p>
+<p><span class="math display">\[\hat{I}_n=(b-a)\sum_{i=1}^n \frac{f(U_i)}{n}.\]</span></p>
+<p>Naturalmente, outras distribuições podem ser utilizadas. O exemplo a seguir ilustra o uso da distribuição exponencial.</p>
+<div id="exm-" class="alert alert-info theorem example">
+<p><span class="theorem-title"><strong>Example 9.1</strong></span> Considere a integral</p>
+<p><span class="math display">\[\int_0^\infty \cos(x)e^{−x}dx,\]</span> cujo resultado sabemos ser 0,5. Note que</p>
+<p><span class="math display">\[\int_0^\infty \cos(x)e^{−x}dx=E(\cos(Y)),\]</span> onde <span class="math inline">\(Y\sim\)</span>Exponencial(1). Abaixo mostramos o valor da integral via Monte Carlo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>,<span class="dv">1</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">cos</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5018463</code></pre>
+</div>
+</div>
+</div>
+<p>Podemos então definir formalmente o método de integração de Monte Carlo.</p>
+<div class="alert alert-success">
+<p><strong>Método de integração de Monte Carlo</strong> O método de integração de Monte Carlo consiste em estimar a integral</p>
+<p><span class="math display">\[E[h(X)]=\int h(x)f(x)dx\]</span> através de uma amostra aleatória simulada <span class="math inline">\(x_1,…,x_n\)</span> com <span class="math inline">\(X_i\sim f(.)\)</span>, utilizando a média amostra</p>
+<p><span class="math display">\[\hat{I}_n=\frac{1}{n}\sum_{i=1}^n h(x_i).\]</span></p>
+</div>
+<p>Se</p>
+<p><span class="math display">\[\int h(x)^2 f(x)dx=E(h(X)^2)&lt;\infty,\]</span> então</p>
+<p><span class="math display">\[v_n=\frac{1}{n}\sum_{i=1}^n( h(x_i)−\hat{I}_n)^2\]</span> é um estimador para <span class="math inline">\(Var[h(X)]\)</span> e <span class="math inline">\(\sqrt{v_n/n}\)</span> é o erro padrão estimado de <span class="math inline">\(\hat{I}_n\)</span> e tem a mesma interpretação do erro de integração em um método de quadratura.</p>
+<div id="exm-" class="alert alert-info theorem example">
+<p><span class="theorem-title"><strong>Example 9.2</strong></span> O erro estimado para a integral do exemplo anterior é dado abaixo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(<span class="fu">cos</span>(y))<span class="sc">/</span><span class="fu">sqrt</span>(n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.001866639</code></pre>
+</div>
+</div>
+</div>
+<div class="alert alert-danger">
+<p>Encontre o valor das seguintes integrais via método de Monte Carlo</p>
+<p><span class="math display">\[\int_{-\infty}^\infty \int_0^2\int_0^\infty y\cos(\pi(x+y+z))e^{−x^2−z}dzdydx\]</span></p>
+<p><span class="math display">\[\int_{-\infty}^{\infty}\int_0^2\int_0^\infty y\cos(\pi y)e^{−x^2y−yz}dzdydx\]</span></p>
+</div>
+</section>
+<section id="amostragem-por-importância" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="amostragem-por-importância"><span class="header-section-number">9.2</span> Amostragem por importância</h2>
+<p>O método da amostragem por importância é baseado em uma representação alternativa da integração de Monte Carlo. Seja <span class="math inline">\(g(x)\)</span> uma função densidade com valores estritamente positivos para os valores de <span class="math inline">\(x\)</span> tais que <span class="math inline">\(h(x)f(x)&gt;0\)</span>. Então</p>
+<p><span class="math display">\[E_f[h(X)]=\int h(x)f(x)dx=\int h(x)\frac{f(x)}{g(x)}g(x)dx=E_g\left[h(X)\frac{f(X)}{g(X)}\right],\]</span> onde a notação <span class="math inline">\(E_f\)</span> explicita que a esperança é baseada na variável aleatória com densidade <span class="math inline">\(f(x)\)</span>. Disto, teremos o seguinte algoritmo:</p>
+<div class="alert alert-success">
+<p><strong>Amostragem por importância</strong></p>
+<p>Para calcular <span class="math inline">\(E_f[h(X)]\)</span>:</p>
+<ol type="1">
+<li>Simule <span class="math inline">\(x_1,…,x_n\)</span> independentes com distribuição <span class="math inline">\(g(.)\)</span></li>
+</ol>
+<p>2.Calcule</p>
+<p><span class="math display">\[\hat{I}_n=\frac{1}{n}\sum_{i=1}^n \frac{h(x_i)f(x_i)}{g(x_i)}.\]</span></p>
+</div>
+<p>Em palavras, o método de integração de amostragem por importância consiste na liberdade de escolha da variável aleatória que será simulada. A densidade <span class="math inline">\(g(.)\)</span> é denominada <em>important function</em> e, em princípio, pode ser qualquer função densidade. Abaixo, vemos como este algoritmo pode ser útil.</p>
+<div id="exm-" class="alert alert-info theorem example">
+<p><span class="theorem-title"><strong>Example 9.3</strong></span> Considere a seguinte integral</p>
+<p><span class="math display">\[\int_3^\infty \frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx\]</span> que é equivalente a <span class="math inline">\(P(X&gt;3)\)</span> onde <span class="math inline">\(X\sim\hbox{Normal}(0,1)\)</span>. Podemos escrever</p>
+<p><span class="math display">\[\int_3^\infty \frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx=\int_{-\infty}^\infty I_{(3,\infty)}(x)\frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx=E(I_{(3,\infty)}(X))\]</span> logo, para uma amostra simulada de tamanho <span class="math inline">\(n\)</span> da normal padrão, a integral acima pode ser estimada por <span class="math display">\[\hat{I}_n=\frac{1}{1}\sum_{i=1}^n I_{(3,\infty)}(x_i),\]</span> o que é a frequência relativa dos valores simulados maiores que 3. Abaixo mostramos o valor estimado da integral via método de Monte Carlo e o verdadeiro valor da integral.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># integral de monte carlo</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">1</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># estimativa de monte carlo</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( x <span class="sc">&gt;</span> <span class="dv">3</span> ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0194</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># valor real</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">3</span>, <span class="at">lower.tail =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.001349898</code></pre>
+</div>
+</div>
+<p>Note que o resultado não é ruim. Isso acontece porque o evento <span class="math inline">\(X&gt;3\)</span> ocorre com uma frequência baixa (1 vez em cada 1.000) e teríamos que aumentar muito o tamanho da amostra para ter estimativas confiáveis.</p>
+<p>Vamos considerar uma amostragem por importância utilizando a densidade</p>
+<p><span class="math display">\[g(y)=e^{−(y−3)} I_{(3,\infty)}(y),\]</span></p>
+<p>Observe que <span class="math inline">\(Z=Y-3\sim\hbox{Exponencial}(1)\)</span>, de modo que para simular de <span class="math inline">\(g(x)\)</span> basta simular uma amostra <span class="math inline">\(Z_1,\ldots,Z_n\)</span> e fazer <span class="math inline">\(Y_i=Z_i+3\)</span>. Utilizando <span class="math inline">\(g(.)\)</span> como <em>importance function</em>, teremos</p>
+<p><span class="math display">\[\int_{3}^\infty \frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx=\int_{3}^\infty \frac{\frac{1}{\sqrt{2\pi}}e^{-x^2/2}}{e^{-(x-3)}}e^{-(x-3)}dx\]</span> logo, a integral de Monte Carlo via amostragem por importância é dada por</p>
+<p><span class="math display">\[\hat{I}_n=\frac{1}{n}\sum_{i=1}^n \frac{\frac{1}{\sqrt{2\pi}}e^{-x_i^2/2}}{e^{-(x_i-3)}},\]</span> onde <span class="math inline">\(x_1,\ldots,x_n\)</span> são valores simulados da distribuiação de <span class="math inline">\(g(x)\)</span>. Abaixo segue o valor estimado. Observe que, com o mesmo número de simulações, obtivemos um resultado bem superior.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">4</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># amostragem por importaância</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n,<span class="dv">1</span>) <span class="sc">+</span> <span class="dv">3</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( <span class="fu">dnorm</span>(x)<span class="sc">/</span><span class="fu">dexp</span>(x<span class="dv">-3</span>,<span class="dv">1</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.001347281</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># valor real</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">3</span>, <span class="at">lower.tail =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.001349898</code></pre>
+</div>
+</div>
+</div>
+<p>Como o exemplo acima mostrou, a escolha de <span class="math inline">\(g(.)\)</span> impacta diretamente na performance da estimativa. Como as médias amostrais são não viciadas, a performance da integral de Monte Carlo está associada com a variância. Assuma que estamos interessados em estimar</p>
+<p><span class="math display">\[\int f(x)dx=\int \frac{f(x)}{g(x)}g(x)dx=E_g\left[\frac{f(X)}{g(X)}\right],\]</span> utilizando o estimador <span class="math display">\[\hat{I}_n=\frac{1}{n}\sum_{i=1}^n \frac{f(X_i)}{g(X_i)}.\]</span> cuja variância é <span class="math display">\[\frac{1}{n}Var_g\left[\frac{f(X)}{g(X)}\right].\]</span> onde <span class="math display">\[\begin{align}
+Var_g\left[\frac{f(X)}{g(X)}\right]&amp;=E_g\left[\left(\frac{f(X)}{g(X)}\right)^2\right]−E_g\left[\frac{f(X)}{g(X)}\right]^2\\&amp;=E_g\left[\left(\frac{f(X)}{g(X)}\right)^2\right]−\left(\int f(x)dx\right)^2\end{align}.\]</span></p>
+<p>Ao analisar a última igualdade acima, podemos concluir que <span class="math inline">\(g(x)\)</span> impacta a variância apenas na primeira parcela da soma. Pela Desigualdade de Jensen, sabemos que</p>
+<p><span class="math display">\[E_g\left[\left(\frac{f(X)}{g(X)}\right)^2\right]\geq E_g\left[\frac{|f(X)|}{g(X)}\right]^2=\left(\int|f(x)|dx\right)^2\]</span> Então <span class="math display">\[Var_g\left[\frac{f(X)}{g(X)}\right]\geq \left(\int|f(x)|dx\right)^2 -\left(\int f(x)dx\right)^2\]</span> Note que essa cota inferior é atingida quando <span class="math display">\[g(x)=\frac{|f(x)|}{\int |f(x)|dx}.\]</span> Portanto, teremos um método mais preciso se <span class="math inline">\(g(.)\)</span> for escolhida como sendo uma função densidade proporcional a <span class="math inline">\(|f(x)|\)</span>.</p>
+<div class="alert alert-danger">
+<p><strong>Exercício* </strong> Estime o valor da integral</p>
+<p><span class="math display">\[\int_{-\infty}^\infty (1+x^2)^{−}1dx\]</span> utilizando o método de amostragem por importância.</p>
+</div>
 
 
 </section>
@@ -637,10 +809,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./mcmc.html" class="pagination-link" aria-label="Método de Monte Carlo via Cadeias de Markov">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Método de Monte Carlo via Cadeias de Markov</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./solucoes_caso_real.html" class="pagination-link" aria-label="Solução de equações">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Solução de equações</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./provas.html" class="pagination-link" aria-label="Provas">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Provas</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

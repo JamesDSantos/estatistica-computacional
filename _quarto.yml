@@ -17,6 +17,7 @@ book:
     - uniforme_multivariada.qmd
     - AR.qmd
     - mcmc.qmd
+    - monte_carlo.qmd
     - provas.qmd
 
 bibliography: references.bib

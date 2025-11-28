@@ -1,0 +1,205 @@
+# O método de integração de Monte Carlo
+
+## Método de Monte Carlo
+
+Considere inicialmente o problema de calcular
+$$\int_0^1 f(x)dx.$$
+
+Note que a integral acima pode ser reescrita como
+$$\int_0^1 f(x)I_{(0,1)}(x)dx.$$
+
+Como $I_{(0,1)}(x)$ é a função densidade da distribuição Uniforme(0,1), tem-se que
+
+$$\int_0^1 f(x)dx=E(f(U)),$$
+onde $U\sim$Uniforme(0,1). Se $U_1,U_2,\ldots,$  são variáveis aleatórias independentes da distribuição Uniforme(0,1), pela **Lei Forte dos Grandes Números**, teremos que
+
+$$\sum_{i=1}^n\frac{U_i}{n}\rightarrow E(f(U))=\int_0^1 f(x)dx,$$
+quando $n\rightarrow\infty$. Portanto, podemos estimar o valor da integral através da simulação de uma amostra aleatória.
+
+<div class='alert alert-success'>
+**Método de Monte Carlo básico**
+
+1. Gere $u_1,\ldots,u_n$ independentes com distribuição U(0,1).
+
+2. Estime a integral de $f(x)$ no intervalo (0,1) por
+
+$$\hat{I}_n=\sum_{i=1}^n \frac{f(u_i)}{n}.$$
+</div>
+
+
+Considere que a integral de $f(x)$ no intervalo $(a,b)$ pode ser reescrita do seguinte modo:
+
+$$\int_a^b f(x)dx=\int_a^b f(x)I_{(a,b)}(x)dx=(b-a)\int_a^b f(x)\frac{I_{(a,b)}(x)}{b-a}dx.$$
+
+Portanto, a distribuição Uniforme($a,b$), cuja função densidade $I_{(a,b)}(x)/(b-a)$ surge naturalmente em qualquer integral no intervalo ($a,b$), o que implica em
+
+$$\int_a^b f(x)dx=E( (b-a)f(U)),$$
+onde $U\sim\hbox{Uniforme}(a,b)$. Para a amostra $U_1,\ldots,U_n$ de valores simulados desta distribuição, o estimador para a integral em questão será
+
+$$\hat{I}_n=(b-a)\sum_{i=1}^n \frac{f(U_i)}{n}.$$
+
+
+
+Naturalmente, outras distribuições podem ser utilizadas. O exemplo a seguir ilustra o uso da distribuição exponencial.
+
+
+::: {#exm- .alert .alert-info}
+Considere a integral
+
+$$\int_0^\infty \cos(x)e^{−x}dx,$$
+cujo resultado sabemos ser 0,5. Note que
+
+$$\int_0^\infty \cos(x)e^{−x}dx=E(\cos(Y)),$$
+onde $Y\sim$Exponencial(1). Abaixo mostramos o valor da integral via Monte Carlo:
+
+```{r}
+y <- rexp(10^5,1)
+mean(cos(y))
+```
+:::
+
+Podemos então definir formalmente o método de integração de Monte Carlo.
+
+<div class='alert alert-success'>
+**Método de integração de Monte Carlo** O método de integração de Monte Carlo consiste em estimar a integral
+
+$$E[h(X)]=\int h(x)f(x)dx$$
+através de uma amostra aleatória simulada $x_1,…,x_n$ com $X_i\sim f(.)$, utilizando a média amostra
+
+$$\hat{I}_n=\frac{1}{n}\sum_{i=1}^n h(x_i).$$
+</div>
+
+Se 
+
+$$\int h(x)^2 f(x)dx=E(h(X)^2)<\infty,$$
+então
+
+$$v_n=\frac{1}{n}\sum_{i=1}^n( h(x_i)−\hat{I}_n)^2$$
+é um estimador para $Var[h(X)]$ e $\sqrt{v_n/n}$ é o erro padrão estimado de $\hat{I}_n$ e tem a mesma interpretação do erro de integração em um método de quadratura.
+
+
+::: {#exm- .alert .alert-info}
+O erro estimado para a integral do exemplo anterior é dado abaixo.
+
+```{r}
+n <- 10^5
+sd(cos(y))/sqrt(n)
+
+```
+:::
+
+
+<div class='alert alert-danger'>
+Encontre o valor das seguintes integrais via método de Monte Carlo
+
+$$\int_{-\infty}^\infty \int_0^2\int_0^\infty y\cos(\pi(x+y+z))e^{−x^2−z}dzdydx$$
+
+$$\int_{-\infty}^{\infty}\int_0^2\int_0^\infty y\cos(\pi y)e^{−x^2y−yz}dzdydx$$
+</div>
+
+## Amostragem por importância
+
+O método da amostragem por importância é baseado em uma representação alternativa da integração de Monte Carlo. Seja $g(x)$  uma função densidade com valores estritamente positivos para os valores de $x$
+ tais que $h(x)f(x)>0$. Então
+
+$$E_f[h(X)]=\int h(x)f(x)dx=\int h(x)\frac{f(x)}{g(x)}g(x)dx=E_g\left[h(X)\frac{f(X)}{g(X)}\right],$$
+onde a notação $E_f$ explicita que a esperança é baseada na variável aleatória com densidade $f(x)$. Disto, teremos o seguinte algoritmo:
+
+<div class= 'alert alert-success'>
+**Amostragem por importância**
+
+Para calcular $E_f[h(X)]$:
+
+1. Simule $x_1,…,x_n$ independentes com distribuição $g(.)$
+
+2.Calcule
+
+$$\hat{I}_n=\frac{1}{n}\sum_{i=1}^n \frac{h(x_i)f(x_i)}{g(x_i)}.$$
+</div>
+
+
+Em palavras, o método de integração de amostragem por importância consiste na liberdade de escolha da variável aleatória que será simulada. A densidade $g(.)$
+ é denominada *important function* e, em princípio, pode ser qualquer função densidade. Abaixo, vemos como este algoritmo pode ser útil.
+
+::: {#exm- .alert .alert-info}
+Considere a seguinte integral
+
+$$\int_3^\infty \frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx$$
+que é equivalente a $P(X>3)$ onde $X\sim\hbox{Normal}(0,1)$. Podemos escrever
+
+$$\int_3^\infty \frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx=\int_{-\infty}^\infty I_{(3,\infty)}(x)\frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx=E(I_{(3,\infty)}(X))$$
+logo, para uma amostra simulada de tamanho $n$ da normal padrão, a integral acima pode ser estimada por
+$$\hat{I}_n=\frac{1}{1}\sum_{i=1}^n I_{(3,\infty)}(x_i),$$
+o que é a frequência relativa dos valores simulados maiores que 3. Abaixo mostramos o valor estimado da integral via método de Monte Carlo e o verdadeiro valor da integral.
+
+```{r}
+# integral de monte carlo
+n <- 10000
+x <- rnorm(n, 1)
+
+# estimativa de monte carlo
+mean( x > 3 ) 
+
+# valor real
+pnorm(3, lower.tail = F)
+```
+
+Note que o resultado não é ruim. Isso acontece porque o evento $X>3$  ocorre com uma frequência baixa (1 vez em cada 1.000) e teríamos que aumentar muito o tamanho da amostra para ter estimativas confiáveis. 
+
+Vamos considerar uma amostragem por importância utilizando a densidade
+
+$$g(y)=e^{−(y−3)} I_{(3,\infty)}(y),$$
+
+Observe que $Z=Y-3\sim\hbox{Exponencial}(1)$, de modo que para simular de $g(x)$ basta simular uma amostra $Z_1,\ldots,Z_n$ e fazer $Y_i=Z_i+3$. Utilizando $g(.)$ como *importance function*, teremos
+
+
+$$\int_{3}^\infty \frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx=\int_{3}^\infty \frac{\frac{1}{\sqrt{2\pi}}e^{-x^2/2}}{e^{-(x-3)}}e^{-(x-3)}dx$$
+logo, a integral de Monte Carlo via amostragem por importância é dada por
+
+$$\hat{I}_n=\frac{1}{n}\sum_{i=1}^n \frac{\frac{1}{\sqrt{2\pi}}e^{-x_i^2/2}}{e^{-(x_i-3)}},$$
+onde $x_1,\ldots,x_n$ são valores simulados da distribuiação de $g(x)$. Abaixo segue o valor estimado. Observe que, com o mesmo número de simulações, obtivemos um resultado bem superior.
+
+
+```{r}
+n <- 10^4
+
+# amostragem por importaância
+x <- rexp(n,1) + 3
+mean( dnorm(x)/dexp(x-3,1) )
+
+# valor real
+pnorm(3, lower.tail = F)
+
+```
+:::
+
+
+Como o exemplo acima mostrou, a escolha de $g(.)$
+impacta diretamente na performance da estimativa. Como as médias amostrais são não viciadas, a performance da integral de Monte Carlo está associada com a variância. Assuma que estamos interessados em estimar
+
+$$\int f(x)dx=\int \frac{f(x)}{g(x)}g(x)dx=E_g\left[\frac{f(X)}{g(X)}\right],$$
+utilizando o estimador
+$$\hat{I}_n=\frac{1}{n}\sum_{i=1}^n \frac{f(X_i)}{g(X_i)}.$$
+cuja variância é
+$$\frac{1}{n}Var_g\left[\frac{f(X)}{g(X)}\right].$$
+onde
+$$\begin{align}
+Var_g\left[\frac{f(X)}{g(X)}\right]&=E_g\left[\left(\frac{f(X)}{g(X)}\right)^2\right]−E_g\left[\frac{f(X)}{g(X)}\right]^2\\&=E_g\left[\left(\frac{f(X)}{g(X)}\right)^2\right]−\left(\int f(x)dx\right)^2\end{align}.$$
+
+Ao analisar a última igualdade acima, podemos concluir que $g(x)$ impacta a variância apenas na primeira parcela da soma. Pela Desigualdade de Jensen, sabemos que
+
+$$E_g\left[\left(\frac{f(X)}{g(X)}\right)^2\right]\geq E_g\left[\frac{|f(X)|}{g(X)}\right]^2=\left(\int|f(x)|dx\right)^2$$
+Então
+$$Var_g\left[\frac{f(X)}{g(X)}\right]\geq \left(\int|f(x)|dx\right)^2 -\left(\int f(x)dx\right)^2$$ 
+Note que essa cota inferior é atingida quando
+$$g(x)=\frac{|f(x)|}{\int |f(x)|dx}.$$
+Portanto, teremos um método mais preciso se $g(.)$
+ for escolhida como sendo uma função densidade proporcional a $|f(x)|$.
+
+<div class='alert alert-danger'>
+**Exercício* ** Estime o valor da integral
+
+$$\int_{-\infty}^\infty (1+x^2)^{−}1dx$$
+utilizando o método de amostragem por importância.
+
+</div>
