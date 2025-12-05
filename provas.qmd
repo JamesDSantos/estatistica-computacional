@@ -5,7 +5,7 @@ Todas as provas possuem as seguintes regras:
 1. Não é permitido o uso de dispositivos eletrônicos
 2. Não é permitido deixar a sala de aula sem entregar a prova
 
-# Revisão para a Prova 1
+## Revisão para a Prova 1
 
 
 <div class='alert alert-info'>
@@ -33,4 +33,82 @@ Todas as provas possuem as seguintes regras:
 **Questão 6.** Aproxime a integral
 $$\int_0^1 x^2dx$$
 utilizando a regra de Newton-Cotes, considerando dois subintervalos e a regra do ponto médio.
+</div>
+
+
+
+## Prova 1
+
+<div class='alert alert-info'> 
+**Questão 1.**
+
+Considere a função $f(x)=x^2-4$. Mostre que essa função tem sinais opostos no intervalo $[0,8]$. Em seguida, encontre a raiz de $f(x)$ nesse intervalo utilizando o método da bisseção.
+</div>
+
+<div class='alert alert-info'> 
+**Questão 2.**
+Seja $f(x)$ uma função real contínua. Considere que para o intervalo
+	$[a,b]$, temos que $f(a)f(b)<0$. Considere ainda que $f(x)$ admite apenas uma raiz
+	em $[a,b]$. Mostre que é possível que o método da secante produza um valor fora 
+	do intervalo $[a,b]$ na primeira iteração. **Sugestão:** você pode resolver essa questão 
+	apenas esboçando o gráfico da função e fazendo a argumentação necessária.
+</div>
+
+<div class='alert alert-info'> 
+**Questão 3.**
+ Seja $x^\star$ o máximo global de $f(x)$. Prove que $x^\star$ é o mínimo 
+	global de $g(x)=-f(x)$.
+</div>
+
+<div class='alert alert-info'> 
+**Questão 4.**
+ Considere a função $f(x,y)=2x^2 + y^2$. Considerando o ponto inicial
+	(1,1) e a taxa de aprendizagem igual a 0,1, faça a primeira iteração do método da 
+	descida do gradiente.
+</div>
+
+<div class='alert alert-info'> 
+**Questão 5.**
+ Considere a função $f(x,y)= 2x^2+y^2-2$. Considerando o simplex inicial $(0,-2),(-1,1)$ e $(1,1)$, faça uma iteração do método de Nelder Mead e apresente o novo simplex. Aproxime a integral
+	$$\int_0^1 x^3dx$$
+	utilizando a regra do trapézio e dois subintervalos.
+</div>	
+
+## Revisão para a Prova 2
+
+<div class='alert alert-info'>
+**Questão 1.** Seja $X$ uma variável aleatória cuja densidade é dada por
+$$f(x)=\frac{2}{x^3},$$
+onde $x>1$. 
+
+1. Encontre $F(x)$
+2. Encontre $F^{-1}(u)$
+3. Utilizando os resultados obtidos, construa um algoritmo para simular valores de $X$. 
+</div>
+
+<div class='alert alert-info'>
+**Questão 2.** Seja $X$ uma variável aleatória cuja função de probabilidade é dada por
+$$P(X=x)=\left\{\begin{array}{ll}1/10,& x=0\\ 3/10,& x=1\\1/10,&x=2\\5/10,&x=3
+\end{array}\right.$$
+ 
+
+Utilizando Método da Inversão, construa um algoritmo para simular amostras de $X$
+</div>
+
+<div class='alert alert-info'>
+**Questão 3.** Seja $X$ uma variável aleatória cuja densidade é dada por
+$$f(x)=xe^{-(x-1)},$$
+onde $x>1$. Na Questão 1, você mostrou como simular do modelo 
+$$g(x)=\frac{2}{x^3},$$
+com $x>1$. 
+
+1. Encontre o máximo da razão $f(x)/g(x)$
+2. Utilizando o resultado obtido, utilize o Método da Aceitação/Rejeição para obter simulações da variável $X$
+</div>
+
+<div class='alert alert-info'>
+**Questão 4.** Seja $X$ uma variável aleatória com função densidade dada por
+
+$$f(x)=\frac{x^2}{\sqrt{2\pi}}e^{-x^2/2},$$
+onde $x\in\mathbb{R}$. Utilizando a distribuição normal padrão como proposta no método Metropolis-Hastings, construa um algoritmo para simular amostras de $X$
 </div>
